@@ -1,6 +1,6 @@
 package ar.edu.unlp.info.bd2.model;
 
-public class State {
+public class OrderStatus {
 
 	public void cancel(Order o) {
 		

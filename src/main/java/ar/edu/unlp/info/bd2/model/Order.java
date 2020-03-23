@@ -3,7 +3,7 @@ package ar.edu.unlp.info.bd2.model;
 public class Order {
 	private Product product;
 	private Integer cant;
-	private State state;
+	private OrderStatus state;
 	
 	
 	
@@ -25,10 +25,10 @@ public class Order {
 	public void setCant(Integer cant) {
 		this.cant = cant;
 	}
-	public State getState() {
+	public OrderStatus getState() {
 		return state;
 	}
-	public void setState(State state) {
+	public void setState(OrderStatus state) {
 		this.state = state;
 	}
 }

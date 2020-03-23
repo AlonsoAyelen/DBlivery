@@ -2,7 +2,7 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.Date;
 
-public class ProductOrder extends Users {
+public class ProductOrder extends User {
 
 	public ProductOrder(String u, String p, String n, String e, Date b) {
 		super(u, p, n, e, b);

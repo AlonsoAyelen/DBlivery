@@ -2,14 +2,14 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.Date;
 
-public class Users {
+public class User {
 	private String username;
 	private String password;
 	private String name;
 	private String email;
 	private Date birth;
 	
-	public Users(String u,String p,String n,String e,Date b) {   //constructor
+	public User(String u,String p,String n,String e,Date b) {   //constructor
 		username = u;
 		password = p;
 		name = n;

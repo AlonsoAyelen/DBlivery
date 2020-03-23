@@ -1,5 +1,5 @@
 package ar.edu.unlp.info.bd2.model;
 
-public class Delivered extends State {
+public class Delivered extends OrderStatus {
 
 }

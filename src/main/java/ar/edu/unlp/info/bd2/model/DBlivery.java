@@ -3,14 +3,14 @@ package ar.edu.unlp.info.bd2.model;
 import java.util.ArrayList;
 
 public class DBlivery {
-	private ArrayList<Users> users = new ArrayList<>();
+	private ArrayList<User> users = new ArrayList<>();
 	private ArrayList<Supplier> suppliers = new ArrayList<>();
 	private ArrayList<DeliveryMan> deliveryMans = new ArrayList<>();
 	
-	public ArrayList<Users> getUsers() {
+	public ArrayList<User> getUsers() {
 		return users;
 	}
-	public void setUsers(ArrayList<Users> users) {
+	public void setUsers(ArrayList<User> users) {
 		this.users = users;
 	}
 	public ArrayList<Supplier> getSuppliers() {
