@@ -5,12 +5,19 @@ import java.util.ArrayList;
 //import java.util.ArrayList; // import the ArrayList class
 
 public class Product {
+	private long id;
 	private String name;
 	private Supplier supplier;
 	private Float price;
 	private Float weight;
 	private ArrayList<Price> prices = new ArrayList<>();
 	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	public Supplier getSupplier() {
 		return supplier;
 	}
@@ -41,6 +48,7 @@ public class Product {
 	public void setPrices(ArrayList<Price> prices) {
 		this.prices = prices;
 	}
+
 	
 	// HISTORIAL	private ArrayList<String> historic = new ArrayList<String>();
  

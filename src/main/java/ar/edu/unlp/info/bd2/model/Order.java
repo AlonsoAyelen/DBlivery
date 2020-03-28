@@ -4,12 +4,39 @@ import java.util.ArrayList;
 
 public class Order {
 	//private Product product;
-	private Integer cant;
+	private long id;
+	private User deliveryUser;
+	private User client;
 	private OrderStatus state;
 	private ArrayList<Row> products = new ArrayList<>();
 	private ArrayList<OrderStatus> status = new ArrayList<>();
 	
-	
+	public User getClient() {
+		return client;
+	}
+
+	public void setClient(User client) {
+		this.client = client;
+	}
+
+	public User getDeliveryUser() {
+		return deliveryUser;
+	}
+
+	public void setDeliveryUser(User deliveryUser) {
+		this.deliveryUser = deliveryUser;
+	}
+
+	private Integer cant;
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 	
 	public Order(Product p, Integer c) {   //constructor
 		cant = c;

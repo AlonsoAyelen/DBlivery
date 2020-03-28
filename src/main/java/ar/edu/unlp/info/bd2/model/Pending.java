@@ -11,4 +11,7 @@ public class Pending extends OrderStatus {
 		o.setState(new Sent());
 	}
 	
+	public String getStatus() {
+		return "Pending";
+	}
 }

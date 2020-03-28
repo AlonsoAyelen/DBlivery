@@ -3,6 +3,7 @@ package ar.edu.unlp.info.bd2.model;
 import java.util.Date;
 
 public class User {
+	private long id;
 	private String username;
 	private String password;
 	private String name;
@@ -17,6 +18,13 @@ public class User {
 		birth = b;
 	}
 	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -47,5 +55,7 @@ public class User {
 	public void setBirth(Date birth) {
 		this.birth = birth;
 	}
+
+
 	
 }

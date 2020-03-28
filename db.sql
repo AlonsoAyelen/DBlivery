@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS bd2_grupo2;
+CREATE USER IF NOT EXISTS 'dbliverygrupo2'@'localhost' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON bd2_grupo2.* TO 'dbliverygrupo2'@'localhost';
+FLUSH PRIVILEGES;

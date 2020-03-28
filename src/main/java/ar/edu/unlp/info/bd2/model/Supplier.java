@@ -1,10 +1,10 @@
 package ar.edu.unlp.info.bd2.model;
 
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
 
 public class Supplier {
-
+	private long id;
 	private String name;
 	private String cuil;
 	private String address;
@@ -19,6 +19,14 @@ public class Supplier {
 		address = a;
 		coordX = x;
 		coordY = y;
+	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	public String getName() {
@@ -59,5 +67,7 @@ public class Supplier {
 	public void setProducts(ArrayList<Product> products) {
 		this.products = products;
 	}
+
+
 
 }
