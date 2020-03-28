@@ -2,15 +2,31 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.ArrayList;
 
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
+//import javax.persistence.Id;
+import javax.persistence.*;
+
 //import java.util.ArrayList; // import the ArrayList class
 
+@Entity
 public class Product {
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
 	private String name;
 	private Supplier supplier;
 	private Float price;
 	private Float weight;
 	private ArrayList<Price> prices = new ArrayList<>();
+	
+	public Product (String name, Float price, Float weight, Supplier supplier) {
+		this.name=name;
+		this.price=price;
+		this.weight=weight;
+		this.supplier=supplier;
+	}
 	
 	public long getId() {
 		return id;

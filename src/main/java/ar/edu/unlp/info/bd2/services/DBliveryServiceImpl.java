@@ -15,28 +15,32 @@ import ar.edu.unlp.info.bd2.services.DBliveryService;
 
 public class DBliveryServiceImpl implements DBliveryService {
 	
-	private DBliveryRepository repositorio;
+	private DBliveryRepository repository;
 	
     public DBliveryServiceImpl(DBliveryRepository repository) {
-        this.repositorio = repository;
+        this.repository = repository;
     }
     
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
-		// TODO Auto-generated method stub
-		return null;
+		Product p = new Product(name, price,weight,supplier);
+		repository.save(p);
+		return p;
 	}
 
 	@Override
 	public Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY) {
-		// TODO Auto-generated method stub
-		return null;
+		Supplier s = new Supplier(name, cuil,address,coordX,coordY);
+		repository.save(s);
+		return s;
 	}
 
 	@Override
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("second statement.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ");
+		User u = new User(email,password,username,name,dateOfBirth);
+		repository.save(u);
+		return u;
 	}
 
 	@Override

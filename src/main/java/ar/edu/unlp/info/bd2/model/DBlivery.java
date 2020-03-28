@@ -2,7 +2,16 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.ArrayList;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class DBlivery {
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private ArrayList<User> users = new ArrayList<>();
 	private ArrayList<Supplier> suppliers = new ArrayList<>();
