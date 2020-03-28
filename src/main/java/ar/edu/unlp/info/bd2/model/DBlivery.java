@@ -5,8 +5,7 @@ import java.util.ArrayList;
 public class DBlivery {
 	private ArrayList<User> users = new ArrayList<>();
 	private ArrayList<Supplier> suppliers = new ArrayList<>();
-	private ArrayList<DeliveryMan> deliveryMans = new ArrayList<>();
-	
+
 	public ArrayList<User> getUsers() {
 		return users;
 	}
@@ -18,11 +17,5 @@ public class DBlivery {
 	}
 	public void setSuppliers(ArrayList<Supplier> suppliers) {
 		this.suppliers = suppliers;
-	}
-	public ArrayList<DeliveryMan> getDeliveryMans() {
-		return deliveryMans;
-	}
-	public void setDeliveryMans(ArrayList<DeliveryMan> deliveryMans) {
-		this.deliveryMans = deliveryMans;
 	}
 }

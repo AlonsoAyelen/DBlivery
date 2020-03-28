@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.bd2.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Supplier {
@@ -9,6 +10,7 @@ public class Supplier {
 	private String address;
 	private Float coordX;
 	private Float coordY;
+	private ArrayList<Product> products = new ArrayList<>();
 	
 	
 	public Supplier(String n,String c,String a,Float x,Float y) {   //constructor
@@ -48,6 +50,14 @@ public class Supplier {
 	}
 	public void setCoordY(Float coordY) {
 		this.coordY = coordY;
+	}
+
+	public ArrayList<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(ArrayList<Product> products) {
+		this.products = products;
 	}
 
 }

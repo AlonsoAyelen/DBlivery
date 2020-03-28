@@ -1,5 +1,7 @@
 package ar.edu.unlp.info.bd2.model;
 
+import java.util.ArrayList;
+
 //import java.util.ArrayList; // import the ArrayList class
 
 public class Product {
@@ -7,6 +9,7 @@ public class Product {
 	private Supplier supplier;
 	private Float price;
 	private Float weight;
+	private ArrayList<Price> prices = new ArrayList<>();
 	
 	public Supplier getSupplier() {
 		return supplier;
@@ -31,6 +34,12 @@ public class Product {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public ArrayList<Price> getPrices() {
+		return prices;
+	}
+	public void setPrices(ArrayList<Price> prices) {
+		this.prices = prices;
 	}
 	
 	// HISTORIAL	private ArrayList<String> historic = new ArrayList<String>();
