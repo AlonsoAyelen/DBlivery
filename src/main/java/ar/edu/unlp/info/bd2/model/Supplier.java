@@ -3,11 +3,15 @@ package ar.edu.unlp.info.bd2.model;
 import java.util.ArrayList;
 //import java.util.Date;
 
+//import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+//import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+//import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,11 +23,21 @@ public class Supplier {
 	private long id;
 	@Column(name="name")
 	private String name;
+	@Column(name="cuil")
 	private String cuil;
+	@Column(name="address")
 	private String address;
+	@Column(name="coordx")
 	private Float coordX;
+	@Column(name="coordY")
 	private Float coordY;
-	private ArrayList<Product> products = new ArrayList<>();
+	//@OneToMany(mappedBy="supplier")
+	private ArrayList<Product> products = new ArrayList<Product>();
+	/*
+	 * cascade = CascadeType.ALL, fetch = FetchType.LAZY
+	 * @JoinColumn(name = "supplier", referencedColumnName = "supplier_id")
+	 * orphanRemoval
+	 * */
 	
 	public Supplier() {
 		

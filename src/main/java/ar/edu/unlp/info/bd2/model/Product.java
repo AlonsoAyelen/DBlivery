@@ -18,7 +18,7 @@ public class Product {
 	
 	@Column(name="name")
 	private String name;
-	@Column(name="supplier")
+	@ManyToOne()
 	private Supplier supplier;
 	@Column(name="price")
 	private Float price;
