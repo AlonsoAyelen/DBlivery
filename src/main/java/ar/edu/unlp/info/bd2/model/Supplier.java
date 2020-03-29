@@ -32,7 +32,7 @@ public class Supplier {
 	@Column(name="coordY")
 	private Float coordY;
 	//@OneToMany(mappedBy="supplier")
-	private ArrayList<Product> products = new ArrayList<Product>();
+	private ArrayList<Product> products;
 	/*
 	 * cascade = CascadeType.ALL, fetch = FetchType.LAZY
 	 * @JoinColumn(name = "supplier", referencedColumnName = "supplier_id")
@@ -40,7 +40,7 @@ public class Supplier {
 	 * */
 	
 	public Supplier() {
-		
+
 	}
 	
 	public Supplier(String n,String c,String a,Float x,Float y) {   //constructor
@@ -50,6 +50,7 @@ public class Supplier {
 		address = a;
 		coordX = x;
 		coordY = y;
+		products=new ArrayList<Product>();
 	}
 	
 	public long getId() {

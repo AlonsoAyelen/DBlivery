@@ -24,7 +24,7 @@ public class Product {
 	private Float price;
 	@Column(name="weight")
 	private Float weight;
-	private ArrayList<Price> prices = new ArrayList<>();
+	private ArrayList<Price> prices;
 	
 	public Product (String name, Float price, Float weight, Supplier supplier) {
 		this.name=name;
