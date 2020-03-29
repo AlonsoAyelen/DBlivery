@@ -25,6 +25,9 @@ public class Supplier {
 	private Float coordY;
 	private ArrayList<Product> products = new ArrayList<>();
 	
+	public Supplier() {
+		
+	}
 	
 	public Supplier(String n,String c,String a,Float x,Float y) {   //constructor
 		id=1;

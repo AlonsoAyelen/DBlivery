@@ -7,7 +7,9 @@ public class Price {
 	private Date finishDate;
 	private Float price;
 	
-	
+	public Price() {
+		
+	}
 	
 	public Date getStartDate() {
 		return startDate;

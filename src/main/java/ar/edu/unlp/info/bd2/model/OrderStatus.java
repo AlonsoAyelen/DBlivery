@@ -2,6 +2,10 @@ package ar.edu.unlp.info.bd2.model;
 
 public class OrderStatus {
 
+	public OrderStatus() {
+		
+	}
+	
 	public String getStatus() {
 		return null;
 	}

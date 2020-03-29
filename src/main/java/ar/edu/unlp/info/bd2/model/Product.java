@@ -8,13 +8,21 @@ import java.util.ArrayList;
 import javax.persistence.*;
 
 //import java.util.ArrayList; // import the ArrayList class
-
+@Entity
+@Table(name="products")
 public class Product {
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
+	@Column(name="name")
 	private String name;
+	@Column(name="supplier")
 	private Supplier supplier;
+	@Column(name="price")
 	private Float price;
+	@Column(name="weight")
 	private Float weight;
 	private ArrayList<Price> prices = new ArrayList<>();
 	
@@ -23,6 +31,10 @@ public class Product {
 		this.price=price;
 		this.weight=weight;
 		this.supplier=supplier;
+	}
+	
+	public Product() {
+		
 	}
 	
 	public long getId() {

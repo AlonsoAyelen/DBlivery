@@ -11,6 +11,10 @@ public class Order {
 	private ArrayList<Row> products = new ArrayList<>();
 	private ArrayList<OrderStatus> status = new ArrayList<>();
 	
+	public Order(){
+		
+	}
+	
 	public User getClient() {
 		return client;
 	}

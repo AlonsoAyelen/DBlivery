@@ -16,6 +16,9 @@ public class DBlivery {
 	private ArrayList<User> users = new ArrayList<>();
 	private ArrayList<Supplier> suppliers = new ArrayList<>();
 	
+	public DBlivery() {
+		
+	}
 
 	public ArrayList<User> getUsers() {
 		return users;
