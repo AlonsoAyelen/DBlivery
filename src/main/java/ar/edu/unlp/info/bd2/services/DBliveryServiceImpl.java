@@ -38,6 +38,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
 		User u = new User(email,password,username,name,dateOfBirth);
+		System.out.println(u.getName());
 		repository.save(u);
 		return u;
 	}

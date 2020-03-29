@@ -2,6 +2,7 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,21 +14,33 @@ import javax.persistence.Table;
 @Table(name="users")
 public class User {
 	
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
+	@Column(name="username")
 	private String username;
+	@Column(name="password")
 	private String password;
+	@Column(name="name")
 	private String name;
+	@Column(name="email")
 	private String email;
+	@Column(name="birth")
 	private Date birth;
 	
-	public User(String u,String p,String n,String e,Date b) {   //constructor
+	public User(String e,String p,String u,String n,Date b) {   //constructor
 		username = u;
 		password = p;
 		name = n;
 		email = e;
 		birth = b;
+	}
+	
+	public User() {
+		
 	}
 	
 	public long getId() {
