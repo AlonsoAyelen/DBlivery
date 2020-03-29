@@ -2,12 +2,43 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="prices")
 public class Price {
+	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
+	@Column(name="startDate")
 	private Date startDate;
+	@Column(name="finishDate")
 	private Date finishDate;
+	@Column(name="price")
 	private Float price;
 	
 	public Price() {
+		
+	}
+	
+
+	public Price(Date start, Date finish, Float price){
+		this.startDate=start;
+		this.finishDate=finish;
+		this.price=price;
+		
+	}
+
+	public Price(Date start, Float price){
+		this.startDate=start;
+		this.price=price;
 		
 	}
 	

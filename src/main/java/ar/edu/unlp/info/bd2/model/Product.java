@@ -1,13 +1,15 @@
 package ar.edu.unlp.info.bd2.model;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 //import javax.persistence.GeneratedValue;
 //import javax.persistence.GenerationType;
 //import javax.persistence.Id;
 import javax.persistence.*;
 
-//import java.util.ArrayList; // import the ArrayList class
+import java.util.ArrayList; // import the ArrayList class
 @Entity
 @Table(name="products")
 public class Product {
@@ -24,13 +26,21 @@ public class Product {
 	private Float price;
 	@Column(name="weight")
 	private Float weight;
-	private ArrayList<Price> prices;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "Price_id")
+	private List<Price> prices = new ArrayList<Price>();
 	
 	public Product (String name, Float price, Float weight, Supplier supplier) {
 		this.name=name;
 		this.price=price;
 		this.weight=weight;
 		this.supplier=supplier;
+		Calendar today = Calendar.getInstance();
+		Date todayDate = today.getTime();
+		Price p = new Price(todayDate, price);
+		System.out.print(this.prices);
+		this.prices.add(p);
+		System.out.print(this.prices);
 	}
 	
 	public Product() {
@@ -67,10 +77,13 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public ArrayList<Price> getPrices() {
+	public List<Price> getPrices() {
 		return prices;
 	}
-	public void setPrices(ArrayList<Price> prices) {
+	public void addPrice(Price p) {
+		this.prices.add(p);
+	}
+	public void setPrices(List<Price> prices) {
 		this.prices = prices;
 	}
 
