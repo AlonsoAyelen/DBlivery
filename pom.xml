@@ -23,7 +23,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.45</version>
+            <version>8.0.16</version>
         </dependency>
 
         <dependency>
@@ -98,6 +98,16 @@
             <artifactId>mongodb-driver-sync</artifactId>
             <version>3.10.1</version>
         </dependency>
+        <dependency>
+	        <groupId>org.slf4j</groupId>
+	        <artifactId>slf4j-api</artifactId>
+	        <version>1.7.5</version>
+	   </dependency>
+	   <dependency>
+	        <groupId>org.slf4j</groupId>
+	        <artifactId>slf4j-simple</artifactId>
+	        <version>1.6.4</version>
+	   </dependency>
 
     </dependencies>
 

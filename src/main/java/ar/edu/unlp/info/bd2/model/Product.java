@@ -9,10 +9,7 @@ import javax.persistence.*;
 
 //import java.util.ArrayList; // import the ArrayList class
 
-@Entity
 public class Product {
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private String name;

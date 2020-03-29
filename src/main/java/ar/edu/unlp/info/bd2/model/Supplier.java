@@ -11,11 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@Table(name="supplier")
 public class Supplier {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(name="name")
 	private String name;
 	private String cuil;
 	private String address;
