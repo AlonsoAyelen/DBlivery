@@ -71,4 +71,13 @@ public class DBliveryRepository {
         Optional<User> ou = Optional.ofNullable(users.get(query.getFirstResult()));;
         return ou;
 	}
+	
+	public Optional<Order> findOrderById(Long id) {
+		String hql = "from Order where id = :id";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("id", id);
+        List<Order> products = query.getResultList();
+        Optional<Order> op = Optional.ofNullable(products.get(query.getFirstResult()));;
+        return op;
+	}
 }

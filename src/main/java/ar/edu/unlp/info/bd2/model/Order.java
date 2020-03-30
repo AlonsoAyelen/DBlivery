@@ -1,18 +1,56 @@
 package ar.edu.unlp.info.bd2.model;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="orders")
 public class Order {
-	//private Product product;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	//@Column(name="dalivery_user")
+	@ManyToOne()
 	private User deliveryUser;
+	@ManyToOne()
 	private User client;
-	private OrderStatus state;
-	private ArrayList<Row> products = new ArrayList<>();
-	private ArrayList<OrderStatus> status = new ArrayList<>();
+	@Column(name="date")
+	private Date dateOfOrder;
+	@Column(name="address")
+	private String address;
+	@Column(name="coordx")
+	private Float coordX;
+	@Column(name="coordy")
+	private Float coordY;
+
+	@OneToMany
+	private List<Row> products = new ArrayList<>();
+	@OneToMany
+	private List<OrderStatus> status = new ArrayList<>();
 	
 	public Order(){
 		
+	}
+
+	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
+		this.dateOfOrder=dateOfOrder;
+		this.address=address;
+		this.coordX=coordX;
+		this.coordY=coordY;
+		this.client=client;
+		Pending p = new Pending();
+		this.status.add(p);
 	}
 	
 	public User getClient() {
@@ -31,7 +69,6 @@ public class Order {
 		this.deliveryUser = deliveryUser;
 	}
 
-	private Integer cant;
 	public long getId() {
 		return id;
 	}
@@ -40,34 +77,15 @@ public class Order {
 		this.id = id;
 	}
 
-
-	
-	public Order(Product p, Integer c) {   //constructor
-		cant = c;
-		//product = p;
-		state = new Pending();
-	}
-	
-//	public Product getProduct() {
-//		return product;
-//	}
-//	public void setProduct(Product product) {
-//		this.product = product;
-//	}
-	public Integer getCant() {
-		return cant;
-	}
-	public void setCant(Integer cant) {
-		this.cant = cant;
-	}
-	public OrderStatus getState() {
-		return state;
-	}
-	public void setState(OrderStatus state) {
-		this.state = state;
+	public Date getDateOfOrder() {
+		return dateOfOrder;
 	}
 
-	public ArrayList<Row> getProducts() {
+	public void setDateOfOrder(Date dateOfOrder) {
+		this.dateOfOrder = dateOfOrder;
+	}
+
+	public List<Row> getProducts() {
 		return products;
 	}
 
@@ -75,11 +93,41 @@ public class Order {
 		this.products = products;
 	}
 
-	public ArrayList<OrderStatus> getStatus() {
+	public List<OrderStatus> getStatus() {
 		return status;
 	}
 
 	public void setStatus(ArrayList<OrderStatus> status) {
 		this.status = status;
 	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Float getCoordX() {
+		return coordX;
+	}
+
+	public void setCoordX(Float coordX) {
+		this.coordX = coordX;
+	}
+
+	public Float getCoordY() {
+		return coordY;
+	}
+
+	public void setCoordY(Float coordY) {
+		this.coordY = coordY;
+	}
+
+	public void addProduct(Row r) {
+		this.getProducts().add(r);
+	}
+
+
 }

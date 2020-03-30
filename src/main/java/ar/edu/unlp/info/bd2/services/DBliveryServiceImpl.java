@@ -7,6 +7,7 @@ import java.util.Optional;
 import ar.edu.unlp.info.bd2.model.Order;
 import ar.edu.unlp.info.bd2.model.OrderStatus;
 import ar.edu.unlp.info.bd2.model.Product;
+import ar.edu.unlp.info.bd2.model.Row;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
@@ -78,13 +79,22 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
-		// TODO Auto-generated method stub
-		return null;
+		Order o = new Order(dateOfOrder, address,coordX,coordY,client);
+		repository.save(o);
+		//System.out.println(o.getAddress()+o.getCoordX()+o.getDateOfOrder()+o.getId());
+		return o;
 	}
 
 	@Override
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
 		// TODO Auto-generated method stub
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent()){
+			Order o = oo.get();
+			Row r = new Row(product,quantity);
+			o.addProduct(r); //addRow
+			return o;
+		}
 		return null;
 	}
 
