@@ -50,26 +50,24 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<User> getUserById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findUserById(id);
 	}
 
 	@Override
 	public Optional<User> getUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findUserByEmail(email);
 	}
 
 	@Override
 	public Optional<User> getUserByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findUserByUsername(username);
 	}
 
 	@Override
 	public Optional<Product> getProductById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findProductById(id);
+//		Optional<Product> p = repository.findProductById(id);
+//		return p;
 	}
 
 	@Override
@@ -134,7 +132,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getProductByName(String name) {
-		
 		List<Product> p=repository.findProductByName(name);
 		return p;
 	}

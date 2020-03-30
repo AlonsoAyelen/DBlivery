@@ -1,6 +1,7 @@
 package ar.edu.unlp.info.bd2.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Query;
 
@@ -28,6 +29,46 @@ public class DBliveryRepository {
         List<Product> products = query.getResultList();
 //        System.out.println(products.size());
         return products;
-//        return !users.isEmpty() ? users.get(query.getFirstResult()) : null;
+//      return !products.isEmpty() ? products.get(query.getFirstResult()) : null;
+	}
+
+
+	public Optional<Product> findProductById(Long id) {
+		String hql = "from Product where id = :id";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("id", id);
+        List<Product> products = query.getResultList();
+        Optional<Product> op = Optional.ofNullable(products.get(query.getFirstResult()));;
+        return op;
+	}
+
+
+	public Optional<User> findUserByUsername(String username) {
+		String hql = "from User where username = :username";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("username", username);
+        List<User> users = query.getResultList();
+        Optional<User> ou = Optional.ofNullable(users.get(query.getFirstResult()));;
+        return ou;
+	}
+
+
+	public Optional<User> findUserByEmail(String email) {
+		String hql = "from User where email = :email";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("email", email);
+        List<User> users = query.getResultList();
+        Optional<User> ou = Optional.ofNullable(users.get(query.getFirstResult()));;
+        return ou;
+	}
+
+
+	public Optional<User> findUserById(Long id) {
+		String hql = "from User where id = :id";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("id", id);
+        List<User> users = query.getResultList();
+        Optional<User> ou = Optional.ofNullable(users.get(query.getFirstResult()));;
+        return ou;
 	}
 }
