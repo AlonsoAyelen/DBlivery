@@ -134,8 +134,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getProductByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Product> p=repository.findProductByName(name);
+		return p;
 	}
 
 }
