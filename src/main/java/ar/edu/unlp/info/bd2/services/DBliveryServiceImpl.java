@@ -73,8 +73,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<Order> getOrderById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		//
+		return repository.findOrderById(id);
 	}
 
 	@Override
