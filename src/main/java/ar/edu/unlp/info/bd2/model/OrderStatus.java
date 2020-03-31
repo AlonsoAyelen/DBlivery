@@ -33,15 +33,15 @@ public class OrderStatus {
 		
 	}
 	
-	public Boolean canCancel() {
+	public Boolean canCancel(Order o) {
 		return false;
 	}
 	
-	public Boolean canFinish() {
+	public Boolean canFinish(Order o) {
 		return false;
 	}
 	
-	public Boolean canDeliver() {
+	public Boolean canDeliver(Order o) {
 		return false;
 	}
 	

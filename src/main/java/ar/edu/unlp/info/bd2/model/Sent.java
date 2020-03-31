@@ -7,7 +7,7 @@ public class Sent extends OrderStatus {
 	}
 	
 	public void deliver(Order o) {
-		o.setState(new Delivered());
+		o.setStatus(new Delivered());
 	}
 	
 	public String getStatus() {

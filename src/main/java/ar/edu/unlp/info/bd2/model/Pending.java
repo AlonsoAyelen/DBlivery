@@ -7,14 +7,17 @@ public class Pending extends OrderStatus {
 	}
 	
 	public void cancel(Order o) {
-		o.setState(new Cancelled());
+		o.setStatus(new Cancelled());
 	}
 	
 	public void send(Order o) {
-		o.setState(new Sent());
+		o.setStatus(new Sent());
 	}
 	
 	public String getStatus() {
 		return "Pending";
+	}
+	public Boolean canDeliver(Order o) {
+		return (!o.getProducts().isEmpty());
 	}
 }

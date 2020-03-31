@@ -100,8 +100,17 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent() && this.canDeliver(order)){
+			Order o = oo.get();
+			OrderStatus status = this.getActualStatus(order);
+			o.setDeliveryUser(deliveryUser);
+			status.send(o);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be delivered");
+		}
 	}
 
 	@Override
@@ -130,13 +139,21 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public boolean canDeliver(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent()){
+			OrderStatus status = this.getActualStatus(order);
+			return status.canDeliver(oo.get());
+		}		
 		return false;
 	}
 
 	@Override
 	public OrderStatus getActualStatus(Long order) {
-		// TODO Auto-generated method stub
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent()){
+			Order o = oo.get();
+			return o.getStatus().get(o.getStatus().size() - 1 );
+		}
 		return null;
 	}
 

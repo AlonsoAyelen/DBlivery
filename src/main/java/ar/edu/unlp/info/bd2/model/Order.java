@@ -97,8 +97,8 @@ public class Order {
 		return status;
 	}
 
-	public void setStatus(ArrayList<OrderStatus> status) {
-		this.status = status;
+	public void setStatus(OrderStatus status) {
+		this.status.add(status);
 	}
 	
 	public String getAddress() {
