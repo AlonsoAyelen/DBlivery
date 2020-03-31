@@ -135,12 +135,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public boolean canCancel(Long order) throws DBliveryException {
-//		Optional<Order> oo = repository.findOrderById(order);
-//		if (oo.isPresent() && oo.get().canCancel()){
-//			OrderStatus status = this.getActualStatus(order);
-//			return status.canCancel(oo.get());
-//		}		
-//		return false;
 		Optional<Order> oo = repository.findOrderById(order);
 		return (oo.isPresent() && oo.get().canCancel());
 	}
@@ -154,21 +148,11 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public boolean canDeliver(Long order) throws DBliveryException {
 		Optional<Order> oo = repository.findOrderById(order);
-		if (oo.isPresent()){
-			OrderStatus status = this.getActualStatus(order);
-			return status.canDeliver(oo.get());
-		}		
-		return false;
+		return (oo.isPresent() && oo.get().canDeliver());
 	}
 
 	@Override
 	public OrderStatus getActualStatus(Long order) {
-//		Optional<Order> oo = repository.findOrderById(order);
-//		if (oo.isPresent()){
-//			Order o = oo.get();
-//			return o.getStatus().get(o.getStatus().size() - 1 );
-//		}
-//		return null;
 		Optional<Order> oo = repository.findOrderById(order);
 		return (oo.isPresent()?oo.get().getActualStatus():null);
 		

@@ -134,6 +134,10 @@ public class Order {
 		return this.getActualStatus().canCancel(this);
 	}
 
+	public boolean canDeliver() {
+		return this.getActualStatus().canDeliver(this);
+	}
+	
 	public OrderStatus getActualStatus() {
 		return this.getStatus().get(this.getStatus().size() - 1 );
 	}

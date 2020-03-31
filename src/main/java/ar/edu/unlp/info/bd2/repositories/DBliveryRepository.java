@@ -78,8 +78,6 @@ public class DBliveryRepository {
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("id", id);
         List<Order> products = query.getResultList();
-        System.out.println("fassd\n\n\n\n\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        
         Optional<Order> op = Optional.ofNullable(products.get(query.getFirstResult()));;
         return op;
 	}
