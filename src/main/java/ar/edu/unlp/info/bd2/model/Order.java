@@ -141,5 +141,17 @@ public class Order {
 	public OrderStatus getActualStatus() {
 		return this.getStatus().get(this.getStatus().size() - 1 );
 	}
+	
+	public void send() {
+		if (this.canDeliver()) {
+			this.getActualStatus().send(this);	
+		}
+	}
+	
+	public void cancel() {
+		if (this.canCancel()) {
+			this.getActualStatus().cancel(this);	
+		}
+	}
 
 }

@@ -101,11 +101,10 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
 		Optional<Order> oo = repository.findOrderById(order);
-		if (oo.isPresent() && this.canDeliver(order)){
+		if (oo.isPresent() && oo.get().canDeliver()){
 			Order o = oo.get();
-			OrderStatus status = this.getActualStatus(order);
 			o.setDeliveryUser(deliveryUser);
-			status.send(o);
+			o.send();
 			return o;
 		}
 		else {
@@ -118,8 +117,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		Optional<Order> oo = repository.findOrderById(order);
 		if (oo.isPresent() && oo.get().canCancel()){
 			Order o = oo.get();
-			OrderStatus status = this.getActualStatus(order);
-			status.cancel(o);
+			o.cancel();
 			return o;
 		}
 		else {
