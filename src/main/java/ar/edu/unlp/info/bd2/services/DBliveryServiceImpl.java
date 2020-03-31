@@ -114,9 +114,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
-	public Order cancelOrder(Long order) throws DBliveryException {
+	public Order cancelOrder(Long order) throws DBliveryException {		
 		Optional<Order> oo = repository.findOrderById(order);
-		if (oo.isPresent() && this.canCancel(order)){
+		if (oo.isPresent() && oo.get().canCancel()){
 			Order o = oo.get();
 			OrderStatus status = this.getActualStatus(order);
 			status.cancel(o);
@@ -135,12 +135,14 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public boolean canCancel(Long order) throws DBliveryException {
+//		Optional<Order> oo = repository.findOrderById(order);
+//		if (oo.isPresent() && oo.get().canCancel()){
+//			OrderStatus status = this.getActualStatus(order);
+//			return status.canCancel(oo.get());
+//		}		
+//		return false;
 		Optional<Order> oo = repository.findOrderById(order);
-		if (oo.isPresent()){
-			OrderStatus status = this.getActualStatus(order);
-			return status.canCancel(oo.get());
-		}		
-		return false;
+		return (oo.isPresent() && oo.get().canCancel());
 	}
 
 	@Override
@@ -161,12 +163,15 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public OrderStatus getActualStatus(Long order) {
+//		Optional<Order> oo = repository.findOrderById(order);
+//		if (oo.isPresent()){
+//			Order o = oo.get();
+//			return o.getStatus().get(o.getStatus().size() - 1 );
+//		}
+//		return null;
 		Optional<Order> oo = repository.findOrderById(order);
-		if (oo.isPresent()){
-			Order o = oo.get();
-			return o.getStatus().get(o.getStatus().size() - 1 );
-		}
-		return null;
+		return (oo.isPresent()?oo.get().getActualStatus():null);
+		
 	}
 
 	@Override

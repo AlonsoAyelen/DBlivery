@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,9 +35,9 @@ public class Order {
 	@Column(name="coordy")
 	private Float coordY;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Row> products = new ArrayList<>();
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<OrderStatus> status = new ArrayList<>();
 	
 	public Order(){
@@ -129,5 +130,12 @@ public class Order {
 		this.getProducts().add(r);
 	}
 
+	public boolean canCancel() {
+		return this.getActualStatus().canCancel(this);
+	}
+
+	public OrderStatus getActualStatus() {
+		return this.getStatus().get(this.getStatus().size() - 1 );
+	}
 
 }
