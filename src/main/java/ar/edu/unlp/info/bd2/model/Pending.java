@@ -20,4 +20,7 @@ public class Pending extends OrderStatus {
 	public Boolean canDeliver(Order o) {
 		return (!o.getProducts().isEmpty());
 	}
+	public Boolean canCancel(Order o) {
+		return true;
+	}
 }

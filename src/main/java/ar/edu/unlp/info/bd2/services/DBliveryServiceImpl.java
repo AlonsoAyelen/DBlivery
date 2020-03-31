@@ -115,8 +115,16 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order cancelOrder(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent() && this.canCancel(order)){
+			Order o = oo.get();
+			OrderStatus status = this.getActualStatus(order);
+			status.cancel(o);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
 	@Override
@@ -127,7 +135,11 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public boolean canCancel(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent()){
+			OrderStatus status = this.getActualStatus(order);
+			return status.canCancel(oo.get());
+		}		
 		return false;
 	}
 
