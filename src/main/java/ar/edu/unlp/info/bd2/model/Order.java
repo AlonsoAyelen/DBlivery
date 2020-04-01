@@ -133,7 +133,11 @@ public class Order {
 	public boolean canCancel() {
 		return this.getActualStatus().canCancel(this);
 	}
-
+	
+	public boolean canFinish() {
+		return this.getActualStatus().canFinish(this);
+	}
+	
 	public boolean canDeliver() {
 		return this.getActualStatus().canDeliver(this);
 	}
@@ -151,6 +155,12 @@ public class Order {
 	public void cancel() {
 		if (this.canCancel()) {
 			this.getActualStatus().cancel(this);	
+		}
+	}
+	
+	public void finish() {
+		if (this.canFinish()) {
+			this.getActualStatus().finish(this);	
 		}
 	}
 

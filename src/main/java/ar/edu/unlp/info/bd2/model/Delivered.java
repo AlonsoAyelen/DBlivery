@@ -12,4 +12,8 @@ public class Delivered extends OrderStatus {
 	public String getStatus() {
 		return "Delivered";
 	}
+	
+	public Boolean canFinish(Order o) {
+		return true;
+	}
 }

@@ -36,6 +36,10 @@ public class OrderStatus {
 		
 	}
 	
+	public void finish(Order o) {
+		
+	}
+	
 	public Boolean canCancel(Order o) {
 		return false;
 	}

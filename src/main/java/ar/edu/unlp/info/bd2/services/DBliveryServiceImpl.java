@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import ar.edu.unlp.info.bd2.model.Order;
 import ar.edu.unlp.info.bd2.model.OrderStatus;
+import ar.edu.unlp.info.bd2.model.Price;
 import ar.edu.unlp.info.bd2.model.Product;
 import ar.edu.unlp.info.bd2.model.Row;
 import ar.edu.unlp.info.bd2.model.Supplier;
@@ -45,7 +46,14 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Product updateProductPrice(Long id, Float price, Date startDate) throws DBliveryException {
-		// TODO Auto-generated method stub
+		Optional<Product> pp = repository.findProductById(id);
+		if (pp.isPresent()){
+			Product p = pp.get();
+			p.setPrice(price);
+			Price pri = new Price(startDate,null,price);
+			p.addPrice(pri);
+			return p;
+		}
 		return null;
 	}
 
@@ -127,8 +135,15 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order finishOrder(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent() && oo.get().canFinish()){
+			Order o = oo.get();
+			o.finish();
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be finished");
+		}
 	}
 
 	@Override
@@ -139,8 +154,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public boolean canFinish(Long id) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		Optional<Order> oo = repository.findOrderById(id);
+		return (oo.isPresent() && oo.get().canFinish());
 	}
 
 	@Override
