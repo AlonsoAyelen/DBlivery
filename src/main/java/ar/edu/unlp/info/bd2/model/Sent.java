@@ -8,12 +8,16 @@ public class Sent extends OrderStatus {
 	public Sent() {
 		
 	}
-	
-	public void deliver(Order o) {
-		o.setStatus(new Delivered());
-	}
-	
+		
 	public String getStatus() {
 		return "Sent";
+	}
+	
+	public Boolean canFinish(Order o) {
+		return true;
+	}
+	
+	public void finish(Order o) {
+		o.setStatus(new Delivered());
 	}
 }

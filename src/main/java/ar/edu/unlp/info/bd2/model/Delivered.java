@@ -13,7 +13,4 @@ public class Delivered extends OrderStatus {
 		return "Delivered";
 	}
 	
-	public Boolean canFinish(Order o) {
-		return true;
-	}
 }

@@ -86,6 +86,12 @@ public class Product {
 	public void setPrices(List<Price> prices) {
 		this.prices = prices;
 	}
+	
+	public Price getLastPrice() {
+		return prices.get(prices.size()-1);
+	}
+	
+	
 
 	
 	// HISTORIAL	private ArrayList<String> historic = new ArrayList<String>();

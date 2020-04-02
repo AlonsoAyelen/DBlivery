@@ -52,6 +52,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 			p.setPrice(price);
 			Price pri = new Price(startDate,null,price);
 			p.addPrice(pri);
+			Price pOld = p.getLastPrice();
+			pOld.setFinishDate(startDate);
 			return p;
 		}
 		return null;
