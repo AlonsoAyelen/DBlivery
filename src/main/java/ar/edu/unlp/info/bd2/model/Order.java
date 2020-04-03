@@ -146,8 +146,9 @@ public class Order {
 		return this.getStatus().get(this.getStatus().size() - 1 );
 	}
 	
-	public void send() {
+	public void send(User deilvery) {
 		if (this.canDeliver()) {
+			this.setDeliveryUser(deilvery);
 			this.getActualStatus().send(this);	
 		}
 	}

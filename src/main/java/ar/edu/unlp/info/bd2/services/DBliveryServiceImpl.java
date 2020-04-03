@@ -113,8 +113,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		Optional<Order> oo = repository.findOrderById(order);
 		if (oo.isPresent() && oo.get().canDeliver()){
 			Order o = oo.get();
-			o.setDeliveryUser(deliveryUser);
-			o.send();
+			o.send(deliveryUser);
 			return o;
 		}
 		else {
