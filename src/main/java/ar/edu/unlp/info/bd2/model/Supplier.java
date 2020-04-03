@@ -2,7 +2,9 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.ArrayList;
 //import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 //import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,13 +33,8 @@ public class Supplier {
 	private Float coordX;
 	@Column(name="coordY")
 	private Float coordY;
-	//@OneToMany(mappedBy="supplier")
-	private ArrayList<Product> products;
-	/*
-	 * cascade = CascadeType.ALL, fetch = FetchType.LAZY
-	 * @JoinColumn(name = "supplier", referencedColumnName = "supplier_id")
-	 * orphanRemoval
-	 * */
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Product> products = new ArrayList<>();
 	
 	public Supplier() {
 
@@ -92,7 +89,7 @@ public class Supplier {
 		this.coordY = coordY;
 	}
 
-	public ArrayList<Product> getProducts() {
+	public List<Product> getProducts() {
 		return products;
 	}
 
