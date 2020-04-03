@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import ar.edu.unlp.info.bd2.model.Order;
 import ar.edu.unlp.info.bd2.model.OrderStatus;
 import ar.edu.unlp.info.bd2.model.Price;
@@ -23,6 +25,7 @@ public class DBliveryServiceImpl implements DBliveryService {
         this.repository = repository;
     }
     
+    @Transactional
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
 		Product p = new Product(name, price,weight,supplier);
@@ -30,6 +33,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return p;
 	}
 
+    @Transactional
 	@Override
 	public Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY) {
 		Supplier s = new Supplier(name, cuil,address,coordX,coordY);
@@ -37,6 +41,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return s;
 	}
 
+    @Transactional
 	@Override
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
 		User u = new User(email,password,username,name,dateOfBirth);
@@ -44,6 +49,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return u;
 	}
 
+    @Transactional
 	@Override
 	public Product updateProductPrice(Long id, Float price, Date startDate) throws DBliveryException {
 		Optional<Product> pp = repository.findProductById(id);
@@ -87,6 +93,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return repository.findOrderById(id);
 	}
 
+	@Transactional
 	@Override
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
 		Order o = new Order(dateOfOrder, address,coordX,coordY,client);
@@ -95,6 +102,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return o;
 	}
 
+	@Transactional
 	@Override
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
 		// TODO Auto-generated method stub
@@ -108,6 +116,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return null;
 	}
 
+	@Transactional
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
 		Optional<Order> oo = repository.findOrderById(order);
@@ -121,6 +130,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public Order cancelOrder(Long order) throws DBliveryException {		
 		Optional<Order> oo = repository.findOrderById(order);
@@ -134,6 +144,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public Order finishOrder(Long order) throws DBliveryException {
 		Optional<Order> oo = repository.findOrderById(order);
