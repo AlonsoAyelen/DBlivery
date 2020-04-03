@@ -49,11 +49,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		Optional<Product> pp = repository.findProductById(id);
 		if (pp.isPresent()){
 			Product p = pp.get();
-			p.setPrice(price);
-			Price pri = new Price(startDate,null,price);
-			p.addPrice(pri);
-			Price pOld = p.getLastPrice();
-			pOld.setFinishDate(startDate);
+			p.updatePrice(p,price,startDate);
 			return p;
 		}
 		return null;

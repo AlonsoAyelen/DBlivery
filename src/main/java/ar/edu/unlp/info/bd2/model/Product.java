@@ -91,6 +91,14 @@ public class Product {
 		return prices.get(prices.size()-1);
 	}
 	
+	public Product updatePrice(Product p,Float price, Date startDate) {
+		p.setPrice(price);
+		Price pri = new Price(startDate,null,price);
+		p.addPrice(pri);
+		Price pOld = p.getLastPrice();
+		pOld.setFinishDate(startDate);
+		return p;
+	}
 	
 
 	
