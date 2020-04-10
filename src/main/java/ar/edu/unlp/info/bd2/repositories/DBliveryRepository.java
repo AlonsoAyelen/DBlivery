@@ -81,4 +81,13 @@ public class DBliveryRepository {
         Optional<Order> op = Optional.ofNullable(products.get(query.getFirstResult()));;
         return op;
 	}
+
+
+	public List<Order> findAllOrdersMadeByUser(String username) {
+		String hql = "from Order o inner join User u where u.username = :username";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("username", username);
+        List<Order> orders = query.getResultList();
+        return orders;
+	}
 }

@@ -165,4 +165,18 @@ public class Order {
 		}
 	}
 
+	
+	
+	public Integer getAmount() {
+		/*
+		 * 
+		 * Hay que implementar!!!
+		 * 
+		 * 
+		 * 
+		 * */
+		
+		return null;
+	}
+
 }
