@@ -32,6 +32,14 @@ public class DBliveryServiceImpl implements DBliveryService {
 		repository.save(p);
 		return p;
 	}
+    
+    @Transactional
+	@Override
+	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
+		Product p = new Product(name, price,weight,supplier,date);
+		repository.save(p);
+		return p;
+	}
 
     @Transactional
 	@Override
@@ -101,7 +109,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Transactional
 	@Override
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
-		// TODO Auto-generated method stub
 		Optional<Order> oo = repository.findOrderById(order);
 		if (oo.isPresent()){
 			Order o = oo.get();
@@ -325,12 +332,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getOrderWithMoreQuantityOfProducts(Date day) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
 		// TODO Auto-generated method stub
 		return null;
 	}

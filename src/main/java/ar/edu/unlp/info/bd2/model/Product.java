@@ -43,6 +43,17 @@ public class Product {
 		System.out.print(this.prices);
 	}
 	
+	public Product (String name, Float price, Float weight, Supplier supplier,Date date) {
+		this.name=name;
+		this.price=price;
+		this.weight=weight;
+		this.supplier=supplier;
+//		Calendar today = Calendar.getInstance();
+//		Date todayDate = today.getTime();
+		Price p = new Price(date, price);
+		this.prices.add(p);
+	}
+	
 	public Product() {
 		
 	}
