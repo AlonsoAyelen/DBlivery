@@ -84,10 +84,20 @@ public class DBliveryRepository {
 
 
 	public List<Order> findAllOrdersMadeByUser(String username) {
-		String hql = "from Order o inner join User u where u.username = :username";
+		String hql = "select order from Order as order where order.client.username = :username";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("username", username);
         List<Order> orders = query.getResultList();
         return orders;
+	}
+
+
+	public List<Product> findTop10MoreExpensiveProduct() {
+		String hql = "from Product products order by products.price desc";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setFirstResult(0);
+        query.setMaxResults(10);
+        List<Product> products = query.getResultList();
+        return products;
 	}
 }

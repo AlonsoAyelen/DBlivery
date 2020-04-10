@@ -218,8 +218,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getTop10MoreExpensiveProducts() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> p=repository.findTop10MoreExpensiveProduct();
+		return p;
 	}
 
 	@Override
