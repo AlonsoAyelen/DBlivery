@@ -93,7 +93,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<Order> getOrderById(Long id) {
-		//
 		return repository.findOrderById(id);
 	}
 
@@ -212,8 +211,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Supplier> getTopNSuppliersInSentOrders(int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Supplier> suppliers=repository.findTopNSuppliersInSentOrders(n);
+		return suppliers;
 	}
 
 	@Override
@@ -224,8 +223,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<User> getTop6UsersMoreOrders() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> users=repository.findTop6UsersMoreOrders();
+		return users;
 	}
 
 	@Override

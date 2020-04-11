@@ -38,7 +38,7 @@ public class DBliveryRepository {
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("id", id);
         List<Product> products = query.getResultList();
-        Optional<Product> op = Optional.ofNullable(products.get(query.getFirstResult()));;
+        Optional<Product> op = Optional.ofNullable(products.get(query.getFirstResult()));
         return op;
 	}
 
@@ -73,12 +73,11 @@ public class DBliveryRepository {
 	}
 	
 	public Optional<Order> findOrderById(Long id) {
-		
 		String hql = "from Order where id = :id";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("id", id);
-        List<Order> products = query.getResultList();
-        Optional<Order> op = Optional.ofNullable(products.get(query.getFirstResult()));;
+        List<Order> order = query.getResultList();
+        Optional<Order> op = Optional.ofNullable((order.isEmpty())?null:order.get(query.getFirstResult()));;
         return op;
 	}
 
@@ -99,5 +98,31 @@ public class DBliveryRepository {
         query.setMaxResults(10);
         List<Product> products = query.getResultList();
         return products;
+	}
+
+
+	public List<User> findTop6UsersMoreOrders() {
+		String hql = "select client from Order orders group by orders.client order by count(*) desc";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setFirstResult(0);
+        query.setMaxResults(6);
+        List<User> users = query.getResultList();
+//        for (User u : users) {
+//            System.out.println(u.getEmail()+" - "+u.getUsername()); 
+//        }
+        return users;
+	}
+
+
+	public List<Supplier> findTopNSuppliersInSentOrders(int n) {
+		//String hql = "select client from Order orders group by orders.client order by count(*) desc";
+
+		//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+		String hql = "from Sent sent inner join sent.order o";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setFirstResult(0);
+        query.setMaxResults(n);
+        List<Supplier> suppliers = query.getResultList();
+        return suppliers;
 	}
 }

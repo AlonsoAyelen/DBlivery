@@ -104,15 +104,30 @@ public class Product {
 	
 	public Product updatePrice(Product p,Float price, Date startDate) {
 		p.setPrice(price);
-		Price pri = new Price(startDate,null,price);
-		p.addPrice(pri);
 		Price pOld = p.getLastPrice();
 		pOld.setFinishDate(startDate);
+		Price pri = new Price(startDate,null,price);
+		p.addPrice(pri);
 		return p;
 	}
-	
 
+	public Float getPriceInDate(Date date) {
+//		System.out.println(this.getName());
+//		System.out.println(date);
+		for (Price p : this.getPrices()) {
+//			System.out.println("start" + p.getPrice());
+//			System.out.println(p.getStartDate().toString());
+//			System.out.println(p.getStartDate().before(date));
+//			System.out.println(p.getFinishDate() != null);
+//			if (p.getFinishDate() != null) System.out.println(p.getFinishDate().after(date));
+//			System.out.println("end");
+			
+			if(p.getStartDate().before(date) && (p.getFinishDate() != null) && p.getFinishDate().after(date)) {
+				return p.getPrice();
+	        }
+	    }
+		return this.getLastPrice().getPrice();
+	}
 	
-	// HISTORIAL	private ArrayList<String> historic = new ArrayList<String>();
  
 }

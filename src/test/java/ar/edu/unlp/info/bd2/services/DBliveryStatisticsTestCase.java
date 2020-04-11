@@ -45,7 +45,7 @@ public class DBliveryStatisticsTestCase {
     }
     
     @Test
-    public void testGetAllOrdersMadeByUser() {
+    public void testGetAllOrdersMadeByUser() {	//HECHO
     	assertEquals(5,this.service.getAllOrdersMadeByUser("rubnpastor265").size());
     }
     
@@ -64,14 +64,14 @@ public class DBliveryStatisticsTestCase {
     }
     
     @Test
-    public void testGetTop10MoreExpensiveProducts() {
+    public void testGetTop10MoreExpensiveProducts() { //HECHO
     	List<Product> products = this.service.getTop10MoreExpensiveProducts();
     	assertEquals(10,products.size());
     	this.assertListEquality(products.stream().map(property -> property.getName()).collect(Collectors.toList()),Arrays.asList("Maxi hamburguesa completa","Milanesa napolitana","Ensalada César","Ensalada waldorf","Milanesa de pollo napolitana sola","Sándwich de bondiola de cerdo completo","Lomo al roquefort","Tortilla a la española","Choripán","Bondiola al oporto"));
     }
     
     @Test
-    public void testGetTop6UsersMoreOrders() {
+    public void testGetTop6UsersMoreOrders() { //HECHO
     	List<User> users = this.service.getTop6UsersMoreOrders();
     	assertEquals(6,users.size());
     	this.assertListEquality(users.stream().map(property -> property.getUsername()).collect(Collectors.toList()),Arrays.asList("maravega596","maramuoz97","eduardoalonso677","rubnpastor265","nataliocruz598","luzmartnez660"));
@@ -200,7 +200,9 @@ public class DBliveryStatisticsTestCase {
     
     @Test
     public void testOrderAmount() {
-    	Optional<Order> ord = this.service.getOrderById(Long.getLong("77"));
+//    	System.out.println(Long.getLong("77"));
+    	Long l=(long) 77;
+    	Optional<Order> ord = this.service.getOrderById(l);
     	if (ord.isPresent()) {
     		Order o = ord.get();
     		assertEquals(Float.valueOf("2454"),o.getAmount());
