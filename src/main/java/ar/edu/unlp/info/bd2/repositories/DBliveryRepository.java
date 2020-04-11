@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.bd2.repositories;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,5 +125,51 @@ public class DBliveryRepository {
         query.setMaxResults(n);
         List<Supplier> suppliers = query.getResultList();
         return suppliers;
+	}
+
+
+	public List<Order> findOrderWithMoreQuantityOfProducts(Date day) {
+		String hql="select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("day", day);
+		query.setFirstResult(0);
+		query.setMaxResults(1);
+		List<Long> maxL = query.getResultList();
+		Long max=(long)0;
+		if(maxL.size()>0)max=maxL.get(0);
+//		System.out.println(max);
+		hql = "select o from Order o join o.products p where o.dateOfOrder = :day group by o.id having (sum(p.cant)=:max )";
+		query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("day", day);
+		query.setParameter("max", max);
+		List<Order> orders = query.getResultList();
+        
+//		//String hql = "select o from Order o join o.products p where o.dateOfOrder = :day group by o.id having (sum(p.cant) in (select max(select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc ) from Order))";
+//		String hql = "select o from Order o join o.products p where o.dateOfOrder = :day group by o.id having (sum(p.cant) in (select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc ))";
+//		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+//        query.setParameter("day", day);
+//        List<Order> orders = query.getResultList();
+		
+//	    for (Order o : orders) {
+//	      System.out.println(o.getAddress()+" - "+o.getId()); 
+//	    }
+        return orders;
+	}
+
+
+	public List<Product> findProductsNotSold() {
+		String hql = "from Product p where p.id not in (select product from Order o join o.products row join row.product product)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        List<Product> products = query.getResultList();
+        return products;
+	}
+
+
+	public List<Object[]> findProductsWithPriceAt(Date day) {
+		String hql = "select prod,price.price as price from Product prod join prod.prices price where (:day between price.startDate and price.finishDate) or (:day > price.startDate and price.finishDate=NULL)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("day", day);
+		List<Object[]> products = query.getResultList();
+        return products;
 	}
 }

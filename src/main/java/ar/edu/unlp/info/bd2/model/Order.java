@@ -165,15 +165,11 @@ public class Order {
 		}
 	}
 
-	
-	
 	public Float getAmount() {
 		Float amount=0F;
 		for (Row r : this.getProducts()) {
-			amount= amount+ (r.getProduct().getPriceInDate(this.getDateOfOrder())*r.getCant()); 
-			//amount= amount+ (r.getProduct().getLastPrice().getPrice()*r.getCant()); 
+			amount= amount+ (r.getProduct().getPriceInDate(this.getDateOfOrder())*r.getCant());
         }
-		System.out.println(amount);
 		return amount;
 	}
 

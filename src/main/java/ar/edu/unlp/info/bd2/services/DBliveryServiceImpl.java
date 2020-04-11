@@ -319,20 +319,20 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Object[]> getProductsWithPriceAt(Date day) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Object[]> products = repository.findProductsWithPriceAt(day);
+		return products;
 	}
 
 	@Override
 	public List<Product> getProductsNotSold() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> p=repository.findProductsNotSold();
+		return p;
 	}
 
 	@Override
 	public List<Order> getOrderWithMoreQuantityOfProducts(Date day) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders=repository.findOrderWithMoreQuantityOfProducts(day);
+		return orders;
 	}
 
 	@Override

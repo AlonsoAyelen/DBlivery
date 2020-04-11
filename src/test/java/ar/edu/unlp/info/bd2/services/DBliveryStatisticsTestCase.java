@@ -170,7 +170,7 @@ public class DBliveryStatisticsTestCase {
     }
     
     @Test
-    public void testGetProductsWithPriceAt() throws ParseException {
+    public void testGetProductsWithPriceAt() throws ParseException { //HECHO
     	List<Object[]> prices = this.service.getProductsWithPriceAt(sdf.parse("28/2/2013"));
     	assertEquals(110, prices.size());
     	assertEquals("Papas fritas a la provenzal", ((Product)prices.get(0)[0]).getName());
@@ -182,14 +182,14 @@ public class DBliveryStatisticsTestCase {
     }
     
     @Test
-    public void testGetProductsNotSold() {
+    public void testGetProductsNotSold() { //HECHO
     	List<Product> products = this.service.getProductsNotSold();
     	assertEquals(5,products.size());
     	this.assertListEquality(products.stream().map(property -> property.getName()).collect(Collectors.toList()),Arrays.asList("Bastoncitos de mozzarella a la milanesa","Milanesa Suiza","Sándwich de lomo completo","Tarta de pollo (2 porc.)","Lomo a la mostaza con papas noisette"));
     }
     
     @Test
-    public void testGetOrderWithMoreQuantityOfProducts() throws ParseException {
+    public void testGetOrderWithMoreQuantityOfProducts() throws ParseException { //FUNCIONANDO, REVISAR LA NO SUBCONSULTA
     	List<Order> ord = this.service.getOrderWithMoreQuantityOfProducts(sdf.parse("23/6/2014"));
     	assertEquals(1,ord.size());
     	Order o = ord.get(0);
@@ -199,10 +199,9 @@ public class DBliveryStatisticsTestCase {
     }
     
     @Test
-    public void testOrderAmount() {
+    public void testOrderAmount() { //HECHO, CONSULTADO EL LONG.GETLONG
 //    	System.out.println(Long.getLong("77"));
-    	Long l=(long) 77;
-    	Optional<Order> ord = this.service.getOrderById(l);
+    	Optional<Order> ord = this.service.getOrderById((long) 77);
     	if (ord.isPresent()) {
     		Order o = ord.get();
     		assertEquals(Float.valueOf("2454"),o.getAmount());
