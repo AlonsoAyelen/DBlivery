@@ -295,8 +295,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Supplier getSupplierLessExpensiveProduct() {
-		// TODO Auto-generated method stub
-		return null;
+		Supplier supplier = repository.findSupplierLessExpensiveProduct();
+		return supplier;
 	}
 
 	@Override

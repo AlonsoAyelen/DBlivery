@@ -193,4 +193,12 @@ public class DBliveryRepository {
 		List<Supplier> suppliers = query.getResultList();
 		return suppliers;
 	}
+
+
+	public Supplier findSupplierLessExpensiveProduct() {
+		String hql="select s from Product p join p.supplier s where p.price = (select min(prod.price) from Product prod)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		List<Supplier> suppliers = query.getResultList();
+		return (suppliers.size()>0)?suppliers.get(0):null;
+	}
 }

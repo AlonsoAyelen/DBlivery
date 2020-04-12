@@ -146,12 +146,12 @@ public class DBliveryStatisticsTestCase {
     }
 
     @Test
-    public void testGetSupplierLessExpensiveProduct() {
+    public void testGetSupplierLessExpensiveProduct() { //HECHO
     	assertEquals("Pancho Crazy", this.service.getSupplierLessExpensiveProduct().getName());
     }
     
     @Test
-    public void testGetSuppliersDoNotSellOn() throws ParseException {
+    public void testGetSuppliersDoNotSellOn() throws ParseException { //HECHO
     	List<Supplier> suppliers = this.service.getSuppliersDoNotSellOn(sdf.parse("28/2/2010"));
     	assertEquals(7,suppliers.size());
     	this.assertListEquality(suppliers.stream().map(property -> property.getName()).collect(Collectors.toList()),Arrays.asList("La Trattoria","Pancho Crazy","Kentucky","La Bodeguita","Foodie Special Burger","Lo de Carlos","Burger Bar"));
