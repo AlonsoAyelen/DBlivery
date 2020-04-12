@@ -302,13 +302,14 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public List<Supplier> getSuppliersDoNotSellOn(Date day) {
 		// TODO Auto-generated method stub
-		return null;
+		List<Supplier> suppliers = repository.findSuppliersDoNotSellOn(day);
+		return suppliers;
 	}
 
 	@Override
 	public List<Product> getSoldProductsOn(Date day) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> p=repository.findSoldProductsOn(day);
+		return p;
 	}
 
 	@Override

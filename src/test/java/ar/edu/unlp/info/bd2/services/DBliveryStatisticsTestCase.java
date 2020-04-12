@@ -158,7 +158,8 @@ public class DBliveryStatisticsTestCase {
     }
     
     @Test
-    public void testGetSoldProductsOn() throws ParseException {
+    public void testGetSoldProductsOn() throws ParseException { //HECHO
+    	//REVISAR PRODUCTOS QUE ESTEN EN ORDENES QUE APARECEN COMO CANCELADAS
     	List<Product> products = this.service.getSoldProductsOn(sdf.parse("28/2/2010"));
     	assertEquals(4, products.size());
     	this.assertListEquality(products.stream().map(property -> property.getName()).collect(Collectors.toList()),Arrays.asList("Filet de merluza a la romana","Bife de chorizo grillado","Milanesa americana","Ensalada de hojas verdes y queso"));
@@ -166,6 +167,7 @@ public class DBliveryStatisticsTestCase {
     
     @Test
     public void testGetOrdersCompleteMorethanOneDay() {
+    	//REVISAR SI HAY QUE AGREGAR LA FECHA DE FIN EN DELIVERED
     	assertEquals(99, this.service.getOrdersCompleteMorethanOneDay().size());
     }
     
@@ -183,6 +185,7 @@ public class DBliveryStatisticsTestCase {
     
     @Test
     public void testGetProductsNotSold() { //HECHO
+    	//REVISAR PRODUCTOS QUE ESTEN EN ORDENES QUE APARECEN COMO CANCELADAS
     	List<Product> products = this.service.getProductsNotSold();
     	assertEquals(5,products.size());
     	this.assertListEquality(products.stream().map(property -> property.getName()).collect(Collectors.toList()),Arrays.asList("Bastoncitos de mozzarella a la milanesa","Milanesa Suiza","Sándwich de lomo completo","Tarta de pollo (2 porc.)","Lomo a la mostaza con papas noisette"));
@@ -190,6 +193,7 @@ public class DBliveryStatisticsTestCase {
     
     @Test
     public void testGetOrderWithMoreQuantityOfProducts() throws ParseException { //FUNCIONANDO, REVISAR LA NO SUBCONSULTA
+    	//REVISAR ORDENES QUE HAYAN SIDO CANCELADAS
     	List<Order> ord = this.service.getOrderWithMoreQuantityOfProducts(sdf.parse("23/6/2014"));
     	assertEquals(1,ord.size());
     	Order o = ord.get(0);

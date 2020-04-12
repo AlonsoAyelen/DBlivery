@@ -172,4 +172,25 @@ public class DBliveryRepository {
 		List<Object[]> products = query.getResultList();
         return products;
 	}
+
+
+	public List<Product> findSoldProductsOn(Date day) {
+		String hql = "select row.product from Order o join o.products row where o.dateOfOrder=:day";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("day", day);
+	    List<Product> products = query.getResultList();
+//        for (Product p : products) {
+//	      System.out.println(p.getName()+" - "+p.getId()); 
+//	    }
+        return products;
+	}
+
+
+	public List<Supplier> findSuppliersDoNotSellOn(Date day) {
+		String hql="from Supplier s where s.id not in (select p.supplier from Order o join o.products row join row.product p where o.dateOfOrder=:day)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("day",day);
+		List<Supplier> suppliers = query.getResultList();
+		return suppliers;
+	}
 }
