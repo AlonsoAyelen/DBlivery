@@ -23,14 +23,10 @@ public class DBliveryRepository {
 
 	public List<Product> findProductByName(String name) {
 		String hql = "from Product where name like concat('%',:name,'%')";
-//		String hql = "from Product where name like :name";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("name", name);
-//      query.setParameter("name", '%'+name+'%');
         List<Product> products = query.getResultList();
-//        System.out.println(products.size());
         return products;
-//      return !products.isEmpty() ? products.get(query.getFirstResult()) : null;
 	}
 
 
@@ -38,8 +34,8 @@ public class DBliveryRepository {
 		String hql = "from Product where id = :id";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("id", id);
-        List<Product> products = query.getResultList();
-        Optional<Product> op = Optional.ofNullable(products.get(query.getFirstResult()));
+        Product product = (Product) query.getSingleResult();
+        Optional<Product> op = Optional.ofNullable(product);
         return op;
 	}
 
@@ -48,8 +44,8 @@ public class DBliveryRepository {
 		String hql = "from User where username = :username";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("username", username);
-        List<User> users = query.getResultList();
-        Optional<User> ou = Optional.ofNullable(users.get(query.getFirstResult()));;
+        User user = (User) query.getSingleResult();
+        Optional<User> ou = Optional.ofNullable(user);
         return ou;
 	}
 
@@ -58,8 +54,8 @@ public class DBliveryRepository {
 		String hql = "from User where email = :email";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("email", email);
-        List<User> users = query.getResultList();
-        Optional<User> ou = Optional.ofNullable(users.get(query.getFirstResult()));;
+        User user = (User) query.getSingleResult();
+        Optional<User> ou = Optional.ofNullable(user);
         return ou;
 	}
 
@@ -68,8 +64,8 @@ public class DBliveryRepository {
 		String hql = "from User where id = :id";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("id", id);
-        List<User> users = query.getResultList();
-        Optional<User> ou = Optional.ofNullable(users.get(query.getFirstResult()));;
+        User user = (User) query.getSingleResult();
+        Optional<User> ou = Optional.ofNullable(user);
         return ou;
 	}
 	
@@ -77,8 +73,8 @@ public class DBliveryRepository {
 		String hql = "from Order where id = :id";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("id", id);
-        List<Order> order = query.getResultList();
-        Optional<Order> op = Optional.ofNullable((order.isEmpty())?null:order.get(query.getFirstResult()));;
+        Order order = (Order) query.getSingleResult();
+        Optional<Order> op = Optional.ofNullable(order);
         return op;
 	}
 
@@ -198,7 +194,7 @@ public class DBliveryRepository {
 	public Supplier findSupplierLessExpensiveProduct() {
 		String hql="select s from Product p join p.supplier s where p.price = (select min(prod.price) from Product prod)";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-		List<Supplier> suppliers = query.getResultList();
-		return (suppliers.size()>0)?suppliers.get(0):null;
+		Supplier supplier = (Supplier) query.getSingleResult();
+		return supplier;
 	}
 }

@@ -52,7 +52,7 @@ public class DBliveryServiceImpl implements DBliveryService {
     @Transactional
 	@Override
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
-		User u = new User(email,password,username,name,dateOfBirth);
+    	User u = new User(email,password,username,name,dateOfBirth);
 		repository.save(u);
 		return u;
 	}
@@ -101,7 +101,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
 		Order o = new Order(dateOfOrder, address,coordX,coordY,client);
 		repository.save(o);
-		//System.out.println(o.getAddress()+o.getCoordX()+o.getDateOfOrder()+o.getId());
 		return o;
 	}
 

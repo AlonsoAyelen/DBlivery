@@ -38,9 +38,7 @@ public class Product {
 		Calendar today = Calendar.getInstance();
 		Date todayDate = today.getTime();
 		Price p = new Price(todayDate, price);
-		System.out.print(this.prices);
 		this.prices.add(p);
-		System.out.print(this.prices);
 	}
 	
 	public Product (String name, Float price, Float weight, Supplier supplier,Date date) {
@@ -99,7 +97,12 @@ public class Product {
 	}
 	
 	public Price getLastPrice() {
-		return prices.get(prices.size()-1);
+		Price act= prices.get(0);
+		for (Price p :this.getPrices()) {
+			if(p.getStartDate().after(act.getStartDate())) act=p;
+		}
+		return act;
+		//return prices.get(prices.size()-1);
 	}
 	
 	public Product updatePrice(Product p,Float price, Date startDate) {
