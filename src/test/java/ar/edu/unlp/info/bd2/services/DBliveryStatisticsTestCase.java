@@ -139,7 +139,7 @@ public class DBliveryStatisticsTestCase {
     }
     
     @Test
-    public void testGetProductIncreaseMoreThan100() {
+    public void testGetProductIncreaseMoreThan100() { //HECHO
     	List<Product> products = this.service.getProductIncreaseMoreThan100();
     	assertEquals(6, products.size());
     	this.assertListEquality(products.stream().map(property -> property.getName()).collect(Collectors.toList()),Arrays.asList("Sorrentinos de jamón y queso mozzarella","Sándwich de bondiola de cerdo, lechuga y tomate","Papas fritas con cheddar y panceta","Bondiola de cerdo a la riojana","Tabla fritas y fiambre","Ravioles de verdura"));

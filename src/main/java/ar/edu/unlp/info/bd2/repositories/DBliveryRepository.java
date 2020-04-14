@@ -197,4 +197,15 @@ public class DBliveryRepository {
 		Supplier supplier = (Supplier) query.getSingleResult();
 		return supplier;
 	}
+
+
+	public List<Product> findProductIncreaseMoreThan100() {
+		String hql = "select prod from Product prod join prod.prices prc where prod.price > (2*prc.price)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		List<Product> products = query.getResultList();
+//		for (Product p : products) {
+//			System.out.println(p.getName()+" - "+p.getPrice()+" - "+p.getId()); 
+//		}
+        return products;
+	}
 }

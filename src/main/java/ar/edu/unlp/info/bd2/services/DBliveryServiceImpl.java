@@ -300,8 +300,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getProductIncreaseMoreThan100() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> p=repository.findProductIncreaseMoreThan100();
+		return p;
 	}
 
 	@Override
