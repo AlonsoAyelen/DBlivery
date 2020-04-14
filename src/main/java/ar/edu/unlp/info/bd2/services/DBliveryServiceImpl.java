@@ -65,8 +65,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 			Product p = pp.get();
 			p.updatePrice(p,price,startDate);
 			return p;
+		} else {
+			throw new  DBliveryException("Product not found");
 		}
-		return null;
 	}
 
 	@Override
@@ -87,8 +88,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public Optional<Product> getProductById(Long id) {
 		return repository.findProductById(id);
-//		Optional<Product> p = repository.findProductById(id);
-//		return p;
 	}
 
 	@Override
@@ -113,8 +112,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 			Row r = new Row(product,quantity);
 			o.addProduct(r); //addRow
 			return o;
+		} else {
+			throw new  DBliveryException("Order not found\n");
 		}
-		return null;
 	}
 
 	@Transactional
@@ -162,19 +162,31 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public boolean canCancel(Long order) throws DBliveryException {
 		Optional<Order> oo = repository.findOrderById(order);
-		return (oo.isPresent() && oo.get().canCancel());
+		if (oo.isPresent()) {
+			return oo.get().canCancel();
+		} else {
+			throw new DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
 	public boolean canFinish(Long id) throws DBliveryException {
 		Optional<Order> oo = repository.findOrderById(id);
-		return (oo.isPresent() && oo.get().canFinish());
+		if(oo.isPresent()) {
+			return oo.get().canFinish();
+		} else {
+			throw new DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
 	public boolean canDeliver(Long order) throws DBliveryException {
 		Optional<Order> oo = repository.findOrderById(order);
-		return (oo.isPresent() && oo.get().canDeliver());
+		if(oo.isPresent()) {
+			return oo.get().canDeliver();
+		} else {
+			throw new DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
