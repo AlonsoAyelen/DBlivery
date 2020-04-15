@@ -52,6 +52,16 @@ public class DBliveryServiceImpl implements DBliveryService {
     @Transactional
 	@Override
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
+//    	Optional<User> ou1=this.getUserByEmail(email);
+//    	Optional<User> ou2=this.getUserByUsername(username);
+//    	if(!ou1.isPresent() && !ou2.isPresent()){
+//    		User u = new User(email,password,username,name,dateOfBirth);
+//			repository.save(u);
+//			return u;
+//    	} else {
+//    		System.out.println("El usuario ya esta registrado");
+//    		return ou1.get();
+//    	}
     	User u = new User(email,password,username,name,dateOfBirth);
 		repository.save(u);
 		return u;
@@ -294,8 +304,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getProductsOnePrice() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> p=repository.findProductsOnePrice();
+		return p;
 	}
 
 	@Override
@@ -312,7 +322,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Supplier> getSuppliersDoNotSellOn(Date day) {
-		// TODO Auto-generated method stub
 		List<Supplier> suppliers = repository.findSuppliersDoNotSellOn(day);
 		return suppliers;
 	}

@@ -1,5 +1,8 @@
 package ar.edu.unlp.info.bd2.model;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +18,17 @@ public class OrderStatus {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name="date")
+	protected Date date;
 	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	public Integer getId() {
 		return id;
 	}

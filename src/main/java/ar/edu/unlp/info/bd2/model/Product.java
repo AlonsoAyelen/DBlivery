@@ -27,7 +27,7 @@ public class Product {
 	@Column(name="weight")
 	private Float weight;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "Price_id")
+	@JoinColumn(name = "price_id")
 	private List<Price> prices = new ArrayList<Price>();
 	
 	public Product (String name, Float price, Float weight, Supplier supplier) {
@@ -46,8 +46,6 @@ public class Product {
 		this.price=price;
 		this.weight=weight;
 		this.supplier=supplier;
-//		Calendar today = Calendar.getInstance();
-//		Date todayDate = today.getTime();
 		Price p = new Price(date, price);
 		this.prices.add(p);
 	}

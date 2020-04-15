@@ -92,7 +92,7 @@ public class DBliveryRepository {
 		String hql = "from Product products order by products.price desc";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setFirstResult(0);
-        query.setMaxResults(10);
+        query.setMaxResults(9);
         List<Product> products = query.getResultList();
         return products;
 	}
@@ -206,6 +206,14 @@ public class DBliveryRepository {
 //		for (Product p : products) {
 //			System.out.println(p.getName()+" - "+p.getPrice()+" - "+p.getId()); 
 //		}
+        return products;
+	}
+
+
+	public List<Product> findProductsOnePrice() {
+		String hql = "select prod from Product prod join prod.prices prc group by prod.id having (count(*)=1)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		List<Product> products = query.getResultList();
         return products;
 	}
 }

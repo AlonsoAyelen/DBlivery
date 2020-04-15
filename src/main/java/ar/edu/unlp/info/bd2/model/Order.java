@@ -145,7 +145,7 @@ public class Order {
 	public OrderStatus getActualStatus() {
 		OrderStatus act= this.getStatus().get(0);
 		for (OrderStatus os :this.getStatus()) {
-			if(os.getId()>act.getId()) act=os;
+			if(os.getDate().after(act.getDate())) act=os;
 		}
 		return act;
 		//return this.getStatus().get(this.getStatus().size() - 1 );
