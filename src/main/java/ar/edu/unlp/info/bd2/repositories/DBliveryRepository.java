@@ -216,4 +216,17 @@ public class DBliveryRepository {
 		List<Product> products = query.getResultList();
         return products;
 	}
+	
+//	public List<Order> findDeliveredOrdersForUser(String username) {
+//		//String hql = "select ord from Delivered as deli join deli.order as ord where ord.client.username = :username";
+//        String hql="select ord from Delivered del join del.order ord";
+//		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+//        //query.setParameter("username", username);
+//        List<Order> orders = query.getResultList();
+//        for (Order o : orders) {
+//	      System.out.println(o.getAddress()+" - "+o.getId()); 
+//	    }
+//        
+//        return orders;
+//	}
 }

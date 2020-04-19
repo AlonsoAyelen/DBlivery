@@ -5,22 +5,35 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+//import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.Table;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name="order_status")
+
 public class OrderStatus {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @GeneratedValue
+	protected Integer id;
 	@Column(name="date")
 	protected Date date;
+	@ManyToOne
+    protected Order order;
 	
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
 	public Date getDate() {
 		return date;
 	}
@@ -49,6 +62,10 @@ public class OrderStatus {
 		
 	}
 	
+//	public void cancel(Order o,Date date) {
+//		
+//	}
+	
 	public void deliver(Order o) {
 			
 	}
@@ -56,10 +73,18 @@ public class OrderStatus {
 	public void send(Order o) {
 		
 	}
-	
+
+//	public void send(Order o,Date date) {
+//		
+//	}
+
 	public void finish(Order o) {
 		
 	}
+	
+//	public void finish(Order o,Date date) {
+//		
+//	}
 	
 	public Boolean canCancel(Order o) {
 		return false;

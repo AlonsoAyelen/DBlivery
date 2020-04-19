@@ -50,7 +50,7 @@ public class Order {
 		this.coordX=coordX;
 		this.coordY=coordY;
 		this.client=client;
-		Pending p = new Pending();
+		Pending p = new Pending(this);
 		this.status.add(p);
 	}
 	
@@ -158,17 +158,37 @@ public class Order {
 		}
 	}
 	
+//	public void send(User deilvery,Date date) {
+//		if (this.canDeliver()) {
+//			this.setDeliveryUser(deilvery);
+//			System.out.print(this.getActualStatus());
+//			this.getActualStatus().send(this,date);	
+//		}
+//	}
+
 	public void cancel() {
 		if (this.canCancel()) {
 			this.getActualStatus().cancel(this);	
 		}
 	}
+
+//	public void cancel(Date date) {
+//		if (this.canCancel()) {
+//			this.getActualStatus().cancel(this,date);	
+//		}
+//	}
 	
 	public void finish() {
 		if (this.canFinish()) {
 			this.getActualStatus().finish(this);	
 		}
 	}
+
+//	public void finish(Date date) {
+//		if (this.canFinish()) {
+//			this.getActualStatus().finish(this,date);	
+//		}
+//	}
 
 	public Float getAmount() {
 		Float amount=0F;

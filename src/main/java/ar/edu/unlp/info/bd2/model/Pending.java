@@ -4,8 +4,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="pending")
 public class Pending extends OrderStatus {
 
 	public Pending() {
@@ -13,13 +15,28 @@ public class Pending extends OrderStatus {
 		Date todayDate = today.getTime();
 		this.date=todayDate;
 	}
-	
-	public void cancel(Order o) {
-		o.setStatus(new Cancelled());
+
+	public Pending(Order o) {
+		Calendar today = Calendar.getInstance();
+		Date todayDate = today.getTime();
+		this.date=todayDate;
+		this.order=o;
 	}
 	
+	public void cancel(Order o) {
+		o.setStatus(new Cancelled(o));
+	}
+	
+//	public void cancel(Order o,Date date) {
+//		o.setStatus(new Cancelled(o,date));
+//	}
+
+//	public void send(Order o,Date date) {
+//		o.setStatus(new Sent(o,date));
+//	}
+	
 	public void send(Order o) {
-		o.setStatus(new Sent());
+		o.setStatus(new Sent(o));
 	}
 	
 	public String getStatus() {

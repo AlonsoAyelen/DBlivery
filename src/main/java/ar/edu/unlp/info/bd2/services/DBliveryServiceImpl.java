@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.bd2.services;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -126,7 +127,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 			throw new  DBliveryException("Order not found\n");
 		}
 	}
-
 	@Transactional
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
@@ -274,7 +274,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getDeliveredOrdersForUser(String username) {
-		// TODO Auto-generated method stub
+//		List<Order> o=repository.findDeliveredOrdersForUser(username);
+//		return o;
 		return null;
 	}
 
@@ -358,19 +359,45 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
+//		System.out.print("llegue");
+//		Optional<Order> oo = repository.findOrderById(order);
+//		System.out.print("aca no");
+//		if (oo.isPresent() && oo.get().canDeliver()){
+//			Order o = oo.get();
+//			o.send(deliveryUser,date);
+//			return o;
+//		}
+//		else {
+//			throw new DBliveryException("The order can't be delivered");
+//		}
 		return null;
 	}
 
 	@Override
 	public Order cancelOrder(Long order, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
+//		Optional<Order> oo = repository.findOrderById(order);
+//		if (oo.isPresent() && oo.get().canCancel()){
+//			Order o = oo.get();
+//			o.cancel(date);
+//			return o;
+//		}
+//		else {
+//			throw new DBliveryException("The order can't be cancelled");
+//		}
 		return null;
 	}
 
 	@Override
 	public Order finishOrder(Long order, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
+//		Optional<Order> oo = repository.findOrderById(order);
+//		if (oo.isPresent() && oo.get().canFinish()){
+//			Order o = oo.get();
+//			o.finish(date);
+//			return o;
+//		}
+//		else {
+//			throw new DBliveryException("The order can't be finished");
+//		}
 		return null;
 	}
 
