@@ -217,16 +217,53 @@ public class DBliveryRepository {
         return products;
 	}
 	
-//	public List<Order> findDeliveredOrdersForUser(String username) {
-//		//String hql = "select ord from Delivered as deli join deli.order as ord where ord.client.username = :username";
-//        String hql="select ord from Delivered del join del.order ord";
-//		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-//        //query.setParameter("username", username);
-//        List<Order> orders = query.getResultList();
-//        for (Order o : orders) {
-//	      System.out.println(o.getAddress()+" - "+o.getId()); 
-//	    }
-//        
-//        return orders;
-//	}
+	public List<Order> findDeliveredOrdersForUser(String username) {
+		String hql="select o from Sent s join s.order o where o.client.username = :username";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("username", username);
+        List<Order> orders = query.getResultList();   
+        return orders;
+	}
+	
+	public List<Order> findPendingOrders() {
+		String hql="select o from Pending p join p.order o where o.id not in(select c.order.id from Cancelled c) and o not in(select s.order.id from Sent s) and o not in(select d.order.id from Delivered d)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        List<Order> orders = query.getResultList();
+        return orders;
+	}
+	
+	public List<Order> findSentOrders() {
+		String hql="select o from Sent s join s.order o where o.id not in(select c.order.id from Cancelled c) and o not in(select d.order.id from Delivered d)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        List<Order> orders = query.getResultList();
+        return orders;
+	}
+	
+	public List<Order> findDeliveredOrdersInPeriod(Date startDate, Date endDate) {
+		String hql="select o from Delivered d join d.order o where o.id not in(select c.order.id from Cancelled c) and d.date between :startDate and :endDate";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+		List<Order> orders = query.getResultList();
+        return orders;
+	}
+	
+	public List<Order> findCancelledOrdersInPeriod(Date startDate, Date endDate) {
+		String hql="select o from Cancelled c join c.order o where c.date between :startDate and :endDate";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+		List<Order> orders = query.getResultList();
+        return orders;
+	}
+	
+	public List<Order> findOrdersCompleteMorethanOneDay() {
+		String hql="select o from Delivered d join d.order o where day(d.date) = day(o.dateOfOrder)";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		List<Order> orders = query.getResultList();
+        return orders;
+	}
+	//select * from delivered join orders on delivered.order_id = orders.id where day(delivered.date) = day(orders.date);
+	
+	
 }

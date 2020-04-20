@@ -250,33 +250,33 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getCancelledOrdersInPeriod(Date startDate, Date endDate) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders=repository.findCancelledOrdersInPeriod(startDate,endDate);
+		return orders;
 	}
 
 	@Override
 	public List<Order> getPendingOrders() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders=repository.findPendingOrders();
+		return orders;
 	}
 
 	@Override
 	public List<Order> getSentOrders() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders=repository.findSentOrders();
+		return orders;
 	}
 
 	@Override
 	public List<Order> getDeliveredOrdersInPeriod(Date startDate, Date endDate) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders=repository.findDeliveredOrdersInPeriod(startDate,endDate);
+		return orders;
 	}
 
 	@Override
 	public List<Order> getDeliveredOrdersForUser(String username) {
-//		List<Order> o=repository.findDeliveredOrdersForUser(username);
-//		return o;
-		return null;
+		List<Order> o=repository.findDeliveredOrdersForUser(username);
+		return o;
+//		return null;
 	}
 
 	@Override
@@ -335,8 +335,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getOrdersCompleteMorethanOneDay() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders=repository.findOrdersCompleteMorethanOneDay();
+		return orders;
 	}
 
 	@Override
