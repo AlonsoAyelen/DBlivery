@@ -357,48 +357,50 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return orders;
 	}
 
+	@Transactional
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser, Date date) throws DBliveryException {
-//		System.out.print("llegue");
-//		Optional<Order> oo = repository.findOrderById(order);
-//		System.out.print("aca no");
-//		if (oo.isPresent() && oo.get().canDeliver()){
-//			Order o = oo.get();
-//			o.send(deliveryUser,date);
-//			return o;
-//		}
-//		else {
-//			throw new DBliveryException("The order can't be delivered");
-//		}
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent() && oo.get().canDeliver()){
+			Order o = oo.get();
+			o.send(deliveryUser,date);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be delivered");
+		}
 	}
 
+	@Transactional
 	@Override
 	public Order cancelOrder(Long order, Date date) throws DBliveryException {
-//		Optional<Order> oo = repository.findOrderById(order);
-//		if (oo.isPresent() && oo.get().canCancel()){
-//			Order o = oo.get();
-//			o.cancel(date);
-//			return o;
-//		}
-//		else {
-//			throw new DBliveryException("The order can't be cancelled");
-//		}
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent() && oo.get().canCancel()){
+			Order o = oo.get();
+			o.cancel(date);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
+	@Transactional
 	@Override
 	public Order finishOrder(Long order, Date date) throws DBliveryException {
-//		Optional<Order> oo = repository.findOrderById(order);
-//		if (oo.isPresent() && oo.get().canFinish()){
-//			Order o = oo.get();
-//			o.finish(date);
-//			return o;
-//		}
-//		else {
-//			throw new DBliveryException("The order can't be finished");
-//		}
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent() && oo.get().canFinish()){
+			Order o = oo.get();
+			o.finish(date);
+			return o;
+		}
+		else {
+			System.out.println(oo.isPresent());
+			System.out.println(oo.get().getActualStatus());
+			System.out.println(oo.get().getAddress());
+			System.out.println(oo.get().getId());
+			throw new DBliveryException("The order can't be finished");
+		}
 	}
 
 }

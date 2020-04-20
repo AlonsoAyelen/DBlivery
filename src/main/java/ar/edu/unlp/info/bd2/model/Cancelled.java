@@ -23,6 +23,11 @@ public class Cancelled extends OrderStatus {
 		this.order=o;
 	}
 
+	public Cancelled(Order order2, Date date2) {
+		this.date=date2;
+		this.order=order2;
+	}
+
 	public String getStatus() {
 		return "Cancelled";
 	}

@@ -48,4 +48,14 @@ public class Pending extends OrderStatus {
 	public Boolean canCancel(Order o) {
 		return true;
 	}
+	
+	public void send(Order order2, Date date2) {
+		order2.setStatus(new Sent(order2,date2));
+		
+	}
+	
+	public void cancel(Order order2, Date date2) {
+		order2.setStatus(new Cancelled(order2,date2));
+		
+	}
 }

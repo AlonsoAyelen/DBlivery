@@ -144,8 +144,11 @@ public class Order {
 	
 	public OrderStatus getActualStatus() {
 		OrderStatus act= this.getStatus().get(0);
+//		for (OrderStatus os :this.getStatus()) {
+//			if(os.getDate().after(act.getDate())) act=os;
+//		}
 		for (OrderStatus os :this.getStatus()) {
-			if(os.getDate().after(act.getDate())) act=os;
+			if(os.getId()>act.getId()) act=os;
 		}
 		return act;
 		//return this.getStatus().get(this.getStatus().size() - 1 );
@@ -172,12 +175,6 @@ public class Order {
 		}
 	}
 
-//	public void cancel(Date date) {
-//		if (this.canCancel()) {
-//			this.getActualStatus().cancel(this,date);	
-//		}
-//	}
-	
 	public void finish() {
 		if (this.canFinish()) {
 			this.getActualStatus().finish(this);	
@@ -196,6 +193,25 @@ public class Order {
 			amount= amount+ (r.getProduct().getPriceInDate(this.getDateOfOrder())*r.getCant());
         }
 		return amount;
+	}
+
+	public void send(User deliveryUser2, Date date) {
+		if (this.canDeliver()) {
+			this.setDeliveryUser(deliveryUser2);
+			this.getActualStatus().send(this,date);	
+		}
+	}
+
+	public void cancel(Date date) {
+		if (this.canCancel()) {
+			this.getActualStatus().cancel(this,date);	
+		}
+	}
+
+	public void finish(Date date) {
+		if (this.canFinish()) {
+			this.getActualStatus().finish(this,date);	
+		}
 	}
 
 }

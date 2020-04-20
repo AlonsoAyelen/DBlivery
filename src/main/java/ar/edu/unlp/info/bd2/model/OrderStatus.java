@@ -61,11 +61,7 @@ public class OrderStatus {
 	public void cancel(Order o) {
 		
 	}
-	
-//	public void cancel(Order o,Date date) {
-//		
-//	}
-	
+
 	public void deliver(Order o) {
 			
 	}
@@ -74,18 +70,10 @@ public class OrderStatus {
 		
 	}
 
-//	public void send(Order o,Date date) {
-//		
-//	}
-
 	public void finish(Order o) {
 		
 	}
-	
-//	public void finish(Order o,Date date) {
-//		
-//	}
-	
+
 	public Boolean canCancel(Order o) {
 		return false;
 	}
@@ -96,6 +84,21 @@ public class OrderStatus {
 	
 	public Boolean canDeliver(Order o) {
 		return false;
+	}
+
+	public void send(Order order2, Date date2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void cancel(Order order2, Date date2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void finish(Order order2, Date date2) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

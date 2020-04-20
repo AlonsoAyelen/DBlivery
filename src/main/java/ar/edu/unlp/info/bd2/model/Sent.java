@@ -23,6 +23,11 @@ public class Sent extends OrderStatus {
 		this.order=o;
 	}
 		
+	public Sent(Order order2, Date date2) {
+		this.date=date2;
+		this.order=order2;
+	}
+
 	public String getStatus() {
 		return "Sent";
 	}
@@ -34,8 +39,9 @@ public class Sent extends OrderStatus {
 	public void finish(Order o) {
 		o.setStatus(new Delivered(o));
 	}
-	
-//	public void finish(Order o,Date date) {
-//		o.setStatus(new Delivered(o,date));
-//	}
+
+	public void finish(Order order2, Date date2) {
+		order2.setStatus(new Delivered(order2,date));
+		
+	}
 }
