@@ -395,10 +395,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 			return o;
 		}
 		else {
-			System.out.println(oo.isPresent());
-			System.out.println(oo.get().getActualStatus());
-			System.out.println(oo.get().getAddress());
-			System.out.println(oo.get().getId());
 			throw new DBliveryException("The order can't be finished");
 		}
 	}

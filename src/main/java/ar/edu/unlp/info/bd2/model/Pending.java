@@ -23,6 +23,11 @@ public class Pending extends OrderStatus {
 		this.order=o;
 	}
 	
+	public Pending(Order order, Date date) {
+		this.date=date;
+		this.order=order;
+	}
+	
 	public void cancel(Order o) {
 		o.setStatus(new Cancelled(o));
 	}

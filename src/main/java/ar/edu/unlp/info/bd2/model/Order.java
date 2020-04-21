@@ -50,7 +50,7 @@ public class Order {
 		this.coordX=coordX;
 		this.coordY=coordY;
 		this.client=client;
-		Pending p = new Pending(this);
+		Pending p = new Pending(this,dateOfOrder);
 		this.status.add(p);
 	}
 	
@@ -210,7 +210,7 @@ public class Order {
 
 	public void finish(Date date) {
 		if (this.canFinish()) {
-			this.getActualStatus().finish(this,date);	
+			this.getActualStatus().finish(this,date);
 		}
 	}
 

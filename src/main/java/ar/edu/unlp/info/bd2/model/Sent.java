@@ -41,7 +41,7 @@ public class Sent extends OrderStatus {
 	}
 
 	public void finish(Order order2, Date date2) {
-		order2.setStatus(new Delivered(order2,date));
+		order2.setStatus(new Delivered(order2,date2));
 		
 	}
 }

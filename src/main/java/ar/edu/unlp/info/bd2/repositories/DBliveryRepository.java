@@ -20,7 +20,6 @@ public class DBliveryRepository {
         return obj;
     }
     
-
 	public List<Product> findProductByName(String name) {
 		String hql = "from Product where name like concat('%',:name,'%')";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -28,7 +27,6 @@ public class DBliveryRepository {
         List<Product> products = query.getResultList();
         return products;
 	}
-
 
 	public Optional<Product> findProductById(Long id) {
 		String hql = "from Product where id = :id";
@@ -39,7 +37,6 @@ public class DBliveryRepository {
         return op;
 	}
 
-
 	public Optional<User> findUserByUsername(String username) {
 		String hql = "from User where username = :username";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -48,7 +45,6 @@ public class DBliveryRepository {
         Optional<User> ou = Optional.ofNullable(user);
         return ou;
 	}
-
 
 	public Optional<User> findUserByEmail(String email) {
 		String hql = "from User where email = :email";
@@ -59,7 +55,6 @@ public class DBliveryRepository {
         return ou;
 	}
 
-
 	public Optional<User> findUserById(Long id) {
 		String hql = "from User where id = :id";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -68,7 +63,7 @@ public class DBliveryRepository {
         Optional<User> ou = Optional.ofNullable(user);
         return ou;
 	}
-	
+
 	public Optional<Order> findOrderById(Long id) {
 		String hql = "from Order where id = :id";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -78,7 +73,6 @@ public class DBliveryRepository {
         return op;
 	}
 
-
 	public List<Order> findAllOrdersMadeByUser(String username) {
 		String hql = "select order from Order as order where order.client.username = :username";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -86,7 +80,6 @@ public class DBliveryRepository {
         List<Order> orders = query.getResultList();
         return orders;
 	}
-
 
 	public List<Product> findTop10MoreExpensiveProduct() {
 		String hql = "from Product products order by products.price desc";
@@ -96,7 +89,6 @@ public class DBliveryRepository {
         List<Product> products = query.getResultList();
         return products;
 	}
-
 
 	public List<User> findTop6UsersMoreOrders() {
 		String hql = "select client from Order orders group by orders.client order by count(*) desc";
@@ -110,7 +102,6 @@ public class DBliveryRepository {
         return users;
 	}
 
-
 	public List<Supplier> findTopNSuppliersInSentOrders(int n) {
 		//String hql = "select client from Order orders group by orders.client order by count(*) desc";
 
@@ -122,7 +113,6 @@ public class DBliveryRepository {
         List<Supplier> suppliers = query.getResultList();
         return suppliers;
 	}
-
 
 	public List<Order> findOrderWithMoreQuantityOfProducts(Date day) {
 		String hql="select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc";
@@ -152,14 +142,12 @@ public class DBliveryRepository {
         return orders;
 	}
 
-
 	public List<Product> findProductsNotSold() {
 		String hql = "from Product p where p.id not in (select product from Order o join o.products row join row.product product)";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         List<Product> products = query.getResultList();
         return products;
 	}
-
 
 	public List<Object[]> findProductsWithPriceAt(Date day) {
 		String hql = "select prod,price.price as price from Product prod join prod.prices price where (:day between price.startDate and price.finishDate) or (:day > price.startDate and price.finishDate=NULL)";
@@ -168,7 +156,6 @@ public class DBliveryRepository {
 		List<Object[]> products = query.getResultList();
         return products;
 	}
-
 
 	public List<Product> findSoldProductsOn(Date day) {
 		String hql = "select row.product from Order o join o.products row where o.dateOfOrder=:day";
@@ -181,7 +168,6 @@ public class DBliveryRepository {
         return products;
 	}
 
-
 	public List<Supplier> findSuppliersDoNotSellOn(Date day) {
 		String hql="from Supplier s where s.id not in (select p.supplier from Order o join o.products row join row.product p where o.dateOfOrder=:day)";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -190,14 +176,12 @@ public class DBliveryRepository {
 		return suppliers;
 	}
 
-
 	public Supplier findSupplierLessExpensiveProduct() {
 		String hql="select s from Product p join p.supplier s where p.price = (select min(prod.price) from Product prod)";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
 		Supplier supplier = (Supplier) query.getSingleResult();
 		return supplier;
 	}
-
 
 	public List<Product> findProductIncreaseMoreThan100() {
 		String hql = "select prod from Product prod join prod.prices prc where prod.price > (2*prc.price)";
@@ -209,14 +193,13 @@ public class DBliveryRepository {
         return products;
 	}
 
-
 	public List<Product> findProductsOnePrice() {
 		String hql = "select prod from Product prod join prod.prices prc group by prod.id having (count(*)=1)";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
 		List<Product> products = query.getResultList();
         return products;
 	}
-	
+
 	public List<Order> findDeliveredOrdersForUser(String username) {
 		String hql="select o from Sent s join s.order o where o.client.username = :username";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -224,21 +207,21 @@ public class DBliveryRepository {
         List<Order> orders = query.getResultList();   
         return orders;
 	}
-	
+
 	public List<Order> findPendingOrders() {
 		String hql="select o from Pending p join p.order o where o.id not in(select c.order.id from Cancelled c) and o not in(select s.order.id from Sent s) and o not in(select d.order.id from Delivered d)";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         List<Order> orders = query.getResultList();
         return orders;
 	}
-	
+
 	public List<Order> findSentOrders() {
 		String hql="select o from Sent s join s.order o where o.id not in(select c.order.id from Cancelled c) and o not in(select d.order.id from Delivered d)";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         List<Order> orders = query.getResultList();
         return orders;
 	}
-	
+
 	public List<Order> findDeliveredOrdersInPeriod(Date startDate, Date endDate) {
 		String hql="select o from Delivered d join d.order o where o.id not in(select c.order.id from Cancelled c) and d.date between :startDate and :endDate";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -247,7 +230,7 @@ public class DBliveryRepository {
 		List<Order> orders = query.getResultList();
         return orders;
 	}
-	
+
 	public List<Order> findCancelledOrdersInPeriod(Date startDate, Date endDate) {
 		String hql="select o from Cancelled c join c.order o where c.date between :startDate and :endDate";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
@@ -256,9 +239,9 @@ public class DBliveryRepository {
 		List<Order> orders = query.getResultList();
         return orders;
 	}
-	
+
 	public List<Order> findOrdersCompleteMorethanOneDay() {
-		String hql="select o from Delivered d join d.order o where day(d.date) = day(o.dateOfOrder)";
+		String hql="select o from Delivered d join d.order o where d.date>= o.dateOfOrder+2";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
 		List<Order> orders = query.getResultList();
         return orders;
