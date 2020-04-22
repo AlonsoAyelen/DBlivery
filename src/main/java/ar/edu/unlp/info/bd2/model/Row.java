@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 //import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -20,10 +21,14 @@ public class Row {
 	private Long cant;
 	@ManyToOne
 	private Product product;
+	@ManyToOne
+	@JoinColumn
+	private Order order;
 
-	public Row(Product product, Long quantity) {
+	public Row(Product product, Long quantity, Order order) {
 		this.cant=quantity;
 		this.product=product;
+		this.order=order;
 	}
 	
 	public Row() {

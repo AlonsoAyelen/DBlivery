@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name="order_status")
-
 public class OrderStatus {
 	@Id
     @GeneratedValue

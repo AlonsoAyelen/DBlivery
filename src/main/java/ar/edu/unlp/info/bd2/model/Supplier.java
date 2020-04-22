@@ -33,7 +33,7 @@ public class Supplier {
 	private Float coordX;
 	@Column(name="coordY")
 	private Float coordY;
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
 	private List<Product> products = new ArrayList<>();
 	
 	public Supplier() {

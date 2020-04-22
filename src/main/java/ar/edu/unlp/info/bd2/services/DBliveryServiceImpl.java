@@ -120,7 +120,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		Optional<Order> oo = repository.findOrderById(order);
 		if (oo.isPresent()){
 			Order o = oo.get();
-			Row r = new Row(product,quantity);
+			Row r = new Row(product,quantity,o);
 			o.addProduct(r); //addRow
 			return o;
 		} else {

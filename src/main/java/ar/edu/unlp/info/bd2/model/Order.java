@@ -35,7 +35,7 @@ public class Order {
 	@Column(name="coordy")
 	private Float coordY;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<Row> products = new ArrayList<>();
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<OrderStatus> status = new ArrayList<>();
