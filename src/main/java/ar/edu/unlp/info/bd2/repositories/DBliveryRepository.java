@@ -115,30 +115,28 @@ public class DBliveryRepository {
 	}
 
 	public List<Order> findOrderWithMoreQuantityOfProducts(Date day) {
-		String hql="select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc";
-		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-		query.setParameter("day", day);
-		query.setFirstResult(0);
-		query.setMaxResults(1);
-		List<Long> maxL = query.getResultList();
-		Long max=(long)0;
-		if(maxL.size()>0)max=maxL.get(0);
-//		System.out.println(max);
-		hql = "select o from Order o join o.products p where o.dateOfOrder = :day group by o.id having (sum(p.cant)=:max )";
-		query = this.sessionFactory.getCurrentSession().createQuery(hql);
-		query.setParameter("day", day);
-		query.setParameter("max", max);
-		List<Order> orders = query.getResultList();
-        
-//		//String hql = "select o from Order o join o.products p where o.dateOfOrder = :day group by o.id having (sum(p.cant) in (select max(select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc ) from Order))";
-//		String hql = "select o from Order o join o.products p where o.dateOfOrder = :day group by o.id having (sum(p.cant) in (select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc ))";
+//		String hql="select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc";
 //		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-//        query.setParameter("day", day);
-//        List<Order> orders = query.getResultList();
-		
+//		query.setParameter("day", day);
+//		query.setFirstResult(0);
+//		query.setMaxResults(1);
+//		List<Long> maxL = query.getResultList();
+//		Long max=(long)0;
+//		if(maxL.size()>0)max=maxL.get(0);
+////		System.out.println(max);
+//		hql = "select o from Order o join o.products p where o.dateOfOrder = :day group by o.id having (sum(p.cant)=:max )";
+//		query = this.sessionFactory.getCurrentSession().createQuery(hql);
+//		query.setParameter("day", day);
+//		query.setParameter("max", max);
+//		List<Order> orders = query.getResultList();
 //	    for (Order o : orders) {
 //	      System.out.println(o.getAddress()+" - "+o.getId()); 
 //	    }
+
+		String hql = "select o from Order o join o.products p where o.dateOfOrder = :day group by o.id having (sum(p.cant) >= ALL (select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id))";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("day", day);
+        List<Order> orders = query.getResultList();
         return orders;
 	}
 
