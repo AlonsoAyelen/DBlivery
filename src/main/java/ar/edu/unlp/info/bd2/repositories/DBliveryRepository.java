@@ -255,4 +255,11 @@ public class DBliveryRepository {
 		return prod;
 	}
 	
+	public List<Order> findMoreOneHour(){
+		String hql="SELECT o FROM Sent s join s.order o WHERE s.date >= o.dateOfOrder + 1";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		List<Order> orders = query.getResultList();
+		return orders;
+	}
+	
 }

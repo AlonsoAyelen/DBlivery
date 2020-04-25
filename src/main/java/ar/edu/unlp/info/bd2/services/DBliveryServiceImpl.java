@@ -281,8 +281,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getSentMoreOneHour() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> o = repository.findMoreOneHour();
+		return o;
 	}
 
 	@Override
