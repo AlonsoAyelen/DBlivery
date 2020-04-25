@@ -246,5 +246,13 @@ public class DBliveryRepository {
 	}
 	//select * from delivered join orders on delivered.order_id = orders.id where day(delivered.date) = day(orders.date);
 	
+	public Product findBestSelling() {
+		String hql="SELECT p FROM Row r JOIN r.product p GROUP BY p.id ORDER BY SUM(cant) DESC ";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setFirstResult(0);
+        query.setMaxResults(1);
+        Product prod = (Product) query.getSingleResult();
+		return prod;
+	}
 	
 }
