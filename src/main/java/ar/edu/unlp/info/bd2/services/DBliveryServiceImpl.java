@@ -287,8 +287,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getDeliveredOrdersSameDay() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> o = repository.findSameDay();
+		return o;
 	}
 
 	@Override

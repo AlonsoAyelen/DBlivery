@@ -262,4 +262,11 @@ public class DBliveryRepository {
 		return orders;
 	}
 	
+	public List<Order> findSameDay(){
+		String hql="SELECT o FROM Delivered s join s.order o WHERE s.date = o.dateOfOrder";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		List<Order> orders = query.getResultList();
+		return orders;
+	}
+	
 }
