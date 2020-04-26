@@ -278,4 +278,16 @@ public class DBliveryRepository {
 	List<Supplier> sup = query.getResultList();
 	return sup;
 	}
+	
+	public List<User> find5LessDeliveryUsers(){
+		String hql = "SELECT du\n" + 
+				"FROM Order o join o.deliveryUser du\n" + 
+				"GROUP BY du \n" + 
+				"ORDER BY COUNT(o) ASC";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setFirstResult(0);
+	    query.setMaxResults(5);
+	    List<User> user = query.getResultList();
+	    return user;
+	}
 }

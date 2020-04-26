@@ -293,8 +293,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<User> get5LessDeliveryUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> u = repository.find5LessDeliveryUsers();
+		return u;
 	}
 
 	@Override
