@@ -227,7 +227,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public List<User> getUsersSpendingMoreThan(Float amount) {
 		List<User> u=repository.findSpendingMoreThan(amount);
-		return null;
+		return u;
 	}
 
 	@Override

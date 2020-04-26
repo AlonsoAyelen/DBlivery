@@ -259,9 +259,13 @@ public class DBliveryRepository {
 	}
 	
 	public List<User> findSpendingMoreThan(float amount){
-		String hql="SELECT DISTINCT u FROM Order o join o.client u WHERE o.getAmount < :amount";
+		String hql="	SELECT u\n" + 
+					"	FROM Order o join o.client u join o.products r join r.product p join p.prices pr\n" + 
+					"	WHERE (o.dateOfOrder BETWEEN pr.startDate AND pr.finishDate) OR (o.dateOfOrder >= pr.startDate AND pr.finishDate = NULL)\n" + 
+					"	GROUP BY o\n" + 
+					"	HAVING (SUM(pr.price*r.cant) > :amount )";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-		query.setParameter("amount", amount);
+		query.setParameter("amount", (double) amount);
 		List<User> users = query.getResultList();
 		return users;
 	}
