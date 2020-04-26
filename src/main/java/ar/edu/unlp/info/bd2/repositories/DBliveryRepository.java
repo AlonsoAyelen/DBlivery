@@ -171,7 +171,8 @@ public class DBliveryRepository {
 	}
 
 	public List<Product> findProductIncreaseMoreThan100() {
-		String hql = "select prod from Product prod join prod.prices prc where prod.price > (2*prc.price)";
+		//String hql = "select prod from Product prod join prod.prices prc where prod.price > (2*prc.price)";
+		String hql = "select prod from Product prod join prod.prices prc where (prc.startDate in (select min(pr.startDate) from Product p join p.prices pr where p.id=prod.id) and (prc.price*2<prod.price))";
 		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
 		List<Product> products = query.getResultList();
 //		for (Product p : products) {
