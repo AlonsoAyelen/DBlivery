@@ -267,7 +267,7 @@ public class DBliveryRepository {
 	}
 	
 	public List<Supplier> findTopNSuppliersInSentOrders(int n){
-	String hql="select s from Order o join o.products row join row.product p join p.supplier s where o.id in (select o.id from Sent s join s.order o where o.id not in(select c.order.id from Cancelled c) and o.id not in(select d.order.id from Delivered d)) group by s.id order by sum(row.cant) desc";
+	String hql="select s from Order o join o.products row join row.product p join p.supplier s where o.id in (select o.id from Sent s join s.order o where o.id not in(select d.order.id from Delivered d)) group by s.id order by sum(row.cant) desc";
 	Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
 	query.setFirstResult(0);
     query.setMaxResults(n);
