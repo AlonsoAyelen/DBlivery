@@ -102,17 +102,6 @@ public class DBliveryRepository {
         return users;
 	}
 
-	public List<Supplier> findTopNSuppliersInSentOrders(int n) {
-		//String hql = "select client from Order orders group by orders.client order by count(*) desc";
-
-		//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-		String hql = "from Sent sent inner join sent.order o";
-		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setFirstResult(0);
-        query.setMaxResults(n);
-        List<Supplier> suppliers = query.getResultList();
-        return suppliers;
-	}
 
 	public List<Order> findOrderWithMoreQuantityOfProducts(Date day) {
 //		String hql="select sum(p.cant) from Order o join o.products p where o.dateOfOrder = :day group by o.id order by sum(p.cant) desc";
@@ -269,4 +258,20 @@ public class DBliveryRepository {
 		return orders;
 	}
 	
+	public List<User> findSpendingMoreThan(float amount){
+		String hql="SELECT DISTINCT u FROM Order o join o.client u WHERE o.getAmount < :amount";
+		Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+		query.setParameter("amount", amount);
+		List<User> users = query.getResultList();
+		return users;
+	}
+	
+	public List<Supplier> findTopNSuppliersInSentOrders(int n){
+	String hql="select s from Order o join o.products row join row.product p join p.supplier s where o.id in (select o.id from Sent s join s.order o where o.id not in(select c.order.id from Cancelled c) and o.id not in(select d.order.id from Delivered d)) group by s.id order by sum(row.cant) desc";
+	Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+	query.setFirstResult(0);
+    query.setMaxResults(n);
+	List<Supplier> sup = query.getResultList();
+	return sup;
+	}
 }
