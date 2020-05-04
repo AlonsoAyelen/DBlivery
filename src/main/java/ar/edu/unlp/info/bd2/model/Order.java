@@ -37,7 +37,7 @@ public class Order {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<Row> products = new ArrayList<>();
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<OrderStatus> status = new ArrayList<>();
 	
 	public Order(){

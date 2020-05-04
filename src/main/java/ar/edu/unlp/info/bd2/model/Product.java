@@ -28,7 +28,7 @@ public class Product {
 	@Column(name="weight")
 	private Float weight;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "price_id")
+	@JoinColumn(name = "product_id")
 	private List<Price> prices = new ArrayList<Price>();
 	
 	public Product (String name, Float price, Float weight, Supplier supplier) {
