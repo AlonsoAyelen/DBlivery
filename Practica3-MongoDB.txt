@@ -1,0 +1,797 @@
+Parte 1: Bases de Datos NoSQL y Relacionales
+Si bien las BBDD NoSQL tienen diferencias fundamentales con los sistemas de BBDD Relacionales o RDBMS, algunos conceptos comunes se pueden relacionar. Responda las siguientes preguntas, considerando MongoDB en particular como Base de Datos NoSQL.
+
+La estructura que utiliza MongoDB para almacenar información es correspondiente a la del tipo de base de datos orientada a documentos. Esto quiere decir que cada registro o unidad básica se la denomina documento y cada conjunto de documentos se los denomina colección. Los documentos en MongoDB son un conjunto de par clave/valor, libre de esquemas.
+MongoDB se basa sobre JSON, pero actualmente la información no se almacena específicamente en dicho formato, sino en BSON (Binary JSON) debido a que BSON es una representación serializada de los documentos JSON lo que permite utilizar documentos embebidos, arrays dentro de documentos y además realiza una extensión de tipos de datos que no son parte de la especificación JSON como los “Date type” y “BinData type”. 
+
+1. ¿Cuáles de los siguientes conceptos de RDBMS existen en MongoDB? En caso de no existir,
+¿hay alguna alternativa? ¿Cuál es?
+• Base de Datos		-> Existe.
+• Tabla / Relación	-> No existe, es equivalente a coleccion.
+• Fila / Tupla		-> No existe, es equivalente a documento.
+• Columna		-> No existe, es equivalente a campo.
+
+
+2. MongoDB tiene soporte para transacciones, pero no es igual que el de los RDBMS. ¿Cuál es el alcance de una transacción en MongoDB?
+
+En MongoDB, una operación en un solo documento es atómica. Debido a que puede usar matrices y documentos incrustados para capturar las relaciones entre los datos en una estructura de documento única en lugar de normalizar a través de múltiples colecciones y documentos, esta atomicidad de un solo documento elimina la necesidad de transacciones de múltiples documentos para muchos casos prácticos.
+
+Para situaciones que requieren atomicidad de lecturas y escrituras en múltiples documentos (en una o varias colecciones), MongoDB admite transacciones de múltiples documentos. Con las transacciones distribuidas, las transacciones se pueden usar en múltiples operaciones, colecciones, bases de datos, documentos y shards.
+
+https://docs.mongodb.com/master/core/transactions/
+
+
+3. Para acelerar las consultas, MongoDB tiene soporte para índices. ¿Qué tipos de índices soporta?
+
+MongoDB proporciona varios tipos de índice diferentes para admitir tipos específicos de datos y consultas.
+-Campo único 
+Además del _idíndice definido por MongoDB, MongoDB admite la creación de índices ascendentes / descendentes definidos por el usuario en un solo campo de un documento .
+-Indice compuesto 
+MongoDB también admite índices definidos por el usuario en múltiples campos, es decir , índices compuestos .
+El orden de los campos que figuran en un índice compuesto tiene importancia. Por ejemplo, si un índice compuesto consiste en { userid: 1, score: -1 }, el índice se ordena primero por userid y luego, dentro de cada valor, se ordena por score.
+-Indice Multikey 
+MongoDB utiliza índices de múltiples claves para indexar el contenido almacenado en arreglos. Si indexa un campo que contiene un valor de matriz, MongoDB crea entradas de índice separadas para cada elemento de la matriz. Para indexar un campo que contiene un valor de matriz, MongoDB crea una clave de índice para cada elemento de la matriz. Estos índices multiciclo admiten consultas eficientes contra campos de matriz. Los índices multiciclo se pueden construir sobre matrices que contienen valores escalares y documentos anidados.
+-Indice geoespacial 
+Para admitir consultas eficientes de datos de coordenadas geoespaciales, MongoDB proporciona dos índices especiales: índices 2d que usan geometría plana al devolver resultados e índices 2dsphere que usan geometría esférica para devolver resultados.
+-Indices de texto 
+MongoDB proporciona un tipo de índice text que admite la búsqueda de contenido de cadena en una colección. Estos índices de texto no almacenan palabras de detención específicas del idioma (por ejemplo, "the", "a", "or") y detienen las palabras en una colección para almacenar solo palabras raíz.
+-Indices hash 
+Para admitir fragmentación basada en hash , MongoDB proporciona un tipo de índice hash , que indexa el hash del valor de un campo. Estos índices tienen una distribución de valores más aleatoria a lo largo de su rango, pero solo admiten coincidencias de igualdad y no pueden admitir consultas basadas en rangos.
+
+MongoDB soporta índices para mejorar la ejecución de consultas. Sin índices, MongodDB debe realizar la búsqueda en toda una colección para seleccionar los documentos que coincidan con una condición de búsqueda. En estos casos es apropiado usar índices para limitar el número de documentos en los que se debe realizar la búsqueda. A grandes rasgos, los índices en MongoDB funcionan del mismo modo que en un RDBMS y son básicamente un tipo de estructura de datos que almacena una porción global de los datos de cada colección, almacenando el valor de uno o varios campos de forma ordenada según un criterio. De esta forma, al ejecutar una query contra MongoDB se examinará si existe un índice que concuerde los parámetros de búsqueda y el resultado esperado debería mejorar los tiempos de respuesta. MongoDB utiliza para su implementación de índices árboles B como estructura de datos. Se debe tener en cuenta que una mala administración de índices (como por ejemplo generar más cantidad de la necesaria) podría generar sobrecarga en operaciones de insert, update y remove, ya que no solo se debe realizar dichas operaciones sino que también debe realizar el registro de los índices en la colección en la que se involucra la información.
+
+Los índices se definen a nivel de las colecciones.
+● Se soportan índices por cualquier campo o subcampo del documento.
+● MongoDB crea un índice sobre el campo _id durante la creación de una colección. Este índice controla la unicidad del valor del _id. No se puede eliminar este índice.
+●Especificación
+	○ db.collection.createIndex( <key and index type specification>, <options> )
+
+https://docs.mongodb.com/manual/indexes/
+
+
+4. ¿Existen claves foráneas en MongoDB?
+
+MongoDB no admite relaciones de clave externa del lado del servidor, también se desaconseja la normalización. Si es posible, debe incrustar su objeto secundario en objetos primarios, esto aumentará el rendimiento y hará que las claves foráneas sean totalmente innecesarias. Dicho esto, no siempre es posible, por lo que hay una construcción especial llamada DBRef que permite hacer referencia a objetos en una colección diferente. Esto puede no ser tan rápido porque DB tiene que hacer consultas adicionales para leer objetos, pero permite un tipo de referencia de clave externa.
+
+-----
+
+En algunos casos, tiene sentido almacenar información relacionada en documentos separados, generalmente en diferentes colecciones o bases de datos.
+Las aplicaciones MongoDB utilizan uno de dos métodos para relacionar documentos:
+ -Referencias manuales donde guarda el _idcampo de un documento en otro documento como referencia. Luego, su aplicación puede ejecutar una segunda consulta para devolver los datos relacionados. Estas referencias son simples y suficientes para la mayoría de los casos de uso.
+ -Los DBRefs son referencias de un documento a otro utilizando el valor del campo del primer documento_id, el nombre de la colección y, opcionalmente, el nombre de su base de datos. Al incluir estos nombres, DBRefs permite que los documentos ubicados en múltiples colecciones se vinculen más fácilmente con documentos de una sola colección. Para resolver DBRefs, su aplicación debe realizar consultas adicionales para devolver los documentos referenciados.
+
+https://docs.mongodb.com/manual/reference/database-references/
+
+
+Parte 2: Primeros pasos con MongoDB
+▶︎ Descargue la última versión de MongoDB desde el sitio oficial. Ingrese al cliente de línea de comando para realizar los siguientes ejercicios.
+
+5. Cree una nueva base de datos llamada airbdb, y una colección llamada apartments. En esa colección inserte un nuevo documento (un departamento) con los siguientes atributos:
+{name:'Apartment with 2 bedrooms', capacity:4}
+recupere la información del departamento usando el comando db.apartments.find() (puede agregar la función .pretty() al final de la expresión para ver los datos indentados). Notará que no se encuentran exactamente los atributos que insertó. ¿Cuál es la diferencia?
+
+/*
+* There is no create database command in MongoDB. Actually, MongoDB do not provide any command to create database.
+* Here, in MongoDB you don't need to create a database manually because MongoDB will create it automatically when you save the value into the defined collection at first time.
+* 
+* db.createCollection(name, options)
+* Creates a new collection or view. For views, see also db.createView().
+* Because MongoDB creates a collection implicitly when the collection is first referenced in a command, this method is used primarily for creating new collections that use specific options. For example, you use db.createCollection() to create a capped collection, or to create a new collection that uses document validation.
+* 
+* The cool thing about MongoDB is that you need not to create collection before you insert document in it. With a single command you can * insert a document in the collection and the MongoDB creates that collection on the fly.
+* Syntax: db.collection_name.insert({key:value, key:value…})
+*/
+
+> show dbs
+admin             0.000GB
+config            0.000GB
+local             0.000GB
+test              0.003GB
+> use airbdb
+switched to db airbdb
+> db.createCollection("apartments")
+{ "ok" : 1 }
+> db.apartments.insert({name:'Apartment with 2 bedrooms', capacity:4})
+WriteResult({ "nInserted" : 1 })
+> db.apartments.find().pretty()
+{
+	"_id" : ObjectId("5eb19d3c043a9d90706b162e"),
+	"name" : "Apartment with 2 bedrooms",
+	"capacity" : 4
+}
+
+La diferencia es el atributo _id que agrega mongodb como identificador. Por defecto, MongoDB genera un identificador de ObjectID único que se asigna al campo _id en un nuevo documento antes de escribir ese documento en la base de datos. En muchos casos, los identificadores únicos predeterminados asignados por MongoDB cumplirán los requisitos de la aplicación. Sin embargo, en algunos casos, una aplicación puede necesitar crear identificadores únicos personalizados
+
+
+
+▶︎ Una característica fundamental de MongoDB y otras bases NoSQL es que los documentos no tienen una estructura definida, como puede ser una tabla en un RDBMS. En una misma colección pueden convivir documentos con diferentes atributos, e incluso atributos de múltiples valores y documentos embebidos.
+
+6. Agregue los siguientes documentos a la colección de departamentos:
+{name:'New Apartment', capacity:3, services: ['wifi', 'ac']}
+{name:'Nice apt for 6', capacity:6, services: ['parking']}
+{name:'1950s Apartment', capacity:3}
+{name:'Duplex Floor', capacity:4, services: ['wifi', 'breakfast', 'laundry']}
+Y busque los departamentos:
+-con capacidad para 3 personas.
+-con capacidad para 4 personas o más
+-con wifi
+-que incluyan la palabra 'Apartment' en su nombre
+-con la palabra 'Apartment' en su nombre y capacidad para más de 3 personas
+-sin servicios (es decir, que el atributo esté ausente)
+vuelva a realizar la última consulta pero proyecte sólo el nombre del departamento en losresultados, omitiendo incluso el atributo _id de la proyección.
+
+> db.apartments.find()
+{ "_id" : ObjectId("5eb19d3c043a9d90706b162e"), "name" : "Apartment with 2 bedrooms", "capacity" : 4 }
+
+> db.apartments.insertMany([{name:'New Apartment', capacity:3, services: ['wifi', 'ac']}, {name:'Nice apt for 6', capacity:6, services: ['parking']}, {name:'1950s Apartment', capacity:3}, {name:'Duplex Floor', capacity:4, services: ['wifi', 'breakfast', 'laundry']} ])
+{
+	"acknowledged" : true,
+	"insertedIds" : [
+		ObjectId("5eb1a06b043a9d90706b1636"),
+		ObjectId("5eb1a06b043a9d90706b1637"),
+		ObjectId("5eb1a06b043a9d90706b1638"),
+		ObjectId("5eb1a06b043a9d90706b1639")
+	]
+}
+
+> db.apartments.find()
+{ "_id" : ObjectId("5eb19d3c043a9d90706b162e"), "name" : "Apartment with 2 bedrooms", "capacity" : 4 }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1636"), "name" : "New Apartment", "capacity" : 3, "services" : [ "wifi", "ac" ] }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1637"), "name" : "Nice apt for 6", "capacity" : 6, "services" : [ "parking" ] }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1638"), "name" : "1950s Apartment", "capacity" : 3 }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1639"), "name" : "Duplex Floor", "capacity" : 4, "services" : [ "wifi", "breakfast", "laundry" ] }
+
+
+-con capacidad para 3 personas.
+> db.apartments.find({ 'capacity': { $eq: 3 } })
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1636"), "name" : "New Apartment", "capacity" : 3, "services" : [ "wifi", "ac" ] }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1638"), "name" : "1950s Apartment", "capacity" : 3 }
+
+-con capacidad para 4 personas o más
+> db.apartments.find({ 'capacity': { $gte: 4 } })
+{ "_id" : ObjectId("5eb19d3c043a9d90706b162e"), "name" : "Apartment with 2 bedrooms", "capacity" : 4 }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1637"), "name" : "Nice apt for 6", "capacity" : 6, "services" : [ "parking" ] }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1639"), "name" : "Duplex Floor", "capacity" : 4, "services" : [ "wifi", "breakfast", "laundry" ] }
+
+// or db.apartments.find({ 'capacity': { $gt: 3 } })
+
+
+-con wifi
+> db.apartments.find({ 'services':{ $in: ['wifi']} })
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1636"), "name" : "New Apartment", "capacity" : 3, "services" : [ "wifi", "ac" ] }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1639"), "name" : "Duplex Floor", "capacity" : 4, "services" : [ "wifi", "breakfast", "laundry" ] }
+
+
+-que incluyan la palabra 'Apartment' en su nombre
+> db.apartments.find({ name: {'$regex': 'Apartment'} })
+{ "_id" : ObjectId("5eb19d3c043a9d90706b162e"), "name" : "Apartment with 2 bedrooms", "capacity" : 4 }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1636"), "name" : "New Apartment", "capacity" : 3, "services" : [ "wifi", "ac" ] }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1638"), "name" : "1950s Apartment", "capacity" : 3 }
+
+
+-con la palabra 'Apartment' en su nombre y capacidad para más de 3 personas
+> db.apartments.find({ $and: [ {name: {'$regex': 'Apartment'}}, {capacity:{ $gt:3 }} ] })
+{ "_id" : ObjectId("5eb19d3c043a9d90706b162e"), "name" : "Apartment with 2 bedrooms", "capacity" : 4 }
+
+
+-sin servicios (es decir, que el atributo esté ausente)
+
+> db.apartments.find({ services:null })
+{ "_id" : ObjectId("5eb19d3c043a9d90706b162e"), "name" : "Apartment with 2 bedrooms", "capacity" : 4 }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1638"), "name" : "1950s Apartment", "capacity" : 3 }
+
+
+-sin servicios proyectando sólo el nombre del departamento en losresultados, omitiendo incluso el atributo _id de la proyección.
+> db.apartments.find({ services:null },{_id:0,name:1})
+{ "name" : "Apartment with 2 bedrooms" }
+{ "name" : "1950s Apartment" }
+
+
+▶︎ En MongoDB hay diferentes maneras de realizar actualizaciones, de acuerdo a las necesidades del esquema flexible de documentos.
+
+7. Actualice el “Duplex Floor” asignándole capacidad 5.
+> db.apartments.updateMany({ name: "Duplex Floor" }, { $set: { capacity: 5 } })
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.apartments.find({ name:"Duplex Floor"})
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1639"), "name" : "Duplex Floor", "capacity" : 5, "services" : [ "wifi", "breakfast", "laundry" ] }
+
+--- > db.apartments.updateOne({ name: "Duplex Floor" }, { $set: { capacity: 5 } })
+--- { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+
+8. Agregue “laundry” al listado de services del “Nice apt for 6”.
+> db.apartments.updateMany({ name: "Nice apt for 6" }, { $addToSet: { services: "laundry" } })
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.apartments.find({ name:"Nice apt for 6"})
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1637"), "name" : "Nice apt for 6", "capacity" : 6, "services" : [ "parking", "laundry" ] }
+
+
+9. Agregue una persona más de capacidad a todos los departamentos con wifi.
+> db.apartments.updateMany({ 'services':{ $in: ['wifi']} }, { $inc: { capacity: 1 } })
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.apartments.find({ 'services':{ $in: ['wifi']} })
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1636"), "name" : "New Apartment", "capacity" : 4, "services" : [ "wifi", "ac" ] }
+{ "_id" : ObjectId("5eb1a06b043a9d90706b1639"), "name" : "Duplex Floor", "capacity" : 5, "services" : [ "wifi", "breakfast", "laundry" ] }
+
+
+
+Parte 3: Índices
+▶︎ Elimine todos los departamentos de la colección. Guarde en un archivo llamado ‘generador.js’
+el siguiente código JavaScript y ejecútelo.
+
+> db.apartments.remove({})	//// or deleteMany({})
+WriteResult({ "nRemoved" : 5 })
+> load('./generador.js')
+true
+
+
+10. Busque en la colección de departamentos si existe algún índice definido.
+
+> db.apartments.getIndexes()
+[
+	{
+		"v" : 2,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_",
+		"ns" : "airbdb.apartments"
+	}
+]
+
+
+11. Cree un índice para el campo name. Busque los departamentos que tengan en su nombre el string “11” y utilice el método explain("executionStats") al final de la consulta, para comparar la cantidad de documentos examinados y el tiempo en milisegundos de la consulta con y sin índice.
+
+//SIN INDICE
+> db.apartments.find({name: /11/}).explain("executionStats")
+{
+	"queryPlanner" : {
+		"plannerVersion" : 1,
+		"namespace" : "airbdb.apartments",
+		"indexFilterSet" : false,
+		"parsedQuery" : {
+			"name" : {
+				"$regex" : "11"
+			}
+		},
+		"winningPlan" : {
+			"stage" : "COLLSCAN",
+			"filter" : {
+				"name" : {
+					"$regex" : "11"
+				}
+			},
+			"direction" : "forward"
+		},
+		"rejectedPlans" : [ ]
+	},
+	"executionStats" : {
+		"executionSuccess" : true,
+		"nReturned" : 2291,
+		"executionTimeMillis" : 35,
+		"totalKeysExamined" : 0,
+		"totalDocsExamined" : 50000,
+		"executionStages" : {
+			"stage" : "COLLSCAN",
+			"filter" : {
+				"name" : {
+					"$regex" : "11"
+				}
+			},
+			"nReturned" : 2291,
+			"executionTimeMillisEstimate" : 30,
+			"works" : 50002,
+			"advanced" : 2291,
+			"needTime" : 47710,
+			"needYield" : 0,
+			"saveState" : 390,
+			"restoreState" : 390,
+			"isEOF" : 1,
+			"invalidates" : 0,
+			"direction" : "forward",
+			"docsExamined" : 50000
+		}
+	},
+	"serverInfo" : {
+		"host" : "tardis",
+		"port" : 27017,
+		"version" : "3.6.3",
+		"gitVersion" : "9586e557d54ef70f9ca4b43c26892cd55257e1a5"
+	},
+	"ok" : 1
+}
+
+
+> db.apartments.createIndex( { name: 1 } )
+{
+	"createdCollectionAutomatically" : false,
+	"numIndexesBefore" : 1,
+	"numIndexesAfter" : 2,
+	"ok" : 1
+}
+> db.apartments.getIndexes()
+[
+	{
+		"v" : 2,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_",
+		"ns" : "airbdb.apartments"
+	},
+	{
+		"v" : 2,
+		"key" : {
+			"name" : 1
+		},
+		"name" : "name_1",
+		"ns" : "airbdb.apartments"
+	}
+]
+
+//CON INDICE
+> db.apartments.find({name: /11/}).explain("executionStats")
+{
+	"queryPlanner" : {
+		"plannerVersion" : 1,
+		"namespace" : "airbdb.apartments",
+		"indexFilterSet" : false,
+		"parsedQuery" : {
+			"name" : {
+				"$regex" : "11"
+			}
+		},
+		"winningPlan" : {
+			"stage" : "FETCH",
+			"inputStage" : {
+				"stage" : "IXSCAN",
+				"filter" : {
+					"name" : {
+						"$regex" : "11"
+					}
+				},
+				"keyPattern" : {
+					"name" : 1
+				},
+				"indexName" : "name_1",
+				"isMultiKey" : false,
+				"multiKeyPaths" : {
+					"name" : [ ]
+				},
+				"isUnique" : false,
+				"isSparse" : false,
+				"isPartial" : false,
+				"indexVersion" : 2,
+				"direction" : "forward",
+				"indexBounds" : {
+					"name" : [
+						"[\"\", {})",
+						"[/11/, /11/]"
+					]
+				}
+			}
+		},
+		"rejectedPlans" : [ ]
+	},
+	"executionStats" : {
+		"executionSuccess" : true,
+		"nReturned" : 2291,
+		"executionTimeMillis" : 58,
+		"totalKeysExamined" : 50000,
+		"totalDocsExamined" : 2291,
+		"executionStages" : {
+			"stage" : "FETCH",
+			"nReturned" : 2291,
+			"executionTimeMillisEstimate" : 50,
+			"works" : 50001,
+			"advanced" : 2291,
+			"needTime" : 47709,
+			"needYield" : 0,
+			"saveState" : 390,
+			"restoreState" : 390,
+			"isEOF" : 1,
+			"invalidates" : 0,
+			"docsExamined" : 2291,
+			"alreadyHasObj" : 0,
+			"inputStage" : {
+				"stage" : "IXSCAN",
+				"filter" : {
+					"name" : {
+						"$regex" : "11"
+					}
+				},
+				"nReturned" : 2291,
+				"executionTimeMillisEstimate" : 50,
+				"works" : 50001,
+				"advanced" : 2291,
+				"needTime" : 47709,
+				"needYield" : 0,
+				"saveState" : 390,
+				"restoreState" : 390,
+				"isEOF" : 1,
+				"invalidates" : 0,
+				"keyPattern" : {
+					"name" : 1
+				},
+				"indexName" : "name_1",
+				"isMultiKey" : false,
+				"multiKeyPaths" : {
+					"name" : [ ]
+				},
+				"isUnique" : false,
+				"isSparse" : false,
+				"isPartial" : false,
+				"indexVersion" : 2,
+				"direction" : "forward",
+				"indexBounds" : {
+					"name" : [
+						"[\"\", {})",
+						"[/11/, /11/]"
+					]
+				},
+				"keysExamined" : 50000,
+				"seeks" : 1,
+				"dupsTested" : 0,
+				"dupsDropped" : 0,
+				"seenInvalidated" : 0
+			}
+		}
+	},
+	"serverInfo" : {
+		"host" : "tardis",
+		"port" : 27017,
+		"version" : "3.6.3",
+		"gitVersion" : "9586e557d54ef70f9ca4b43c26892cd55257e1a5"
+	},
+	"ok" : 1
+}
+
+
+SIN
+"executionTimeMillis" : 35,
+"totalKeysExamined" : 0,
+"totalDocsExamined" : 50000,
+
+CON
+"executionTimeMillis" : 58,
+"totalKeysExamined" : 50000,
+"totalDocsExamined" : 2291,
+
+
+12. Busque los departamentos dentro de la ciudad de Londres. Para esto, puede definir una variable en la terminal y asignarle como valor el polígono del archivo provisto greaterlondon.geojson (copiando y pegando directamente). Cree un índice geoespacial de tipo 2dsphere para el campo location de la colección apartments y, de la misma forma que en el punto 11, compare la performance de la consulta con y sin dicho índice.
+
+> $geojson={"type":"MultiPolygon","coordinates":[[[[0.210307, 51.485877],[0.203326, 51.454328],[0.171111, 51.441565],[0.151133, 51.420431],[0.159891, 51.394648],[0.136931, 51.344174],[0.085001, 51.316023],[0.085665, 51.293085],[0.058483, 51.289355],[0.032881, 51.307521],[0.014982, 51.291787],[0.002266, 51.329138],[-0.037918, 51.338705],[-0.047855, 51.326511],[-0.084781, 51.315885],[-0.094352, 51.299355],[-0.12432, 51.28676],[-0.154371, 51.310254],[-0.16314, 51.330243],[-0.217289, 51.343388],[-0.226898, 51.362595],[-0.260841, 51.379556],[-0.285462, 51.364251],[-0.319307, 51.327812],[-0.330534, 51.348421],[-0.308695, 51.37545],[-0.31772, 51.393668],[-0.419277, 51.432353],[-0.456488, 51.438107],[-0.460465, 51.457035],[-0.506834, 51.471057],[-0.483194, 51.506646],[-0.495488, 51.538333],[-0.477367, 51.555254],[-0.496983, 51.601163],[-0.497247, 51.631654],[-0.457152, 51.612291],[-0.438195, 51.619892],[-0.401441, 51.613166],[-0.316696, 51.640532],[-0.296151, 51.635444],[-0.252275, 51.646561],[-0.249881, 51.654611],[-0.19097, 51.663982],[-0.163632, 51.6824],[-0.109283, 51.691743],[-0.066368, 51.683843],[-0.011092, 51.680867],[-0.012286, 51.646227],[0.062972, 51.60691],[0.087118, 51.604465],[0.136079, 51.6236],[0.168874, 51.621417],[0.22406, 51.631734],[0.264299, 51.60783],[0.290262, 51.564298],[0.313007, 51.565816],[0.331194, 51.540761],[0.265319, 51.532149],[0.263655, 51.517869],[0.214128, 51.496039],[0.210307, 51.485877]]]]}
+
+> db.apartments.find({location: {$geoWithin: {$geometry: $geojson} } } )
+...
+
+SIN INDICE
+> db.apartments.find({location: {$geoWithin: {$geometry: $geojson}}}).explain("executionStats")
+{
+	"queryPlanner" : {
+		"plannerVersion" : 1,
+		"namespace" : "airbdb.apartments",
+		"indexFilterSet" : false,
+		"parsedQuery" : {
+			"location" : {
+				"$geoWithin" : {
+					"$geometry" : {
+						"type" : "MultiPolygon",
+						"coordinates" : [
+							***
+						]
+					}
+				}
+			}
+		},
+		"winningPlan" : {
+			"stage" : "COLLSCAN",
+			"filter" : {
+				"location" : {
+					"$geoWithin" : {
+						"$geometry" : {
+							"type" : "MultiPolygon",
+							"coordinates" : [
+								***
+							]
+						}
+					}
+				}
+			},
+			"direction" : "forward"
+		},
+		"rejectedPlans" : [ ]
+	},
+	"executionStats" : {
+		"executionSuccess" : true,
+		"nReturned" : 12452,
+		"executionTimeMillis" : 230,
+		"totalKeysExamined" : 0,
+		"totalDocsExamined" : 50000,
+		"executionStages" : {
+			"stage" : "COLLSCAN",
+			"filter" : {
+				"location" : {
+					"$geoWithin" : {
+						"$geometry" : {
+							"type" : "MultiPolygon",
+							"coordinates" : [
+								***
+							]
+						}
+					}
+				}
+			},
+			"nReturned" : 12452,
+			"executionTimeMillisEstimate" : 200,
+			"works" : 50002,
+			"advanced" : 12452,
+			"needTime" : 37549,
+			"needYield" : 0,
+			"saveState" : 390,
+			"restoreState" : 390,
+			"isEOF" : 1,
+			"invalidates" : 0,
+			"direction" : "forward",
+			"docsExamined" : 50000
+		}
+	},
+	"serverInfo" : {
+		"host" : "tardis",
+		"port" : 27017,
+		"version" : "3.6.3",
+		"gitVersion" : "9586e557d54ef70f9ca4b43c26892cd55257e1a5"
+	},
+	"ok" : 1
+}
+
+> db.apartments.createIndex({location: "2dsphere"})
+{
+	"createdCollectionAutomatically" : false,
+	"numIndexesBefore" : 2,
+	"numIndexesAfter" : 3,
+	"ok" : 1
+}
+> db.apartments.getIndexes()
+[
+	{
+		"v" : 2,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_",
+		"ns" : "airbdb.apartments"
+	},
+	{
+		"v" : 2,
+		"key" : {
+			"name" : 1
+		},
+		"name" : "name_1",
+		"ns" : "airbdb.apartments"
+	},
+	{
+		"v" : 2,
+		"key" : {
+			"location" : "2dsphere"
+		},
+		"name" : "location_2dsphere",
+		"ns" : "airbdb.apartments",
+		"2dsphereIndexVersion" : 3
+	}
+]
+
+
+//CON INDICE
+> db.apartments.find({location: {$geoWithin: {$geometry: $geojson}}}).explain("executionStats")
+{
+	"queryPlanner" : {
+		"plannerVersion" : 1,
+		"namespace" : "airbdb.apartments",
+		"indexFilterSet" : false,
+		"parsedQuery" : {
+			"location" : {
+				"$geoWithin" : {
+					"$geometry" : {
+						"type" : "MultiPolygon",
+						"coordinates" : [
+							***
+						]
+					}
+				}
+			}
+		},
+		"winningPlan" : {
+			"stage" : "FETCH",
+			"filter" : {
+				"location" : {
+					"$geoWithin" : {
+						"$geometry" : {
+							"type" : "MultiPolygon",
+							"coordinates" : [
+								***
+							]
+						}
+					}
+				}
+			},
+			"inputStage" : {
+				"stage" : "IXSCAN",
+				"keyPattern" : {
+					"location" : "2dsphere"
+				},
+				"indexName" : "location_2dsphere",
+				"isMultiKey" : false,
+				"multiKeyPaths" : {
+					"location" : [ ]
+				},
+				"isUnique" : false,
+				"isSparse" : false,
+				"isPartial" : false,
+				"indexVersion" : 2,
+				"direction" : "forward",
+				"indexBounds" : {
+					"location" : [
+						***
+					]
+				}
+			}
+		},
+		"rejectedPlans" : [ ]
+	},
+	"executionStats" : {
+		"executionSuccess" : true,
+		"nReturned" : 12452,
+		"executionTimeMillis" : 197,
+		"totalKeysExamined" : 18440,
+		"totalDocsExamined" : 18419,
+		"executionStages" : {
+			"stage" : "FETCH",
+			"filter" : {
+				"location" : {
+					"$geoWithin" : {
+						"$geometry" : {
+							"type" : "MultiPolygon",
+							"coordinates" : [
+								***
+							]
+						}
+					}
+				}
+			},
+			"nReturned" : 12452,
+			"executionTimeMillisEstimate" : 160,
+			"works" : 18441,
+			"advanced" : 12452,
+			"needTime" : 5988,
+			"needYield" : 0,
+			"saveState" : 144,
+			"restoreState" : 144,
+			"isEOF" : 1,
+			"invalidates" : 0,
+			"docsExamined" : 18419,
+			"alreadyHasObj" : 0,
+			"inputStage" : {
+				"stage" : "IXSCAN",
+				"nReturned" : 18419,
+				"executionTimeMillisEstimate" : 10,
+				"works" : 18441,
+				"advanced" : 18419,
+				"needTime" : 21,
+				"needYield" : 0,
+				"saveState" : 144,
+				"restoreState" : 144,
+				"isEOF" : 1,
+				"invalidates" : 0,
+				"keyPattern" : {
+					"location" : "2dsphere"
+				},
+				"indexName" : "location_2dsphere",
+				"isMultiKey" : false,
+				"multiKeyPaths" : {
+					"location" : [ ]
+				},
+				"isUnique" : false,
+				"isSparse" : false,
+				"isPartial" : false,
+				"indexVersion" : 2,
+				"direction" : "forward",
+				"indexBounds" : {
+					"location" : [
+						***
+					]
+				},
+				"keysExamined" : 18440,
+				"seeks" : 22,
+				"dupsTested" : 0,
+				"dupsDropped" : 0,
+				"seenInvalidated" : 0
+			}
+		}
+	},
+	"serverInfo" : {
+		"host" : "tardis",
+		"port" : 27017,
+		"version" : "3.6.3",
+		"gitVersion" : "9586e557d54ef70f9ca4b43c26892cd55257e1a5"
+	},
+	"ok" : 1
+}
+
+SIN INDICE
+"executionTimeMillis" : 230,
+"totalKeysExamined" : 0,
+"totalDocsExamined" : 50000,
+
+CON INDICE
+"executionTimeMillis" : 197,
+"totalKeysExamined" : 18440,
+"totalDocsExamined" : 18419,
+
+
+Parte 4: Aggregation Framework
+▶︎ MongoDB cuenta con un Aggregation Framework que brinda la posibilidad de hacer analítica en tiempo real del estilo OLAP (Online Analytical Processing), de forma similar a otros productos específicos como Hadoop o MapReduce. En los siguientes ejercicios se verán algunos ejemplos de su aplicabilidad.
+
+> load('./generadorReservas.js')
+true
+
+
+13. Obtenga 5 departamentos aleatorios de la colección.
+> db.reservations.aggregate([{ $sample: { size: 5 }}])
+{ "_id" : ObjectId("5eb1b652aef462aabfa5701e"), "apartmentName" : "Apartment 44913", "from" : ISODate("2019-02-12T00:41:36.456Z"), "to" : ISODate("2019-02-15T00:41:36.456Z"), "amount" : 343.74 }
+{ "_id" : ObjectId("5eb1b648aef462aabfa51446"), "apartmentName" : "Apartment 18304", "from" : ISODate("2012-10-19T11:27:28.619Z"), "to" : ISODate("2012-10-24T11:27:28.619Z"), "amount" : 663.7 }
+{ "_id" : ObjectId("5eb1b651aef462aabfa560fe"), "apartmentName" : "Apartment 40472", "from" : ISODate("2013-12-11T02:34:37.935Z"), "to" : ISODate("2013-12-14T02:34:37.935Z"), "amount" : 256.83 }
+{ "_id" : ObjectId("5eb1b644aef462aabfa4f6cd"), "apartmentName" : "Apartment 10207", "from" : ISODate("2015-10-27T01:33:23.380Z"), "to" : ISODate("2015-11-03T01:33:23.380Z"), "amount" : 814.59 }
+{ "_id" : ObjectId("5eb1b646aef462aabfa5005c"), "apartmentName" : "Apartment 12704", "from" : ISODate("2019-08-09T01:26:05.681Z"), "to" : ISODate("2019-08-10T01:26:05.681Z"), "amount" : 135.23 }
+
+
+14. Usando el framework de agregación, obtenga los departamentos que estén a 15km (o menos) del centro de la ciudad de Londres ([-0.127718, 51.507451]) y guárdelos en una nueva colección.
+
+//>db.apartments.aggregate([ { $geoNear: {near: { type: "Point", coordinates: [-0.127718, 51.507451] },distanceField: "dist.calculated",maxDistance: 15000,spherical: true } }]) --> conseguir los que estan a 15km del centro
+> db.apartments.aggregate([ { $geoNear: {near: { type: "Point", coordinates: [-0.127718, 51.507451] },distanceField: "dist.calculated",maxDistance: 15000,spherical: true } } , {$out:'centricos'}])
+> show collections
+apartments
+centricos
+reservations
+> db.centricos.find()
+{ "_id" : ObjectId("5eb1aaa582bba782b99a6a6f"), "name" : "Apartment 48676", "capacity" : 2, "services" : [ "wifi" ], "location" : { "type" : "Point", "coordinates" : [ -0.12739129471151378, 51.50783813765025 ] }, "dist" : { "calculated" : 48.678883317258105 } }
+{ "_id" : ObjectId("5eb1aa9782bba782b99a0417"), "name" : "Apartment 22476", "capacity" : 5, "services" : [ "parking", "pool", "wifi" ], "location" : { "type" : "Point", "coordinates" : [ -0.12412688747056588, 51.50762991886151 ] }, "dist" : { "calculated" : 249.61022596355087 } }
+{ "_id" : ObjectId("5eb1aa9682bba782b999ff12"), "name" : "Apartment 21191", "capacity" : 3, "services" : [ "pool", "parking", "breakfast" ], "location" : { "type" : "Point", "coordinates" : [ -0.13206024197277233, 51.50776144872312 ] }, "dist" : { "calculated" : 302.8351139425277 } }
+{ "_id" : ObjectId("5eb1aa9282bba782b999e5df"), "name" : "Apartment 14740", "capacity" : 3, "services" : [ ], "location" : { "type" : "Point", "coordinates" : [ -0.12332368391983994, 51.50523567521889 ] }, "dist" : { "calculated" : 391.81519632149775 } }
+...
+
+
+15. Para los departamentos hallados en el punto anterior, obtener una colección con cada departamento agregando un atributo reservas que contenga un array con todas sus reservas. Note que sólo es posible ligarlas por el nombre del departamento.
+▶︎ Si la consulta se empieza a tornar difícil de leer, se pueden ir guardando los agregadores en variables, que no son más que objetos en formato JSON.
+
+> db.apartments.aggregate([ { $geoNear: {'near': { type: "Point", coordinates: [-0.127718, 51.507451] },distanceField: "dist.calculated",maxDistance: 15000,spherical: true } } ,{$lookup: {from: 'reservations', localField: 'name', foreignField: 'apartmentName',as: 'reservas'}}, {$out:'centricosConReservas'}])
+> show collections
+apartments
+centricos
+centricosConReservas
+reservations
+
+
+16. Usando la colección del punto anterior, obtenga el promedio de precio pagado por reserva (precio completo, no dividir por la cantidad de noches) de cada departamento.
+> db.centricosConReservas.aggregate([{ $unwind: "$reservas"}, { $group:  { _id: { name: "$name" }, precioPromedio: { $avg: "$reservas.amount" } }}])
+{ "_id" : { "name" : "Apartment 11770" }, "precioPromedio" : 308.64 }
+{ "_id" : { "name" : "Apartment 36653" }, "precioPromedio" : 547.665 }
+{ "_id" : { "name" : "Apartment 10819" }, "precioPromedio" : 916.5799999999999 }
+{ "_id" : { "name" : "Apartment 20138" }, "precioPromedio" : 673.475 }
+{ "_id" : { "name" : "Apartment 6045" }, "precioPromedio" : 756.5640000000001 }
+{ "_id" : { "name" : "Apartment 16362" }, "precioPromedio" : 268.5 }
+{ "_id" : { "name" : "Apartment 39288" }, "precioPromedio" : 602.25 }
+{ "_id" : { "name" : "Apartment 34572" }, "precioPromedio" : 783.486 }
+{ "_id" : { "name" : "Apartment 24353" }, "precioPromedio" : 740.8299999999999 }
+{ "_id" : { "name" : "Apartment 30378" }, "precioPromedio" : 1023.1125000000001 }
+{ "_id" : { "name" : "Apartment 18041" }, "precioPromedio" : 565.4 }
+{ "_id" : { "name" : "Apartment 10417" }, "precioPromedio" : 504.5575 }
+
+...
+
+
+
+https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/
+https://docs.mongodb.com/manual/reference/operator/aggregation/out/
+https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/
+https://docs.mongodb.com/manual/reference/operator/aggregation/unwind/
