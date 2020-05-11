@@ -773,21 +773,6 @@ reservations
 
 
 16. Usando la colección del punto anterior, obtenga el promedio de precio pagado por reserva (precio completo, no dividir por la cantidad de noches) de cada departamento.
-> db.centricosConReservas.aggregate([{ $unwind: "$reservas"}, { $group:  { _id: { name: "$name" }, precioPromedio: { $avg: "$reservas.amount" } }}])
-{ "_id" : { "name" : "Apartment 11770" }, "precioPromedio" : 308.64 }
-{ "_id" : { "name" : "Apartment 36653" }, "precioPromedio" : 547.665 }
-{ "_id" : { "name" : "Apartment 10819" }, "precioPromedio" : 916.5799999999999 }
-{ "_id" : { "name" : "Apartment 20138" }, "precioPromedio" : 673.475 }
-{ "_id" : { "name" : "Apartment 6045" }, "precioPromedio" : 756.5640000000001 }
-{ "_id" : { "name" : "Apartment 16362" }, "precioPromedio" : 268.5 }
-{ "_id" : { "name" : "Apartment 39288" }, "precioPromedio" : 602.25 }
-{ "_id" : { "name" : "Apartment 34572" }, "precioPromedio" : 783.486 }
-{ "_id" : { "name" : "Apartment 24353" }, "precioPromedio" : 740.8299999999999 }
-{ "_id" : { "name" : "Apartment 30378" }, "precioPromedio" : 1023.1125000000001 }
-{ "_id" : { "name" : "Apartment 18041" }, "precioPromedio" : 565.4 }
-{ "_id" : { "name" : "Apartment 10417" }, "precioPromedio" : 504.5575 }
-
-...
 
 > db.centricosConReservas.aggregate([{ $unwind: "$reservas"}, { $group:  { _id:"$name", precioPromedio: { $avg: "$reservas.amount" } }}])
 { "_id" : "Apartment 11770", "precioPromedio" : 308.64 }
