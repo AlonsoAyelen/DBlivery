@@ -189,6 +189,11 @@ vuelva a realizar la última consulta pero proyecte sólo el nombre del departam
 
 ▶︎ En MongoDB hay diferentes maneras de realizar actualizaciones, de acuerdo a las necesidades del esquema flexible de documentos.
 
+--El db.collection.update() actualiza un solo documento. Incluya la opción multi:true para actualizar todos los documentos que coincidan con los criterios de consulta.
+--El db.collection.updateOne() actualiza un único documento dentro de la colección basado en el filtro.
+--El db.collection.updateMany() actualiza todos los documentos que coinciden con el filtro especificado para una colección.
+--La distinción para .updateOne() y .updateMany() es que el primero omite la opción "multi" dentro de "wrapper" update(), mientras que el segundo lo incluye con la opcion en verdadero.
+
 7. Actualice el “Duplex Floor” asignándole capacidad 5.
 > db.apartments.updateMany({ name: "Duplex Floor" }, { $set: { capacity: 5 } })
 WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
@@ -456,6 +461,8 @@ CON
 "executionTimeMillis" : 58,
 "totalKeysExamined" : 50000,
 "totalDocsExamined" : 2291,
+
+--En la documentacion oficial de mongo, en la seccion de 'Estrategias de indexación' dice "Los índices tienen un costo de rendimiento, pero valen más que el costo de las consultas frecuentes en grandes conjuntos de datos. Considere la frecuencia relativa de cada consulta en la aplicación y si la consulta justifica un índice.", haciendonos pensar que la consulta sin indice tarda menos debido a que la coleccion no es lo suficientemente grande como para que el costo supere al beneficio.
 
 
 12. Busque los departamentos dentro de la ciudad de Londres. Para esto, puede definir una variable en la terminal y asignarle como valor el polígono del archivo provisto greaterlondon.geojson (copiando y pegando directamente). Cree un índice geoespacial de tipo 2dsphere para el campo location de la colección apartments y, de la misma forma que en el punto 11, compare la performance de la consulta con y sin dicho índice.
