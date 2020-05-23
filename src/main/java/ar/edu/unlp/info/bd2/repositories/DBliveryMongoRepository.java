@@ -46,5 +46,22 @@ public class DBliveryMongoRepository {
         return stream.collect(Collectors.toList());
     }
 
+	public User createUser(User u) {
+		MongoCollection<User> userCollection = client.getDatabase("bd2_grupo2").getCollection("users",User.class);
+	    userCollection.insertOne(u);
+	    return u;
+	}
+
+	public Supplier createSupplier(Supplier s) {
+		MongoCollection<Supplier> supplierCollection = client.getDatabase("bd2_grupo2").getCollection("suppliers",Supplier.class);
+		supplierCollection.insertOne(s);
+	    return s;
+	}
+
+	public Product createProduct(Product p) {
+		MongoCollection<Product> productCollection = client.getDatabase("bd2_grupo2").getCollection("products",Product.class);
+		productCollection.insertOne(p);
+	    return p;
+	}
 
 }

@@ -15,14 +15,14 @@ import ar.edu.unlp.info.bd2.model.Row;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
-import ar.edu.unlp.info.bd2.repositories.DBliveryRepository;
+import ar.edu.unlp.info.bd2.repositories.DBliveryMongoRepository;
 import ar.edu.unlp.info.bd2.services.DBliveryService;
 
 public class DBliveryServiceImpl implements DBliveryService {
 	
-	private DBliveryRepository repository;
+	private DBliveryMongoRepository repository;
 	
-    public DBliveryServiceImpl(DBliveryRepository repository) {
+    public DBliveryServiceImpl(DBliveryMongoRepository repository) {
         this.repository = repository;
     }
 

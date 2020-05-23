@@ -1,14 +1,15 @@
 package ar.edu.unlp.info.bd2.services;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
+import org.bson.types.ObjectId;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import org.bson.types.ObjectId;
+
 
 public interface DBliveryService {
-    
+
 	/**
 	 *  Crea y devuelve un nuevo Producto.
 	 * @param name nombre del producto a ser creado
@@ -30,7 +31,7 @@ public interface DBliveryService {
 	 * @return el productor creado
 	 */
 	Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY);
-	
+
 	/**
 	 * Crea y retorna un Usuario
 	 * @param email email del usuario
@@ -52,43 +53,41 @@ public interface DBliveryService {
 	 */
 	Product updateProductPrice(ObjectId id, Float price, Date startDate) throws DBliveryException;
 
-
-	
 	/**
 	 * Obtiene el usuario por id
 	 * @param id
 	 * @return el usuario con el id provisto
 	 */
 	Optional<User> getUserById(ObjectId id);
-	
+
 	/**
 	 * Obtiene el usuario por el email
 	 * @param email
 	 * @return el usuario con el email provisto
 	 */
 	Optional<User> getUserByEmail(String email);
-	
+
 	/**
 	 * Obtiene el usuario por el username
 	 * @param username
 	 * @return el usuario con el username provisto
 	 */
 	Optional<User> getUserByUsername(String username);
-	
+
 //	/**
 //	 * Obtiene el producto por id
-//	 * @param id 
+//	 * @param id
 //	 * @return el producto con el id provisto
 //	 */
 //	Optional<Product> getProductById(Long id);
-//	
+
 	/**
 	 * Obtiene el pedido por id
 	 * @param id
 	 * @return el pedido con el id provisto
 	 */
 	Optional<Order> getOrderById(ObjectId id);
-	
+
 	/**
 	 * Crea y retorna un nuevo pedido
 	 * @param dateOfOrder timestamp de la fecha en que fue realizado el pedido
@@ -99,7 +98,7 @@ public interface DBliveryService {
 	 * @return el nuevo pedido
 	 */
 	Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY,User client);
-	
+
 	/**
 	 * agrega un producto al pedido
 	 * @param order pedido al cual se le agrega el producto
@@ -117,7 +116,6 @@ public interface DBliveryService {
 	 * @return el pedido modificado
 	 * @throws DBliveryException en caso de no existir el pedido, que el pedido no se encuentre en estado Pending o sí no contiene productos.
 	 */
-
 	Order deliverOrder(ObjectId order, User deliveryUser) throws DBliveryException;
 	Order deliverOrder(ObjectId order, User deliveryUser, Date date) throws DBliveryException;
 
@@ -138,7 +136,7 @@ public interface DBliveryService {
 	 */
 	Order finishOrder(ObjectId order) throws DBliveryException;
 	Order finishOrder(ObjectId order, Date date) throws DBliveryException;
-	
+
 	/**
 	 * verifica si un pedido se puede cancelar, para lo cual debe estar en estado pending
 	 * @param order pedido a ser cancelado
@@ -153,7 +151,8 @@ public interface DBliveryService {
 	 * @return true en caso que pueda ser finalizado, false en caso contrario
 	 * @throws DBliveryException en caso de no existir el pedido
 	 */
-	boolean canFinish(ObjectId id) throws DBliveryException;	
+	boolean canFinish(ObjectId id) throws DBliveryException;
+
 	/**
 	 * verifica si un pedido puede ser enviado para lo cual debe tener productos y estar en estado pending
 	 * @param order pedido a ser enviado
@@ -161,14 +160,14 @@ public interface DBliveryService {
 	 * @throws DBliveryException si el pedido no esta en estado pending.
 	 */
 	boolean canDeliver(ObjectId order) throws DBliveryException;
-	
+
 	/**
 	 * Obtiene el estado actual de un pedido.
 	 * @param order pedido del cual se debe retornar el estado actual
 	 * @return el estado del pedido actual
 	 */
 	OrderStatus getActualStatus(ObjectId order);
-	
+
 	/**
 	 * Obtiene el listado de productos que su nombre contega el string dado
 	 * @param name string a buscar
