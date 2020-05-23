@@ -4,40 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-@Entity
-@Table(name="orders")
 public class Order {
-
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	//@Column(name="dalivery_user")
-	@ManyToOne()
 	private User deliveryUser;
-	@ManyToOne()
 	private User client;
-	@Column(name="date")
 	private Date dateOfOrder;
-	@Column(name="address")
 	private String address;
-	@Column(name="coordx")
 	private Float coordX;
-	@Column(name="coordy")
 	private Float coordY;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<Row> products = new ArrayList<>();
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<OrderStatus> status = new ArrayList<>();
 	
 	public Order(){

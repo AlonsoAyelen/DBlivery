@@ -3,11 +3,6 @@ package ar.edu.unlp.info.bd2.model;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@Entity
-@Table(name="sent")
 public class Sent extends OrderStatus {
 
 	public Sent() {

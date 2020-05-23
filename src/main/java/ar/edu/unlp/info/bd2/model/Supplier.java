@@ -1,39 +1,22 @@
 package ar.edu.unlp.info.bd2.model;
 
 import java.util.ArrayList;
-//import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-//import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-//import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-//import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+import ar.edu.unlp.info.bd2.mongo.*;
 
-@Entity
-@Table(name="supplier")
-public class Supplier {
+
+public class Supplier implements PersistentObject {
 	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	@Column(name="name")
+	@BsonId
+	private ObjectId objectId;
 	private String name;
-	@Column(name="cuil")
 	private String cuil;
-	@Column(name="address")
 	private String address;
-	@Column(name="coordx")
 	private Float coordX;
-	@Column(name="coordY")
 	private Float coordY;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
 	private List<Product> products = new ArrayList<>();
 	
 	public Supplier() {
@@ -41,7 +24,6 @@ public class Supplier {
 	}
 	
 	public Supplier(String n,String c,String a,Float x,Float y) {   //constructor
-		id=1;
 		name = n;
 		cuil = c;
 		address = a;
@@ -49,15 +31,15 @@ public class Supplier {
 		coordY = y;
 		products=new ArrayList<Product>();
 	}
-	
-	public long getId() {
-		return id;
+
+	public ObjectId getObjectId() {
+		return objectId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setObjectId(ObjectId objectId) {
+		this.objectId = objectId;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -96,7 +78,6 @@ public class Supplier {
 	public void setProducts(ArrayList<Product> products) {
 		this.products = products;
 	}
-
 
 
 }

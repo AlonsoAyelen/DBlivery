@@ -1,34 +1,21 @@
 package ar.edu.unlp.info.bd2.model;
 
 import java.util.List;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+import ar.edu.unlp.info.bd2.mongo.*;
 
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
-import javax.persistence.*;
-
-import java.util.ArrayList; // import the ArrayList class
-@Entity
-@Table(name="products")
 public class Product {
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
-	@Column(name="name")
+	@BsonId
+	private ObjectId objectId;
 	private String name;
-	@ManyToOne()
-	@JoinColumn()
 	private Supplier supplier;
-	@Column(name="price")
 	private Float price;
-	@Column(name="weight")
 	private Float weight;
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "product_id")
 	private List<Price> prices = new ArrayList<Price>();
 	
 	public Product (String name, Float price, Float weight, Supplier supplier) {
@@ -54,13 +41,7 @@ public class Product {
 	public Product() {
 		
 	}
-	
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+
 	public Supplier getSupplier() {
 		return supplier;
 	}
@@ -130,6 +111,13 @@ public class Product {
 	    }
 		return this.getLastPrice().getPrice();
 	}
-	
+
+	public ObjectId getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(ObjectId objectId) {
+		this.objectId = objectId;
+	}
  
 }

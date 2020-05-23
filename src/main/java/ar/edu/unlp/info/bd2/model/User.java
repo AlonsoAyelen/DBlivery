@@ -2,33 +2,18 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+import ar.edu.unlp.info.bd2.mongo.*;
 
-
-@Entity
-@Table(name="users")
-public class User {
+public class User implements PersistentObject {
 	
-	//@GeneratedValue(strategy = GenerationType.AUTO)
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
-	@Column(name="username")
+	@BsonId
+	private ObjectId objectId;
 	private String username;
-	@Column(name="password")
 	private String password;
-	@Column(name="name")
 	private String name;
-	@Column(name="email")
 	private String email;
-	@Column(name="birth")
 	private Date birth;
 	
 	public User(String e,String p,String u,String n,Date b) {   //constructor
@@ -38,18 +23,11 @@ public class User {
 		email = e;
 		birth = b;
 	}
-	
+
 	public User() {
 		
 	}
-	
-	public long getId() {
-		return id;
-	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
 	public String getUsername() {
 		return username;
 	}
@@ -79,6 +57,14 @@ public class User {
 	}
 	public void setBirth(Date birth) {
 		this.birth = birth;
+	}
+
+	public ObjectId getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(ObjectId objectId) {
+		this.objectId = objectId;
 	}
 
 
