@@ -15,7 +15,7 @@ public class DBInitializer {
 
     public void prepareDB() throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
+/*
         Supplier supplier001 = this.service.createSupplier("La Trattoria", "21206013986","Calle 52 Nº84", -34.931463F, -57.954751F);
         Supplier supplier002 = this.service.createSupplier("Pancho Crazy", "22626502551","Calle 54 Nº1389", -34.918711F, -57.985247F);
         Supplier supplier003 = this.service.createSupplier("Kentucky", "20226239082","Calle 51 Nº1356", -34.934297F, -57.991746F);
@@ -1876,7 +1876,7 @@ public class DBInitializer {
         service.addProduct(order300.getId(),3L, product061);
         service.deliverOrder(order300.getId(), user188, sdf.parse("6/3/2014"));
         service.finishOrder(order300.getId(), sdf.parse("8/3/2014"));
-
+*/
 
     }
 }

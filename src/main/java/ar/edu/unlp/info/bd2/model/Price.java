@@ -2,8 +2,16 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.Date;
 
-public class Price {
-	private long id;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.types.ObjectId;
+
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
+
+public class Price implements PersistentObject {
+	@BsonProperty("objectId")
+	@BsonId
+	private ObjectId objectId;
 	private Date startDate;
 	private Date finishDate;
 	private Float price;
@@ -26,13 +34,12 @@ public class Price {
 		
 	}
 	
-	public long getId() {
-		return id;
+	public ObjectId getObjectId() {
+		return objectId;
 	}
 
-
-	public void setId(long id) {
-		this.id = id;
+	public void setObjectId(ObjectId objectId) {
+		this.objectId = objectId;
 	}
 	
 	public Date getStartDate() {

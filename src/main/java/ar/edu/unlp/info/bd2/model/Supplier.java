@@ -78,6 +78,8 @@ public class Supplier implements PersistentObject {
 	public void setProducts(ArrayList<Product> products) {
 		this.products = products;
 	}
-
+	public void addProduct(Product p) {
+		this.products.add(p);
+	}
 
 }

@@ -9,7 +9,7 @@ import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 import ar.edu.unlp.info.bd2.mongo.*;
 
-public class Product {
+public class Product implements PersistentObject {
 	@BsonId
 	private ObjectId objectId;
 	private String name;
@@ -83,6 +83,7 @@ public class Product {
 		}
 		return act;
 		//return prices.get(prices.size()-1);
+		//return this.price();?????
 	}
 	
 	public Product updatePrice(Product p,Float price, Date startDate) {

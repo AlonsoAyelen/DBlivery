@@ -11,6 +11,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,7 +30,7 @@ public class DBliveryMongoRepository {
     }
 
     public MongoDatabase getDb() {
-        return this.client.getDatabase("dblivery");
+        return this.client.getDatabase("bd2_grupo2");
     }
 
     public <T extends PersistentObject> List<T> getAssociatedObjects(
@@ -46,22 +49,86 @@ public class DBliveryMongoRepository {
         return stream.collect(Collectors.toList());
     }
 
+    /* COMIENZO DE METODOS CREATE */
+
+    //Intento de hacer que todos los create usen el mismo metodo
+    //REVISAR PROBLEMAS DE USAR PersistentObject.class
+    public void save(PersistentObject obj, String collectionName) {
+        this.getDb()
+                .getCollection(collectionName, PersistentObject.class)
+                .insertOne(obj);
+    }
+
 	public User createUser(User u) {
-		MongoCollection<User> userCollection = client.getDatabase("bd2_grupo2").getCollection("users",User.class);
+		MongoCollection<User> userCollection = this.getDb().getCollection("users",User.class);
 	    userCollection.insertOne(u);
 	    return u;
 	}
 
 	public Supplier createSupplier(Supplier s) {
-		MongoCollection<Supplier> supplierCollection = client.getDatabase("bd2_grupo2").getCollection("suppliers",Supplier.class);
+		MongoCollection<Supplier> supplierCollection = this.getDb().getCollection("suppliers",Supplier.class);
 		supplierCollection.insertOne(s);
 	    return s;
 	}
 
 	public Product createProduct(Product p) {
-		MongoCollection<Product> productCollection = client.getDatabase("bd2_grupo2").getCollection("products",Product.class);
+		MongoCollection<Product> productCollection = this.getDb().getCollection("products",Product.class);
 		productCollection.insertOne(p);
-	    return p;
+		return p;
 	}
+
+	public Order createOrder(Order o) {
+		MongoCollection<Order> orderCollection = this.getDb().getCollection("orders",Order.class);
+		orderCollection.insertOne(o);
+	    return o;
+	}
+	
+	/* FIN DE METODOS CREATE */
+
+
+
+	/* COMIENZO DE METODOS FIND */
+	
+	public List<Product> findProductsByName(String name) {
+		Bson filter = regex("name", name);
+		MongoCollection<Product> productCollection = this.getDb().getCollection("products",Product.class);
+		List<Product> products = new ArrayList<>();
+		FindIterable<Product> itr =productCollection.find(filter);
+		for (Product p : itr) {
+			products.add(p);
+		}
+		return products;
+	}
+
+	public Optional<User> findUserById(ObjectId id) {
+		MongoCollection<User> usersCollection = this.getDb().getCollection("users", User.class);
+		User u = usersCollection.find(eq("objectId", id)).first();
+		Optional<User> ou = Optional.ofNullable(u);
+		return ou;
+	}
+
+	public Optional<User> findUserByUsername(String username) {
+		MongoCollection<User> usersCollection = this.getDb().getCollection("users", User.class);
+		User u = usersCollection.find(eq("username", username)).first();
+		Optional<User> ou = Optional.ofNullable(u);
+		return ou;
+	}
+
+	public Optional<User> findUserByEmail(String email) {
+		MongoCollection<User> usersCollection = this.getDb().getCollection("users", User.class);
+		User u = usersCollection.find(eq("email", email)).first();
+		Optional<User> ou = Optional.ofNullable(u);
+		return ou;
+	}
+
+	public Optional<Product> findProductById(ObjectId id) {
+		MongoCollection<Product> productsCollection = this.getDb().getCollection("products", Product.class);
+		Product p = productsCollection.find(eq("objectId", id)).first();
+		Optional<Product> op = Optional.ofNullable(p);
+		return op;
+	}
+
+	/* FIN DE METODOS FIND */
+
 
 }

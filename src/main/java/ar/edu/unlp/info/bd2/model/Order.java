@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Order {
-	private long id;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
+
+public class Order implements PersistentObject {
+	@BsonId
+	private ObjectId objectId;
 	private User deliveryUser;
 	private User client;
 	private Date dateOfOrder;
@@ -45,12 +51,12 @@ public class Order {
 		this.deliveryUser = deliveryUser;
 	}
 
-	public long getId() {
-		return id;
+	public ObjectId getObjectId() {
+		return objectId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setObjectId(ObjectId objectId) {
+		this.objectId = objectId;
 	}
 
 	public Date getDateOfOrder() {
@@ -123,10 +129,9 @@ public class Order {
 //			if(os.getDate().after(act.getDate())) act=os;
 //		}
 		for (OrderStatus os :this.getStatus()) {
-			if(os.getId()>act.getId()) act=os;
+			if(os.getObjectId().compareTo(act.getObjectId())>0) act=os;
 		}
 		return act;
-		//return this.getStatus().get(this.getStatus().size() - 1 );
 	}
 	
 	public void send(User deilvery) {
@@ -135,14 +140,6 @@ public class Order {
 			this.getActualStatus().send(this);	
 		}
 	}
-	
-//	public void send(User deilvery,Date date) {
-//		if (this.canDeliver()) {
-//			this.setDeliveryUser(deilvery);
-//			System.out.print(this.getActualStatus());
-//			this.getActualStatus().send(this,date);	
-//		}
-//	}
 
 	public void cancel() {
 		if (this.canCancel()) {
@@ -155,12 +152,6 @@ public class Order {
 			this.getActualStatus().finish(this);	
 		}
 	}
-
-//	public void finish(Date date) {
-//		if (this.canFinish()) {
-//			this.getActualStatus().finish(this,date);	
-//		}
-//	}
 
 	public Float getAmount() {
 		Float amount=0F;

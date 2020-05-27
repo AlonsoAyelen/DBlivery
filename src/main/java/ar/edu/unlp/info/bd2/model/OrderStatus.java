@@ -2,8 +2,14 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.Date;
 
-public abstract class OrderStatus {
-	protected Integer id;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
+
+public abstract class OrderStatus implements PersistentObject {
+	@BsonId
+	private ObjectId objectId;
 	protected Date date;
     protected Order order;
 	
@@ -23,12 +29,12 @@ public abstract class OrderStatus {
 		this.date = date;
 	}
 
-	public Integer getId() {
-		return id;
+	public ObjectId getObjectId() {
+		return objectId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setObjectId(ObjectId objectId) {
+		this.objectId = objectId;
 	}
 
 	public OrderStatus() {

@@ -14,6 +14,7 @@ import ar.edu.unlp.info.bd2.model.Product;
 import ar.edu.unlp.info.bd2.model.Row;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
+import ar.edu.unlp.info.bd2.mongo.Association;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
 import ar.edu.unlp.info.bd2.repositories.DBliveryMongoRepository;
 import ar.edu.unlp.info.bd2.services.DBliveryService;
@@ -30,6 +31,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
 		Product p = new Product(name, price,weight,supplier);
 		repository.createProduct(p);
+//		repository.save(p,"products");
+		repository.saveAssociation(supplier,p,"supplier_product");
 		return p;
 	}
 
@@ -37,6 +40,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
 		Product p = new Product(name, price,weight,supplier,date);
 		repository.createProduct(p);
+//		repository.save(p,"products");
+		repository.saveAssociation(supplier,p,"supplier_product");
 		return p;
 	}
 
@@ -56,26 +61,30 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Product updateProductPrice(ObjectId id, Float price, Date startDate) throws DBliveryException {
-		// TODO Auto-generated method stub
+//		Optional<Product> pp = repository.findProductById(id);
+//		if (pp.isPresent()){
+//			Product p = pp.get();
+//			p.updatePrice(p,price,startDate);
+//			return p;
+//		} else {
+//			throw new  DBliveryException("Product not found");
+//		}
 		return null;
 	}
 
 	@Override
 	public Optional<User> getUserById(ObjectId id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findUserById(id);
 	}
 
 	@Override
 	public Optional<User> getUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findUserByEmail(email);
 	}
 
 	@Override
 	public Optional<User> getUserByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findUserByUsername(username);
 	}
 
 	@Override
@@ -86,8 +95,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
-		// TODO Auto-generated method stub
-		return null;
+		Order o = new Order(dateOfOrder, address,coordX,coordY,client);
+		repository.createOrder(o);
+		return o;
 	}
 
 	@Override
@@ -158,8 +168,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getProductsByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findProductsByName(name);
 	}
 
 

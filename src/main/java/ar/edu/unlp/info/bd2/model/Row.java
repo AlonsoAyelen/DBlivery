@@ -1,7 +1,13 @@
 package ar.edu.unlp.info.bd2.model;
 
-public class Row {
-	private Integer id;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.types.ObjectId;
+
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
+
+public class Row implements PersistentObject {
+	@BsonId
+	private ObjectId objectId;
 	private Long cant;
 	private Product product;
 //PORQUE NUNCA SE USABA?!
@@ -25,12 +31,12 @@ public class Row {
 		this.cant = cant;
 	}
 	
-	public Integer getId() {
-		return id;
+	public ObjectId getObjectId() {
+		return objectId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setObjectId(ObjectId objectId) {
+		this.objectId = objectId;
 	}
 
 	public Product getProduct() {
