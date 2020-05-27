@@ -49,6 +49,8 @@ public class DBliveryMongoRepository {
         return stream.collect(Collectors.toList());
     }
 
+    
+    
     /* COMIENZO DE METODOS CREATE */
 
     //Intento de hacer que todos los create usen el mismo metodo
@@ -123,9 +125,17 @@ public class DBliveryMongoRepository {
 
 	public Optional<Product> findProductById(ObjectId id) {
 		MongoCollection<Product> productsCollection = this.getDb().getCollection("products", Product.class);
-		Product p = productsCollection.find(eq("objectId", id)).first();
+//		Product p = productsCollection.find(eq("objectId", id)).first();
+		Product p = productsCollection.find(eq("_id", id)).first();
 		Optional<Product> op = Optional.ofNullable(p);
 		return op;
+	}
+
+	public Optional<Order> findOrderById(ObjectId order) {
+		MongoCollection<Order> productsCollection = this.getDb().getCollection("orders", Order.class);
+		Order o = productsCollection.find(eq("_id", order)).first();
+		Optional<Order> oo = Optional.ofNullable(o);
+		return oo;
 	}
 
 	/* FIN DE METODOS FIND */

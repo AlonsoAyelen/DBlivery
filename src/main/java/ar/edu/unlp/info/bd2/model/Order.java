@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
 
 import ar.edu.unlp.info.bd2.mongo.PersistentObject;
@@ -72,14 +73,18 @@ public class Order implements PersistentObject {
 	}
 
 	public void setProducts(ArrayList<Row> products) {
-		this.products = products;
+//		this.products = products;
 	}
 
 	public List<OrderStatus> getStatus() {
 		return status;
 	}
 
-	public void setStatus(OrderStatus status) {
+	public void setStatus(ArrayList<OrderStatus> s) {
+//		this.status=s;
+	}
+	
+	public void addStatus(OrderStatus status) {
 		this.status.add(status);
 	}
 	
@@ -122,7 +127,8 @@ public class Order implements PersistentObject {
 	public boolean canDeliver() {
 		return this.getActualStatus().canDeliver(this);
 	}
-	
+
+	@BsonIgnore
 	public OrderStatus getActualStatus() {
 		OrderStatus act= this.getStatus().get(0);
 //		for (OrderStatus os :this.getStatus()) {

@@ -15,12 +15,12 @@ public class Cancelled extends OrderStatus {
 		Calendar today = Calendar.getInstance();
 		Date todayDate = today.getTime();
 		this.date=todayDate;
-		this.order=o;
+//		this.order=o;
 	}
 
 	public Cancelled(Order order2, Date date2) {
 		this.date=date2;
-		this.order=order2;
+//		this.order=order2;
 	}
 
 	public String getStatus() {

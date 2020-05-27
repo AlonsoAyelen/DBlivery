@@ -15,16 +15,16 @@ public class Pending extends OrderStatus {
 		Calendar today = Calendar.getInstance();
 		Date todayDate = today.getTime();
 		this.date=todayDate;
-		this.order=o;
+//		this.order=o;
 	}
 	
 	public Pending(Order order, Date date) {
 		this.date=date;
-		this.order=order;
+//		this.order=order;
 	}
 	
 	public void cancel(Order o) {
-		o.setStatus(new Cancelled(o));
+		o.addStatus(new Cancelled(o));
 	}
 	
 //	public void cancel(Order o,Date date) {
@@ -36,7 +36,7 @@ public class Pending extends OrderStatus {
 //	}
 	
 	public void send(Order o) {
-		o.setStatus(new Sent(o));
+		o.addStatus(new Sent(o));
 	}
 	
 	public String getStatus() {
@@ -50,12 +50,12 @@ public class Pending extends OrderStatus {
 	}
 	
 	public void send(Order order2, Date date2) {
-		order2.setStatus(new Sent(order2,date2));
+		order2.addStatus(new Sent(order2,date2));
 		
 	}
 	
 	public void cancel(Order order2, Date date2) {
-		order2.setStatus(new Cancelled(order2,date2));
+		order2.addStatus(new Cancelled(order2,date2));
 		
 	}
 }

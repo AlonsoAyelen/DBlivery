@@ -2,24 +2,26 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.Date;
 
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
+@BsonDiscriminator
 public abstract class OrderStatus implements PersistentObject {
 	@BsonId
 	private ObjectId objectId;
 	protected Date date;
-    protected Order order;
+//    protected Order order;
 	
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
+//	public Order getOrder() {
+//		return order;
+//	}
+//
+//	public void setOrder(Order order) {
+//		this.order = order;
+//	}
 
 	public Date getDate() {
 		return date;

@@ -89,8 +89,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<Order> getOrderById(ObjectId id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findOrderById(id);
 	}
 
 	@Override
@@ -102,8 +101,20 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order addProduct(ObjectId order, Long quantity, Product product) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Optional<Order> oo = repository.findOrderById(order);
+		if(oo.isPresent()) {
+			Order o =oo.get();
+			Row r = new Row(product, quantity, o);
+			//meter el renglon en el arreglo de order
+			System.out.println(o+"   "+o.getAddress()+"   "+o.getObjectId());
+			repository.save(r,"row");
+			repository.saveAssociation(r,o,"order_rows");
+			repository.saveAssociation(r,product,"row_product");
+			return o;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
