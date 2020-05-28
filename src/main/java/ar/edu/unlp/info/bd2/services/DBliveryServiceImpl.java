@@ -89,7 +89,21 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<Order> getOrderById(ObjectId id) {
-		return repository.findOrderById(id);
+		Optional<Order> oo = repository.findOrderById(id);
+//		
+//		GETASSOCIATED MOVIDO AL REPOSITORY
+//		List<Row> lr= repository.getAssociatedObjects(oo.get(), Row.class, "order_rows", "rows");
+////		for (Row r : lr) {
+////			//TENGO QUE IR A BUSCAR CADA PRODUCTO???
+////			CREO QUE DEBERIAS SACARLO DE ADENTRO DEL ROW, Y PONER UNA ASSOCIATION...
+////		
+////		
+////			System.out.println(r.getProduct().getName());
+//////			Product p = repository.getAssociatedObjects(oo.get(), Row.class, "order_rows", "rows");;
+////			
+////		}
+//		oo.get().setProducts(lr);
+		return oo;
 	}
 
 	@Override
@@ -106,10 +120,10 @@ public class DBliveryServiceImpl implements DBliveryService {
 		if(oo.isPresent()) {
 			Order o =oo.get();
 			Row r = new Row(product, quantity, o);
+			o.addProduct(r);
 			//meter el renglon en el arreglo de order
-			System.out.println(o+"   "+o.getAddress()+"   "+o.getObjectId());
-			repository.save(r,"row");
-			repository.saveAssociation(r,o,"order_rows");
+			repository.save(r,"rows");
+			repository.saveAssociation(o,r,"order_rows");
 			repository.saveAssociation(r,product,"row_product");
 			return o;
 		} else {

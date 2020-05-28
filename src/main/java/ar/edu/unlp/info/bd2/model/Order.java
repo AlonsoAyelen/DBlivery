@@ -72,8 +72,8 @@ public class Order implements PersistentObject {
 		return products;
 	}
 
-	public void setProducts(ArrayList<Row> products) {
-//		this.products = products;
+	public void setProducts(List<Row> products) {
+		this.products = products;
 	}
 
 	public List<OrderStatus> getStatus() {
@@ -81,7 +81,7 @@ public class Order implements PersistentObject {
 	}
 
 	public void setStatus(ArrayList<OrderStatus> s) {
-//		this.status=s;
+		this.status=s;
 	}
 	
 	public void addStatus(OrderStatus status) {

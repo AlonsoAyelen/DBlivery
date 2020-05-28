@@ -132,8 +132,10 @@ public class DBliveryMongoRepository {
 	}
 
 	public Optional<Order> findOrderById(ObjectId order) {
-		MongoCollection<Order> productsCollection = this.getDb().getCollection("orders", Order.class);
-		Order o = productsCollection.find(eq("_id", order)).first();
+		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class);
+		Order o = ordersCollection.find(eq("_id", order)).first();
+		List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
+		o.setProducts(lr);
 		Optional<Order> oo = Optional.ofNullable(o);
 		return oo;
 	}
