@@ -128,14 +128,16 @@ public class Order implements PersistentObject {
 		return this.getActualStatus().canDeliver(this);
 	}
 
-	@BsonIgnore
+	//@BsonIgnore
 	public OrderStatus getActualStatus() {
 		OrderStatus act= this.getStatus().get(0);
+		//System.out.print(act);
 //		for (OrderStatus os :this.getStatus()) {
 //			if(os.getDate().after(act.getDate())) act=os;
 //		}
 		for (OrderStatus os :this.getStatus()) {
-			if(os.getObjectId().compareTo(act.getObjectId())>0) act=os;
+			//if(os.getObjectId().compareTo(act.getObjectId())>0) act=os;
+			//System.out.print(os.getObjectId());
 		}
 		return act;
 	}

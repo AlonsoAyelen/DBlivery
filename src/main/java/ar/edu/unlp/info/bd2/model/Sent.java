@@ -3,17 +3,21 @@ package ar.edu.unlp.info.bd2.model;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+
 public class Sent extends OrderStatus {
 
 	public Sent() {
 		Calendar today = Calendar.getInstance();
 		Date todayDate = today.getTime();
+		this.setObjectId(new ObjectId());
 		this.date=todayDate;
 	}
 
 	public Sent(Order o) {
 		Calendar today = Calendar.getInstance();
 		Date todayDate = today.getTime();
+		this.setObjectId(new ObjectId());
 		this.date=todayDate;
 //		this.order=o;
 	}

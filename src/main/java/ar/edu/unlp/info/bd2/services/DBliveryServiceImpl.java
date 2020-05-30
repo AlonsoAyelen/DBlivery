@@ -30,18 +30,21 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
 		Product p = new Product(name, price,weight,supplier);
-		repository.createProduct(p);
+		supplier.addProduct(p);
+		repository.createProduct(supplier);
+//		repository.createProduct(p);
 //		repository.save(p,"products");
-		repository.saveAssociation(supplier,p,"supplier_product");
+//		repository.saveAssociation(supplier,p,"supplier_product");
 		return p;
 	}
 
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
 		Product p = new Product(name, price,weight,supplier,date);
-		repository.createProduct(p);
+		supplier.addProduct(p);
+		repository.createProduct(supplier);
 //		repository.save(p,"products");
-		repository.saveAssociation(supplier,p,"supplier_product");
+//		repository.saveAssociation(supplier,p,"supplier_product");
 		return p;
 	}
 
@@ -62,6 +65,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public Product updateProductPrice(ObjectId id, Float price, Date startDate) throws DBliveryException {
 //		Optional<Product> pp = repository.findProductById(id);
+//		repository.findSupplierOfProduct(id);
+//		
 //		if (pp.isPresent()){
 //			Product p = pp.get();
 //			p.updatePrice(p,price,startDate);
@@ -133,8 +138,16 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order deliverOrder(ObjectId order, User deliveryUser) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent() && oo.get().canDeliver()){
+			Order o = oo.get();
+			o.send(deliveryUser);
+			repository.refreshOrder(o);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be delivered");
+		}
 	}
 
 	@Override
@@ -142,7 +155,17 @@ public class DBliveryServiceImpl implements DBliveryService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	@Override
+	public boolean canDeliver(ObjectId order) throws DBliveryException {
+		Optional<Order> oo = repository.findOrderById(order);
+		if(oo.isPresent()) {
+			return oo.get().canDeliver();
+		} else {
+			throw new DBliveryException("Order not found\n");
+		}
+	}
+	
 	@Override
 	public Order cancelOrder(ObjectId order) throws DBliveryException {
 		// TODO Auto-generated method stub
@@ -175,12 +198,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public boolean canFinish(ObjectId id) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean canDeliver(ObjectId order) throws DBliveryException {
 		// TODO Auto-generated method stub
 		return false;
 	}

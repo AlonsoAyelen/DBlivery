@@ -3,6 +3,8 @@ package ar.edu.unlp.info.bd2.model;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+
 public class Cancelled extends OrderStatus {
 
 	public Cancelled() {
@@ -15,6 +17,7 @@ public class Cancelled extends OrderStatus {
 		Calendar today = Calendar.getInstance();
 		Date todayDate = today.getTime();
 		this.date=todayDate;
+		this.setObjectId(new ObjectId());
 //		this.order=o;
 	}
 
@@ -26,4 +29,6 @@ public class Cancelled extends OrderStatus {
 	public String getStatus() {
 		return "Cancelled";
 	}
+	
+
 }

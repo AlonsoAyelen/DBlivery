@@ -13,7 +13,7 @@ public class Product implements PersistentObject {
 	@BsonId
 	private ObjectId objectId;
 	private String name;
-	private Supplier supplier;
+//	private Supplier supplier;
 	private Float price;
 	private Float weight;
 	private List<Price> prices = new ArrayList<Price>();
@@ -22,9 +22,10 @@ public class Product implements PersistentObject {
 		this.name=name;
 		this.price=price;
 		this.weight=weight;
-		this.supplier=supplier;
+//		this.supplier=supplier;
 		Calendar today = Calendar.getInstance();
 		Date todayDate = today.getTime();
+		this.objectId = new ObjectId();
 		Price p = new Price(todayDate, price);
 		this.prices.add(p);
 	}
@@ -33,7 +34,8 @@ public class Product implements PersistentObject {
 		this.name=name;
 		this.price=price;
 		this.weight=weight;
-		this.supplier=supplier;
+//		this.supplier=supplier;
+		this.objectId = new ObjectId();
 		Price p = new Price(date, price);
 		this.prices.add(p);
 	}
@@ -42,12 +44,12 @@ public class Product implements PersistentObject {
 		
 	}
 
-	public Supplier getSupplier() {
-		return supplier;
-	}
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
-	}
+//	public Supplier getSupplier() {
+//		return supplier;
+//	}
+//	public void setSupplier(Supplier supplier) {
+//		this.supplier = supplier;
+//	}
 	public Float getPrice() {
 		return price;
 	}

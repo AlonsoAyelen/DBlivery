@@ -11,7 +11,7 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 @BsonDiscriminator
 public abstract class OrderStatus implements PersistentObject {
 	@BsonId
-	private ObjectId objectId;
+	protected ObjectId objectId;
 	protected Date date;
 //    protected Order order;
 	

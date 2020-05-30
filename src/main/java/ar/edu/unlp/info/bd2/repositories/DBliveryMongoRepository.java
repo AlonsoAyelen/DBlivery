@@ -6,6 +6,8 @@ import static com.mongodb.client.model.Filters.regex;
 
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.mongo.*;
+
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -73,10 +75,10 @@ public class DBliveryMongoRepository {
 	    return s;
 	}
 
-	public Product createProduct(Product p) {
-		MongoCollection<Product> productCollection = this.getDb().getCollection("products",Product.class);
-		productCollection.insertOne(p);
-		return p;
+	public Product createProduct(Supplier s) {
+		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers",Supplier.class);
+		suppliersCollection.replaceOne(eq("_id", s.getObjectId()),s);
+		return null;
 	}
 
 	public Order createOrder(Order o) {
@@ -107,6 +109,13 @@ public class DBliveryMongoRepository {
 		User u = usersCollection.find(eq("objectId", id)).first();
 		Optional<User> ou = Optional.ofNullable(u);
 		return ou;
+	}
+	
+	public Optional<Supplier> findSupplierById(ObjectId id) {
+		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class);
+		Supplier sup = suppliersCollection.find(eq("objectId", id)).first();
+		Optional<Supplier> su = Optional.ofNullable(sup);
+		return su;
 	}
 
 	public Optional<User> findUserByUsername(String username) {
@@ -139,6 +148,15 @@ public class DBliveryMongoRepository {
 		Optional<Order> oo = Optional.ofNullable(o);
 		return oo;
 	}
+
+	public void refreshOrder(Order o) {
+		// TODO Auto-generated method stub
+		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders",Order.class);
+		ordersCollection.replaceOne(eq("_id", o.getObjectId()),o);
+		//return null;
+	}
+	
+//	public Optional<Supplier> findSupplierOfProduct(ObjectId id) { 		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		BasicDBObject filter = new BasicDBObject(new BasicDBObject("products",new BasicDBObject("$elemMatch", new BasicDBObject("_id", id)))); 		Supplier s = suppliersCollection.find(filter).first(); 		System.out.println(s); 		System.out.println(s.getAddress()); 		return null; 	}
 
 	/* FIN DE METODOS FIND */
 
