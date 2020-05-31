@@ -152,8 +152,16 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order deliverOrder(ObjectId order, User deliveryUser, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if (oo.isPresent() && oo.get().canDeliver()){
+			Order o = oo.get();
+			o.send(deliveryUser,date);
+			repository.refreshOrder(o);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be delivered");
+		}
 	}
 	
 	@Override
@@ -168,14 +176,33 @@ public class DBliveryServiceImpl implements DBliveryService {
 	
 	@Override
 	public Order cancelOrder(ObjectId order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if(oo.isPresent() && oo.get().canCancel()) {
+			Order o = oo.get();
+			o.cancel();
+			//System.out.println(order.getActualStatus(order.getObjectId()).getStatus(),"Cancelled");
+			repository.refreshOrder(o);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
+
+	
 	@Override
 	public Order cancelOrder(ObjectId order, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if(oo.isPresent() && oo.get().canCancel()) {
+			Order o = oo.get();
+			o.cancel(date);
+			repository.refreshOrder(o);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
 	@Override
@@ -192,8 +219,13 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public boolean canCancel(ObjectId order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		Optional<Order> oo = repository.findOrderById(order);
+		if(oo.isPresent()) {
+			return oo.get().canCancel();
+		}
+		else{
+			throw new DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
@@ -204,8 +236,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public OrderStatus getActualStatus(ObjectId order) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		return oo.get().getActualStatus();
 	}
 
 	@Override

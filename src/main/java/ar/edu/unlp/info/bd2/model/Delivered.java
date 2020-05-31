@@ -24,6 +24,7 @@ public class Delivered extends OrderStatus {
 	
 	public Delivered(Order order2, Date date) {
 		this.date=date;
+		this.setObjectId(new ObjectId());
 //		this.order= order2;
 	}
 

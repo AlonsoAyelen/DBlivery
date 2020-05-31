@@ -10,6 +10,7 @@ public class Cancelled extends OrderStatus {
 	public Cancelled() {
 		Calendar today = Calendar.getInstance();
 		Date todayDate = today.getTime();
+		this.setObjectId(new ObjectId());
 		this.date=todayDate;
 	}
 
@@ -23,6 +24,7 @@ public class Cancelled extends OrderStatus {
 
 	public Cancelled(Order order2, Date date2) {
 		this.date=date2;
+		this.setObjectId(new ObjectId());
 //		this.order=order2;
 	}
 

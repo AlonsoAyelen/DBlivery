@@ -32,6 +32,7 @@ public class Order implements PersistentObject {
 		this.coordX=coordX;
 		this.coordY=coordY;
 		this.client=client;
+		this.objectId= new ObjectId();
 		Pending p = new Pending(this,dateOfOrder);
 		this.status.add(p);
 	}
@@ -131,13 +132,13 @@ public class Order implements PersistentObject {
 	//@BsonIgnore
 	public OrderStatus getActualStatus() {
 		OrderStatus act= this.getStatus().get(0);
-		//System.out.print(act);
+//		System.out.println(act.getObjectId());
 //		for (OrderStatus os :this.getStatus()) {
 //			if(os.getDate().after(act.getDate())) act=os;
 //		}
 		for (OrderStatus os :this.getStatus()) {
-			//if(os.getObjectId().compareTo(act.getObjectId())>0) act=os;
-			//System.out.print(os.getObjectId());
+			if(os.getObjectId().compareTo(act.getObjectId())>0) act=os;
+//			System.out.println(os.getObjectId());
 		}
 		return act;
 	}

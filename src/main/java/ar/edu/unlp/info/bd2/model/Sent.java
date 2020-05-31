@@ -25,6 +25,7 @@ public class Sent extends OrderStatus {
 	public Sent(Order order2, Date date2) {
 		this.date=date2;
 //		this.order=order2;
+		this.setObjectId(new ObjectId());
 	}
 
 	public String getStatus() {

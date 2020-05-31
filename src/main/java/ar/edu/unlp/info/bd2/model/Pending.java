@@ -24,6 +24,7 @@ public class Pending extends OrderStatus {
 	
 	public Pending(Order order, Date date) {
 		this.date=date;
+		this.setObjectId(new ObjectId());
 //		this.order=order;
 	}
 	
