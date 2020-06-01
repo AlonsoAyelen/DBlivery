@@ -207,14 +207,30 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order finishOrder(ObjectId order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if(oo.isPresent() && oo.get().canFinish()) {
+			Order o = oo.get();
+			o.finish();
+			repository.refreshOrder(o);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
 	@Override
 	public Order finishOrder(ObjectId order, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = repository.findOrderById(order);
+		if(oo.isPresent() && oo.get().canFinish()) {
+			Order o = oo.get();
+			o.finish(date);
+			repository.refreshOrder(o);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
 	@Override
@@ -230,8 +246,13 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public boolean canFinish(ObjectId id) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		Optional<Order> oo = repository.findOrderById(id);
+		if(oo.isPresent()) {
+			return oo.get().canFinish();
+		}
+		else{
+			throw new DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
