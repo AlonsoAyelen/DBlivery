@@ -132,13 +132,13 @@ public class DBliveryMongoRepository {
 		return ou;
 	}
 
-	public Optional<Product> findProductById(ObjectId id) {
-		MongoCollection<Product> productsCollection = this.getDb().getCollection("products", Product.class);
+//	public Optional<Product> findProductById(ObjectId id) {
+//		MongoCollection<Product> productsCollection = this.getDb().getCollection("products", Product.class);
 //		Product p = productsCollection.find(eq("objectId", id)).first();
-		Product p = productsCollection.find(eq("_id", id)).first();
-		Optional<Product> op = Optional.ofNullable(p);
-		return op;
-	}
+//		Product p = productsCollection.find(eq("_id", id)).first();
+//		Optional<Product> op = Optional.ofNullable(p);
+//		return op;
+//	}
 
 	public Optional<Order> findOrderById(ObjectId order) {
 		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class);
@@ -156,7 +156,24 @@ public class DBliveryMongoRepository {
 		//return null;
 	}
 	
-//	public Optional<Supplier> findSupplierOfProduct(ObjectId id) { 		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		BasicDBObject filter = new BasicDBObject(new BasicDBObject("products",new BasicDBObject("$elemMatch", new BasicDBObject("_id", id)))); 		Supplier s = suppliersCollection.find(filter).first(); 		System.out.println(s); 		System.out.println(s.getAddress()); 		return null; 	}
+	public void refreshSupplier(Supplier p) {
+		MongoCollection<Supplier> ordersCollection = this.getDb().getCollection("suppliers",Supplier.class);
+		ordersCollection.replaceOne(eq("_id", p.getObjectId()),p);
+	}
+
+//	public Optional<Product> findProductById(ObjectId id) {
+//		MongoCollection<Supplier> ordersCollection = this.getDb().getCollection("suppliers",Supplier.class);		
+//		Product p = ordersCollection.find(eq("products.id", id));
+//		Optional<Product> p = Optional.ofNullable(value)
+//		return 
+//	}
+	
+	public Optional<Supplier> findSupplierOfProduct(ObjectId id) { 		
+	MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		
+	BasicDBObject filter = new BasicDBObject(new BasicDBObject("products",new BasicDBObject("$elemMatch", new BasicDBObject("_id", id)))); 		
+	Supplier s = suppliersCollection.find(filter).first();
+	Optional<Supplier> os = Optional.ofNullable(s);
+	return os; 	}
 
 	/* FIN DE METODOS FIND */
 

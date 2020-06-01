@@ -62,19 +62,27 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return u;
 	}
 
+	private Product findProduct(Object id, Supplier s) {
+		for( Product p: s.getProducts() ) {
+			if( p.getObjectId().equals(id) ) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public Product updateProductPrice(ObjectId id, Float price, Date startDate) throws DBliveryException {
-//		Optional<Product> pp = repository.findProductById(id);
-//		repository.findSupplierOfProduct(id);
-//		
-//		if (pp.isPresent()){
-//			Product p = pp.get();
-//			p.updatePrice(p,price,startDate);
-//			return p;
-//		} else {
-//			throw new  DBliveryException("Product not found");
-//		}
-		return null;
+		Optional<Supplier> sup = repository.findSupplierOfProduct(id);
+		if (sup.isPresent()) {
+			Supplier s = sup.get();
+			Product p = this.findProduct(id, s);
+			p.updatePrice(p,price,startDate);
+			repository.refreshSupplier(sup.get());
+			return p;
+		}else {
+			throw new  DBliveryException("Product not found");
+		}
 	}
 
 	@Override
