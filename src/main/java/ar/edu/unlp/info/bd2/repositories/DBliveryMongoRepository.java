@@ -94,12 +94,28 @@ public class DBliveryMongoRepository {
 	/* COMIENZO DE METODOS FIND */
 	
 	public List<Product> findProductsByName(String name) {
-		Bson filter = regex("name", name);
-		MongoCollection<Product> productCollection = this.getDb().getCollection("products",Product.class);
-		List<Product> products = new ArrayList<>();
-		FindIterable<Product> itr =productCollection.find(filter);
-		for (Product p : itr) {
-			products.add(p);
+//		Bson filter = regex("name", name);
+//		MongoCollection<Product> productCollection = this.getDb().getCollection("products",Product.class);
+//		List<Product> products = new ArrayList<>();
+//		FindIterable<Product> itr =productCollection.find(filter);
+//		for (Product p : itr) {
+//			products.add(p);
+//		}
+//		return products;
+		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		
+		BasicDBObject filter = new BasicDBObject(new BasicDBObject("products",new BasicDBObject("$elemMatch", new BasicDBObject("name", new BasicDBObject("$regex",name))))); 		
+		FindIterable<Supplier> itr = suppliersCollection.find(filter);
+		List<Product> products = new ArrayList<Product>();
+//		System.out.println("-----");
+		for(Supplier s : itr) {
+//			System.out.println("S - "+s.getName());
+			for(Product p : s.getProducts()) {
+//				System.out.println("p - "+p.getName());
+				if(p.getName().matches(".*"+name+".*")) {
+//					System.out.println("Va p - "+p.getName());
+					products.add(p);
+				}
+			}
 		}
 		return products;
 	}
@@ -169,11 +185,12 @@ public class DBliveryMongoRepository {
 //	}
 	
 	public Optional<Supplier> findSupplierOfProduct(ObjectId id) { 		
-	MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		
-	BasicDBObject filter = new BasicDBObject(new BasicDBObject("products",new BasicDBObject("$elemMatch", new BasicDBObject("_id", id)))); 		
-	Supplier s = suppliersCollection.find(filter).first();
-	Optional<Supplier> os = Optional.ofNullable(s);
-	return os; 	}
+		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		
+		BasicDBObject filter = new BasicDBObject(new BasicDBObject("products",new BasicDBObject("$elemMatch", new BasicDBObject("_id", id)))); 		
+		Supplier s = suppliersCollection.find(filter).first();
+		Optional<Supplier> os = Optional.ofNullable(s);
+		return os; 	
+	}
 
 	/* FIN DE METODOS FIND */
 
