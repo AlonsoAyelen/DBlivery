@@ -8,6 +8,9 @@ import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
 
+import com.mongodb.client.model.geojson.Point;
+import com.mongodb.client.model.geojson.Position;
+
 import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
 public class Order implements PersistentObject {
@@ -19,6 +22,7 @@ public class Order implements PersistentObject {
 	private String address;
 	private Float coordX;
 	private Float coordY;
+	private Point position;
 	private List<Row> products = new ArrayList<>();
 	private List<OrderStatus> status = new ArrayList<>();
 	
@@ -33,6 +37,8 @@ public class Order implements PersistentObject {
 		this.coordY=coordY;
 		this.client=client;
 		this.objectId= new ObjectId();
+		Position pos = new Position(coordX, coordY);
+		this.position = new Point(pos);
 		Pending p = new Pending(this,dateOfOrder);
 		this.status.add(p);
 	}
