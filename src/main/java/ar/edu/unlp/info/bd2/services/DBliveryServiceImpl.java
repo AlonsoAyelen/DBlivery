@@ -274,7 +274,71 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return repository.findProductsByName(name);
 	}
 
+	@Override
+	public List <Order>  getPendingOrders(){
+		List<Order> orders=repository.findPendingOrders();
+		return orders;
+	}
 
+	@Override
+	public List<Order> getAllOrdersMadeByUser(String username) throws DBliveryException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Supplier> getTopNSuppliersInSentOrders(int n) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getSentOrders() {
+		List<Order> orders=repository.findSentOrders();
+		return orders;
+	}
+
+	@Override
+	public List<Order> getDeliveredOrdersInPeriod(Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getDeliveredOrdersForUser(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Product getBestSellingProduct() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getProductsOnePrice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getSoldProductsOn(Date day) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Product getMaxWeigth() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getOrderNearPlazaMoreno() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 
@@ -506,12 +570,6 @@ public class DBliveryServiceImpl implements DBliveryService {
 //	@Override
 //	public List<Order> getCancelledOrdersInPeriod(Date startDate, Date endDate) {
 //		List<Order> orders=repository.findCancelledOrdersInPeriod(startDate,endDate);
-//		return orders;
-//	}
-//
-//	@Override
-//	public List<Order> getPendingOrders() {
-//		List<Order> orders=repository.findPendingOrders();
 //		return orders;
 //	}
 //

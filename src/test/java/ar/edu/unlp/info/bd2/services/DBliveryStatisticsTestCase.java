@@ -42,7 +42,7 @@ public class DBliveryStatisticsTestCase {
     private MongoClient client;
 
     @Autowired
-    DBliveryStatisticsService service;
+    DBliveryStatiticsService service;
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -53,7 +53,7 @@ public class DBliveryStatisticsTestCase {
         this.client.getDatabase("bd2_grupo" + this.getGroupNumber()).getCollection("order").createIndex(Indexes.geo2dsphere("position"));
     }
 
-    private Integer getGroupNumber() { return 0; }
+    private Integer getGroupNumber() { return 2; }
 
     @Test
     public void testGetAllOrdersMadeByUser() {

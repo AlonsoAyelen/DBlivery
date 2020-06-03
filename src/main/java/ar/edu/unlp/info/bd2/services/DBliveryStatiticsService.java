@@ -6,7 +6,7 @@ import java.util.List;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
 
-public interface DBliveryStatisticsService {
+public interface DBliveryStatiticsService {
 
     /**
      * Obtiene todas las ordenes realizadas por el usuario con username <code>username</code>

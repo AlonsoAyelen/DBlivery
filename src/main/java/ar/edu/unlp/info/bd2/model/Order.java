@@ -23,6 +23,7 @@ public class Order implements PersistentObject {
 	private Float coordX;
 	private Float coordY;
 	private Point position;
+	private OrderStatus statusActual;
 	private List<Row> products = new ArrayList<>();
 	private List<OrderStatus> status = new ArrayList<>();
 	
@@ -41,6 +42,7 @@ public class Order implements PersistentObject {
 		this.position = new Point(pos);
 		Pending p = new Pending(this,dateOfOrder);
 		this.status.add(p);
+		this.statusActual = p;
 	}
 	
 	public User getClient() {
@@ -193,6 +195,14 @@ public class Order implements PersistentObject {
 		if (this.canFinish()) {
 			this.getActualStatus().finish(this,date);
 		}
+	}
+
+	public OrderStatus getStatusActual() {
+		return statusActual;
+	}
+
+	public void setStatusActual(OrderStatus statusActual) {
+		this.statusActual = statusActual;
 	}
 
 }

@@ -207,7 +207,34 @@ public class DBliveryMongoRepository {
 		Optional<Supplier> os = Optional.ofNullable(s);
 		return os; 	
 	}
+	
+	public List<Order> findPendingOrders() {
+		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
+		BasicDBObject filter = new BasicDBObject("statusActual.status", "Pending"); 		
+		FindIterable<Order> itr = ordersCollection.find(filter);
+		List<Order> orders = new ArrayList<Order>();
+		for(Order o : itr) {
+			orders.add(o);
+		}
+		return orders;
+	}
+	
+	public List<Order> findSentOrders() {
+		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
+		BasicDBObject filter = new BasicDBObject("statusActual.status", "Sent"); 		
+		System.out.print(filter);
+		FindIterable<Order> itr = ordersCollection.find(filter);
+		List<Order> orders = new ArrayList<Order>();
+		for(Order o : itr) {
+			orders.add(o);
+//			System.out.println(o.getActualStatus());
+//			System.out.println(o.getStatusActual());
+		}
+		return orders;
+	}
 
+	
+	
 	/* FIN DE METODOS FIND */
 
 
