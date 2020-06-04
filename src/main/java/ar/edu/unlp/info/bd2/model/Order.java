@@ -39,7 +39,7 @@ public class Order implements PersistentObject {
 		this.client=client;
 		this.objectId= new ObjectId();
 		Position pos = new Position(coordX, coordY);
-		this.position = new Point(pos);
+		this.setPosition(new Point(pos));
 		Pending p = new Pending(this,dateOfOrder);
 		this.status.add(p);
 		this.statusActual = p;
@@ -203,6 +203,14 @@ public class Order implements PersistentObject {
 
 	public void setStatusActual(OrderStatus statusActual) {
 		this.statusActual = statusActual;
+	}
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
 	}
 
 }

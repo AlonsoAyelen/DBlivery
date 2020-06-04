@@ -282,8 +282,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getAllOrdersMadeByUser(String username) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders=repository.findOrdersMadeByUser(username);
+		return orders;
 	}
 
 	@Override
@@ -336,9 +336,11 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getOrderNearPlazaMoreno() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> oo = repository.findOrderNearPlazaMoreno();
+		return oo;
 	}
+	
+	
 
 
 
