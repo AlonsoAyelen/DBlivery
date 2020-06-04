@@ -8,6 +8,7 @@ import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.mongo.*;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.client.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -243,19 +244,38 @@ public class DBliveryMongoRepository {
 	}
 
 	
+//	public List<Order> findOrderNearPlazaMoreno(){
+//		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
+//		BasicDBObject filter =new BasicDBObject("near", new BasicDBObject("position", "[-34.921236,-57.954571]")); 		
+//		System.out.print(filter);
+//		FindIterable<Order> itr = ordersCollection.find(filter);
+//		List<Order> orders = new ArrayList<Order>();
+//		for(Order o : itr) {
+//			orders.add(o);
+//		}
+//		return orders;
+//	}
+	
 	public List<Order> findOrderNearPlazaMoreno(){
-		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
-		BasicDBObject filter =new BasicDBObject("near", new BasicDBObject("position", "[-34.921236,-57.954571]")); 		
-		System.out.print(filter);
-		FindIterable<Order> itr = ordersCollection.find(filter);
-		List<Order> orders = new ArrayList<Order>();
+		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class);
+		BasicDBObject geoNearParams = new BasicDBObject();
+	    double[] coordinates = {-34.921236,-57.954571};
+	    BasicDBObject near=new BasicDBObject();
+	    near.append("type", "Point");
+	    near.append("coordinates", coordinates);
+	    geoNearParams.append("near", near);
+	    geoNearParams.append("spherical", "true");
+	    geoNearParams.append("maxDistance", 400);
+	    geoNearParams.append("distanceField", "dist");
+	    BasicDBObject geoNear = new BasicDBObject("$geoNear", geoNearParams);
+	    AggregateIterable<Order> itr = ordersCollection.aggregate(Arrays.asList(geoNear));
+	    List<Order> orders=new ArrayList<Order>();
 		for(Order o : itr) {
 			orders.add(o);
 		}
-		return orders;
+	    return orders;
 	}
 	
 	/* FIN DE METODOS FIND */
 
-	//db.getCollection('orders').find({position: {$near: [-34.921236,-57.954571], $maxDistance: 800}})
 }

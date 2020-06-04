@@ -50,7 +50,7 @@ public class DBliveryStatisticsTestCase {
     public void prepareDB() throws Exception {
         this.client.getDatabase("bd2_grupo" + this.getGroupNumber()).drop();
         this.initializer.prepareDB();
-        this.client.getDatabase("bd2_grupo" + this.getGroupNumber()).getCollection("order").createIndex(Indexes.geo2dsphere("position"));
+        this.client.getDatabase("bd2_grupo" + this.getGroupNumber()).getCollection("orders").createIndex(Indexes.geo2dsphere("position"));
     }
 
     private Integer getGroupNumber() { return 2; }
