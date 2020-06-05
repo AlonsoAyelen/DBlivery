@@ -66,7 +66,7 @@ public class DBliveryStatisticsTestCase {
     }
 
     @Test
-    public void testGetMaxWeigth() {
+    public void testGetMaxWeigth() {	//HECHO
         Product product = this.service.getMaxWeigth();
         assertEquals("Milanesa con rúcula",product.getName());
     }
@@ -80,13 +80,13 @@ public class DBliveryStatisticsTestCase {
     }
 
     @Test
-    public void testGetPendingOrders() {
+    public void testGetPendingOrders() { //AYE
         List<Order> orders = this.service.getPendingOrders();
         assertEquals(54,orders.size());
     }
 
     @Test
-    public void testGetSentOrders() {
+    public void testGetSentOrders() {	//AYE
         List<Order> orders = this.service.getSentOrders();
         assertEquals(65,orders.size());
     }
@@ -98,7 +98,7 @@ public class DBliveryStatisticsTestCase {
     }
 
     @Test
-    public void testGetDeliveredOrdersForUser() {
+    public void testGetDeliveredOrdersForUser() {	//HECHO
         List<Order> orders = this.service.getDeliveredOrdersForUser("luzmartnez660");
         assertEquals(3,orders.size());
     }
@@ -110,13 +110,13 @@ public class DBliveryStatisticsTestCase {
     }
     //
     @Test
-    public void testGetProductsOnePrice() {
+    public void testGetProductsOnePrice() { //EN PROCESO
         List<Product> products = this.service.getProductsOnePrice();
         assertEquals(27, products.size());
     }
 
     @Test
-    public void testGetSoldProductsOn() throws ParseException {
+    public void testGetSoldProductsOn() throws ParseException {	//EMPEZADO
         List<Product> products = this.service.getSoldProductsOn(sdf.parse("28/2/2010"));
         assertEquals(4, products.size());
         this.assertListEquality(products.stream().map(property -> property.getName()).collect(Collectors.toList()),Arrays.asList("Filet de merluza a la romana","Bife de chorizo grillado","Milanesa americana","Ensalada de hojas verdes y queso"));
@@ -124,7 +124,7 @@ public class DBliveryStatisticsTestCase {
 
 
     @Test
-    public void testGetOrderNearPlazaMoreno() {
+    public void testGetOrderNearPlazaMoreno() { //AYE
         List<Order> orders = this.service.getOrderNearPlazaMoreno();
         assertEquals(3,orders.size());
     }

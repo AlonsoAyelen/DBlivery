@@ -24,6 +24,7 @@ public class Order implements PersistentObject {
 	private Float coordY;
 	private Point position;
 	private OrderStatus statusActual;
+	@BsonIgnore
 	private List<Row> products = new ArrayList<>();
 	private List<OrderStatus> status = new ArrayList<>();
 	

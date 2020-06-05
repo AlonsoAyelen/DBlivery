@@ -133,11 +133,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 		if(oo.isPresent()) {
 			Order o =oo.get();
 			Row r = new Row(product, quantity, o);
-			o.addProduct(r);
-			//meter el renglon en el arreglo de order
+//			o.addProduct(r);
 			repository.save(r,"rows");
 			repository.saveAssociation(o,r,"order_rows");
-			repository.saveAssociation(r,product,"row_product");
 			return o;
 		} else {
 			return null;
@@ -306,8 +304,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Order> getDeliveredOrdersForUser(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> o=repository.findDeliveredOrdersForUser(username);
+		return o;
 	}
 
 	@Override
@@ -318,20 +316,19 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getProductsOnePrice() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> p=repository.findProductsOnePrice();
+		return p;
 	}
 
 	@Override
 	public List<Product> getSoldProductsOn(Date day) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> p=repository.findSoldProductsOn(day);
+		return p;
 	}
 
 	@Override
 	public Product getMaxWeigth() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findProductWithMaxWeigth();
 	}
 
 	@Override

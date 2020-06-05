@@ -10,6 +10,8 @@ import ar.edu.unlp.info.bd2.mongo.*;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.*;
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -111,25 +113,13 @@ public class DBliveryMongoRepository {
 	/* COMIENZO DE METODOS FIND */
 	
 	public List<Product> findProductsByName(String name) {
-//		Bson filter = regex("name", name);
-//		MongoCollection<Product> productCollection = this.getDb().getCollection("products",Product.class);
-//		List<Product> products = new ArrayList<>();
-//		FindIterable<Product> itr =productCollection.find(filter);
-//		for (Product p : itr) {
-//			products.add(p);
-//		}
-//		return products;
 		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		
 		BasicDBObject filter = new BasicDBObject(new BasicDBObject("products",new BasicDBObject("$elemMatch", new BasicDBObject("name", new BasicDBObject("$regex",name))))); 		
 		FindIterable<Supplier> itr = suppliersCollection.find(filter);
 		List<Product> products = new ArrayList<Product>();
-//		System.out.println("-----");
 		for(Supplier s : itr) {
-//			System.out.println("S - "+s.getName());
 			for(Product p : s.getProducts()) {
-//				System.out.println("p - "+p.getName());
 				if(p.getName().matches(".*"+name+".*")) {
-//					System.out.println("Va p - "+p.getName());
 					products.add(p);
 				}
 			}
@@ -274,6 +264,102 @@ public class DBliveryMongoRepository {
 			orders.add(o);
 		}
 	    return orders;
+	}
+
+	public List<Product> findProductsOnePrice() {
+		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		
+		
+		BasicDBObject filter = new BasicDBObject("products.prices",new BasicDBObject("$size", 1)); 		
+		System.out.println(filter);
+		FindIterable<Supplier> itr = suppliersCollection.find(filter);
+		
+		//CREO QUE ESTA BIEN, HAY ALGUN PROBLEMA EN EL UPDATEPRODUCTPRICE
+		
+		List<Product> products = new ArrayList<Product>();
+		for(Supplier s : itr) {
+			for(Product p : s.getProducts()) {
+				if(p.getPrices().size()==1) {
+					products.add(p);
+				}
+			}
+		}
+		return products;
+	}
+
+	public List<Order> findDeliveredOrdersForUser(String username) {
+		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
+//		BasicDBObject status = new BasicDBObject("statusActual.status", "Sent"); 		
+//		BasicDBObject usern = new BasicDBObject("client.username", username);
+		BasicDBObject filter = new BasicDBObject();
+		filter.append("statusActual.status", "Delivered");
+		filter.append("client.username", username);
+//		System.out.println(filter);
+		FindIterable<Order> itr = ordersCollection.find(filter);
+		List<Order> orders = new ArrayList<Order>();
+		for(Order o : itr) {
+			orders.add(o);
+		}
+		return orders;
+	}
+
+	public Product findProductWithMaxWeigth() {
+		MongoCollection<Product> suppliersCollection = this.getDb().getCollection("suppliers", Product.class); 		
+		
+		BasicDBObject filter = new BasicDBObject("$unwind","$products");
+		BasicDBObject weigth = new BasicDBObject("$sort",new BasicDBObject("products.weight",-1));
+		BasicDBObject project = new BasicDBObject();
+		project.append("name", "$products.name");
+		project.append("_id", "$products.objectId");
+		project.append("price", "$products.price");
+		project.append("weight", "$products.weight");
+		project.append("prices", "$products.prices");
+
+		List<BasicDBObject> aggrFilter = new ArrayList<BasicDBObject>();
+		aggrFilter.add(filter);
+		aggrFilter.add(weigth);
+		aggrFilter.add(new BasicDBObject("$project",project));
+
+		System.out.println(aggrFilter);
+		Product prod = suppliersCollection.aggregate(aggrFilter).first();
+
+//		Product products = new ArrayList<Product>();
+//		for(Supplier s : itr) {
+//			for(Product p : s.getProducts()) {
+//				if(p.getPrices().size()==1) {
+//					products.add(p);
+//				}
+//			}
+//		}
+		return prod;
+	}
+
+	public List<Product> findSoldProductsOn(Date day) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		String s =sdf.format(day);
+		System.out.println(s);
+		System.out.println(day.toString());
+		MongoCollection<Product> ordersCollection = this.getDb().getCollection("orders", Product.class); 		
+		
+		BasicDBObject filter = new BasicDBObject("dateOfOrder",new BasicDBObject("$eq",day));
+		BasicDBObject project = new BasicDBObject();
+		project.append("name", "$products.name");
+		project.append("_id", "$products.objectId");
+		project.append("price", "$products.price");
+		project.append("weight", "$products.weight");
+		project.append("prices", "$products.prices");
+
+		List<BasicDBObject> aggrFilter = new ArrayList<BasicDBObject>();
+		aggrFilter.add(filter);
+		aggrFilter.add(new BasicDBObject("$project",project));
+
+		System.out.println(aggrFilter);
+		AggregateIterable<Product> itr = ordersCollection.aggregate(aggrFilter);
+
+		List<Product> prods = new ArrayList<Product>();
+		for(Product p : itr) {
+			prods.add(p);
+		}
+		return prods;
 	}
 	
 	/* FIN DE METODOS FIND */
