@@ -299,6 +299,9 @@ public class DBliveryMongoRepository {
 		for(Order o : itr) {
 			orders.add(o);
 		}
+		
+		//HAY QUE RECUPERAR LOS RENGLONES!
+		
 		return orders;
 	}
 
@@ -334,31 +337,22 @@ public class DBliveryMongoRepository {
 	}
 
 	public List<Product> findSoldProductsOn(Date day) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		String s =sdf.format(day);
-		System.out.println(s);
-		System.out.println(day.toString());
-		MongoCollection<Product> ordersCollection = this.getDb().getCollection("orders", Product.class); 		
+//		SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+//		String strDate = sm.format(day);
+	    MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
+//		BasicDBObject filter = new BasicDBObject("dateOfOrder", new BasicDBObject("$regex",strDate));
+//		System.out.println(filter);
+		FindIterable<Order> itr = ordersCollection.find(eq("dateOfOrder", day));
 		
-		BasicDBObject filter = new BasicDBObject("dateOfOrder",new BasicDBObject("$eq",day));
-		BasicDBObject project = new BasicDBObject();
-		project.append("name", "$products.name");
-		project.append("_id", "$products.objectId");
-		project.append("price", "$products.price");
-		project.append("weight", "$products.weight");
-		project.append("prices", "$products.prices");
-
-		List<BasicDBObject> aggrFilter = new ArrayList<BasicDBObject>();
-		aggrFilter.add(filter);
-		aggrFilter.add(new BasicDBObject("$project",project));
-
-		System.out.println(aggrFilter);
-		AggregateIterable<Product> itr = ordersCollection.aggregate(aggrFilter);
-
 		List<Product> prods = new ArrayList<Product>();
-		for(Product p : itr) {
-			prods.add(p);
+		for(Order o : itr) {
+			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
+			for(Row r : lr) {
+				prods.add(r.getProduct());
+//				System.out.println(r.getProduct().getName());
+			}
 		}
+
 		return prods;
 	}
 	
