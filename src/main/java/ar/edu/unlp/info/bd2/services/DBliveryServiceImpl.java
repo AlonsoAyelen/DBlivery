@@ -30,8 +30,11 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
 		Product p = new Product(name, price,weight,supplier);
-		supplier.addProduct(p);
-		repository.createProduct(supplier);
+//		supplier.addProduct(p);
+		Supplier supp = repository.findSupplierById(supplier.getObjectId()).get();
+		supp.addProduct(p);
+		repository.createProduct(supp);
+		
 //		repository.createProduct(p);
 //		repository.save(p,"products");
 //		repository.saveAssociation(supplier,p,"supplier_product");
@@ -41,8 +44,11 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
 		Product p = new Product(name, price,weight,supplier,date);
-		supplier.addProduct(p);
-		repository.createProduct(supplier);
+//		supplier.addProduct(p);
+		Supplier supp = repository.findSupplierById(supplier.getObjectId()).get();
+		supp.addProduct(p);
+		repository.createProduct(supp);
+		
 //		repository.save(p,"products");
 //		repository.saveAssociation(supplier,p,"supplier_product");
 		return p;

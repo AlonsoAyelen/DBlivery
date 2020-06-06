@@ -56,7 +56,7 @@ public class DBliveryStatisticsTestCase {
     private Integer getGroupNumber() { return 2; }
 
     @Test
-    public void testGetAllOrdersMadeByUser() {
+    public void testGetAllOrdersMadeByUser() {	//AYE
         try {
             assertEquals(5,this.service.getAllOrdersMadeByUser("rubnpastor265").size());
         } catch (DBliveryException e) {
