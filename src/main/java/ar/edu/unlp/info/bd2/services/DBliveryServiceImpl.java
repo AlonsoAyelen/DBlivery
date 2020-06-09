@@ -19,7 +19,7 @@ import ar.edu.unlp.info.bd2.repositories.DBliveryException;
 import ar.edu.unlp.info.bd2.repositories.DBliveryMongoRepository;
 import ar.edu.unlp.info.bd2.services.DBliveryService;
 
-public class DBliveryServiceImpl implements DBliveryService {
+public class DBliveryServiceImpl implements DBliveryService, DBliveryStatiticsService {
 	
 	private DBliveryMongoRepository repository;
 	

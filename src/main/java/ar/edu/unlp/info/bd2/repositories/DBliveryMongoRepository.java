@@ -233,19 +233,6 @@ public class DBliveryMongoRepository {
 		return orders;
 	}
 
-	
-//	public List<Order> findOrderNearPlazaMoreno(){
-//		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
-//		BasicDBObject filter =new BasicDBObject("near", new BasicDBObject("position", "[-34.921236,-57.954571]")); 		
-//		System.out.print(filter);
-//		FindIterable<Order> itr = ordersCollection.find(filter);
-//		List<Order> orders = new ArrayList<Order>();
-//		for(Order o : itr) {
-//			orders.add(o);
-//		}
-//		return orders;
-//	}
-	
 	public List<Order> findOrderNearPlazaMoreno(){
 		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class);
 		BasicDBObject geoNearParams = new BasicDBObject();
