@@ -110,7 +110,7 @@ public class DBliveryStatisticsTestCase {
     }
     //
     @Test
-    public void testGetProductsOnePrice() { //EN PROCESO
+    public void testGetProductsOnePrice() { //HECHO
         List<Product> products = this.service.getProductsOnePrice();
         assertEquals(27, products.size());
     }

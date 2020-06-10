@@ -10,6 +10,8 @@ import ar.edu.unlp.info.bd2.mongo.*;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -105,6 +107,54 @@ public class DBliveryMongoRepository {
 		orderCollection.insertOne(o);
 	    return o;
 	}
+
+	public void refreshOrder(Order o) {
+		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders",Order.class);
+		ordersCollection.replaceOne(eq("_id", o.getObjectId()),o);
+	}
+
+	public void refreshSupplier(Supplier p) {
+		MongoCollection<Supplier> ordersCollection = this.getDb().getCollection("suppliers",Supplier.class);
+		ordersCollection.replaceOne(eq("_id", p.getObjectId()),p);
+	}
+
+	public void updateProductInRows(Product pr,Date sd) {
+		MongoCollection<Row> rowsCollection = this.getDb().getCollection("rows",Row.class);
+
+		//Filtrar renglones
+		BasicDBObject filter = new BasicDBObject();
+		filter.append("product._id", pr.getObjectId());
+		BasicDBObject options = new BasicDBObject();
+		options.append("multi", true);
+		BasicDBObject exist = new BasicDBObject();
+		exist.append("$exists", false);
+		BasicDBObject aux = new BasicDBObject();
+		aux.append("price.finishDate", exist);
+		List<Bson> arrayFilter= new ArrayList<Bson>();
+		arrayFilter.add(aux);
+		BasicDBObject updateFields2 = new BasicDBObject();
+		updateFields2.append("product.prices.$[price].finishDate", sd);
+		BasicDBObject setQuery2 = new BasicDBObject();
+		setQuery2.append("$set", updateFields2);
+		UpdateOptions uo=new UpdateOptions();
+		uo.arrayFilters(arrayFilter);		
+		rowsCollection.updateMany(filter, setQuery2,uo);
+
+		//Cambia price, lastPrice y pushea el nuevo precio en el historial
+		BasicDBObject newPrice = new BasicDBObject();
+		newPrice.append("price", pr.getPrice());
+		newPrice.append("startDate", sd);		
+		BasicDBObject pushAttr = new BasicDBObject();
+		pushAttr.append("product.prices", newPrice);		
+		BasicDBObject updateFields = new BasicDBObject();
+		updateFields.append("product.price", pr.getPrice());
+		updateFields.append("product.lastPrice.price", pr.getPrice());
+		updateFields.append("product.lastPrice.startDate", sd);
+		BasicDBObject setQuery = new BasicDBObject();
+		setQuery.append("$set", updateFields);
+		setQuery.append("$push", pushAttr);
+		rowsCollection.updateMany(eq("product._id",pr.getObjectId()), setQuery);		
+	}
 	
 	/* FIN DE METODOS CREATE */
 
@@ -155,14 +205,6 @@ public class DBliveryMongoRepository {
 		return ou;
 	}
 
-//	public Optional<Product> findProductById(ObjectId id) {
-//		MongoCollection<Product> productsCollection = this.getDb().getCollection("products", Product.class);
-//		Product p = productsCollection.find(eq("objectId", id)).first();
-//		Product p = productsCollection.find(eq("_id", id)).first();
-//		Optional<Product> op = Optional.ofNullable(p);
-//		return op;
-//	}
-
 	public Optional<Order> findOrderById(ObjectId order) {
 		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class);
 		Order o = ordersCollection.find(eq("_id", order)).first();
@@ -172,25 +214,6 @@ public class DBliveryMongoRepository {
 		return oo;
 	}
 
-	public void refreshOrder(Order o) {
-		// TODO Auto-generated method stub
-		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders",Order.class);
-		ordersCollection.replaceOne(eq("_id", o.getObjectId()),o);
-		//return null;
-	}
-	
-	public void refreshSupplier(Supplier p) {
-		MongoCollection<Supplier> ordersCollection = this.getDb().getCollection("suppliers",Supplier.class);
-		ordersCollection.replaceOne(eq("_id", p.getObjectId()),p);
-	}
-
-//	public Optional<Product> findProductById(ObjectId id) {
-//		MongoCollection<Supplier> ordersCollection = this.getDb().getCollection("suppliers",Supplier.class);		
-//		Product p = ordersCollection.find(eq("products.id", id));
-//		Optional<Product> p = Optional.ofNullable(value)
-//		return 
-//	}
-	
 	public Optional<Supplier> findSupplierOfProduct(ObjectId id) { 		
 		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		
 		BasicDBObject filter = new BasicDBObject(new BasicDBObject("products",new BasicDBObject("$elemMatch", new BasicDBObject("_id", id)))); 		
@@ -259,9 +282,6 @@ public class DBliveryMongoRepository {
 		BasicDBObject filter = new BasicDBObject("products.prices",new BasicDBObject("$size", 1)); 		
 		System.out.println(filter);
 		FindIterable<Supplier> itr = suppliersCollection.find(filter);
-		
-		//CREO QUE ESTA BIEN, HAY ALGUN PROBLEMA EN EL UPDATEPRODUCTPRICE
-		
 		List<Product> products = new ArrayList<Product>();
 		for(Supplier s : itr) {
 			for(Product p : s.getProducts()) {
@@ -275,12 +295,9 @@ public class DBliveryMongoRepository {
 
 	public List<Order> findDeliveredOrdersForUser(String username) {
 		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
-//		BasicDBObject status = new BasicDBObject("statusActual.status", "Sent"); 		
-//		BasicDBObject usern = new BasicDBObject("client.username", username);
 		BasicDBObject filter = new BasicDBObject();
 		filter.append("statusActual.status", "Delivered");
 		filter.append("client.username", username);
-//		System.out.println(filter);
 		FindIterable<Order> itr = ordersCollection.find(filter);
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
