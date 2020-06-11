@@ -115,14 +115,15 @@ public class DBliveryServiceImpl implements DBliveryService, DBliveryStatiticsSe
 	public Order addProduct(ObjectId order, Long quantity, Product product) throws DBliveryException {
 		Optional<Order> oo = repository.findOrderById(order);
 		if(oo.isPresent()) {
-			Optional<Supplier> sup = repository.findSupplierOfProduct(product.getObjectId());
-			Product p=null;
-			if (sup.isPresent()) {
-				Supplier s = sup.get();
-				p = this.findProduct(product.getObjectId(), s);
-			} else {
-				throw new DBliveryException("Error with the product");
-			}
+//			Optional<Supplier> sup = repository.findSupplierOfProduct(product.getObjectId());
+//			Product p=null;
+//			if (sup.isPresent()) {
+//				Supplier s = sup.get();
+//				p = this.findProduct(product.getObjectId(), s);
+//			} else {
+//				throw new DBliveryException("Error with the product");
+//			}
+			Product p=repository.findProductById(product.getObjectId());
 			Order o =oo.get();
 			Row r = new Row(p, quantity, o);
 			repository.save(r,"rows");

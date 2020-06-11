@@ -138,8 +138,7 @@ public class DBliveryMongoRepository {
 		setQuery2.append("$set", updateFields2);
 		UpdateOptions uo=new UpdateOptions();
 		uo.arrayFilters(arrayFilter);		
-		rowsCollection.updateMany(filter, setQuery2,uo);
-
+		
 		//Cambia price, lastPrice y pushea el nuevo precio en el historial
 		BasicDBObject newPrice = new BasicDBObject();
 		newPrice.append("price", pr.getPrice());
@@ -153,6 +152,8 @@ public class DBliveryMongoRepository {
 		BasicDBObject setQuery = new BasicDBObject();
 		setQuery.append("$set", updateFields);
 		setQuery.append("$push", pushAttr);
+		
+		rowsCollection.updateMany(filter, setQuery2,uo);
 		rowsCollection.updateMany(eq("product._id",pr.getObjectId()), setQuery);		
 	}
 	
@@ -315,7 +316,8 @@ public class DBliveryMongoRepository {
 		BasicDBObject weigth = new BasicDBObject("$sort",new BasicDBObject("products.weight",-1));
 		BasicDBObject project = new BasicDBObject();
 		project.append("name", "$products.name");
-		project.append("_id", "$products.objectId");
+//		project.append("_id", "$products.objectId");
+		project.append("_id", "$products._id");
 		project.append("price", "$products.price");
 		project.append("weight", "$products.weight");
 		project.append("prices", "$products.prices");
@@ -346,6 +348,25 @@ public class DBliveryMongoRepository {
 		}
 
 		return prods;
+	}
+	
+	public Product findProductById(ObjectId id) {
+		MongoCollection<Product> suppliersCollection = this.getDb().getCollection("suppliers", Product.class);
+		BasicDBObject filter = new BasicDBObject("$unwind","$products");
+		BasicDBObject aux = new BasicDBObject("products._id",id);
+		BasicDBObject match = new BasicDBObject("$match",aux);
+		BasicDBObject project = new BasicDBObject();
+		project.append("name", "$products.name");
+		project.append("_id", "$products._id");
+		project.append("price", "$products.price");
+		project.append("weight", "$products.weight");
+		project.append("prices", "$products.prices");
+		List<BasicDBObject> aggrFilter = new ArrayList<BasicDBObject>();
+		aggrFilter.add(filter);
+		aggrFilter.add(match);
+		aggrFilter.add(new BasicDBObject("$project",project));
+		Product prod = suppliersCollection.aggregate(aggrFilter).first();
+		return prod;
 	}
 	
 	/* FIN DE METODOS FIND */
