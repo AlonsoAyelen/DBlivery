@@ -10,7 +10,9 @@ import ar.edu.unlp.info.bd2.mongo.*;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.UpdateOptions;
 
 import java.text.SimpleDateFormat;
@@ -368,6 +370,49 @@ public class DBliveryMongoRepository {
 		Product prod = suppliersCollection.aggregate(aggrFilter).first();
 		return prod;
 	}
+	
+	public List<Order> findDeliveredInPeriod(Date startDate, Date endDate){
+		MongoCollection<Order> orderCollection = this.getDb().getCollection("orders", Order.class);
+		BasicDBObject filter = new BasicDBObject("$gte", startDate);
+		filter.append("$lt", endDate);
+		BasicDBObject filterDate = new BasicDBObject("dateOfOrder",filter);
+		filterDate.append("statusActual.status", "Delivered");
+		FindIterable<Order> itr = orderCollection.find(filterDate);
+		List<Order> ords = new ArrayList<Order>();
+		for(Order o : itr) {
+			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
+			o.setProducts(lr);
+			ords.add(o);
+		}
+		return ords;
+	}
+
+	public List<Supplier> findTopNSuppliersInSentOrders(int n) {
+			AggregateIterable<Supplier> itr = this.getDb().getCollection("suppliers", Supplier.class).aggregate( Arrays.asList(
+				lookup("rows","products._id", "product._id", "row"),
+				unwind("$row"),
+				lookup("order_rows", "row._id", "destination", "order_id"),
+				lookup("orders", "order_id.source", "_id", "order"),
+				match(eq("order.actualStatus.status", "Sent")),
+				group("$_id", Accumulators.sum("total", "$row.cant"), Accumulators.first("name", "$name"),  Accumulators.first( "address",  "$address"), Accumulators.first( "coordX",  "$coordX"), Accumulators.first( "coordY",  "$coordY"), Accumulators.first( "cuil", "$cuil"), Accumulators.first( "products", "$products")),
+				sort(Sorts.descending("total"))
+				));
+			List<Supplier> sups = new ArrayList<Supplier>();
+			int i = 0;
+			for (Supplier s : itr) {
+				if(i++ == n) break;
+				sups.add(s);
+			}
+		return sups;
+	}
+
+	public Product findBestSellingProduct() {
+		return this.getDb().getCollection("rows", Product.class).aggregate(
+				Arrays.asList(
+				group("$product._id", Accumulators.sum("total", "$cant"), Accumulators.first("name", "$product.name"),  Accumulators.first( "prices",  "$product.prices"), Accumulators.first( "price",  "$product.price"), Accumulators.first( "weight",  "$product.weight")),
+				sort(Sorts.descending("total")))).first();
+	}
+	
 	
 	/* FIN DE METODOS FIND */
 

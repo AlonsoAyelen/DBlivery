@@ -277,8 +277,7 @@ public class DBliveryServiceImpl implements DBliveryService, DBliveryStatiticsSe
 
 	@Override
 	public List<Supplier> getTopNSuppliersInSentOrders(int n) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findTopNSuppliersInSentOrders(n);
 	}
 
 	@Override
@@ -289,8 +288,7 @@ public class DBliveryServiceImpl implements DBliveryService, DBliveryStatiticsSe
 
 	@Override
 	public List<Order> getDeliveredOrdersInPeriod(Date startDate, Date endDate) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findDeliveredInPeriod(startDate, endDate);	
 	}
 
 	@Override
@@ -301,8 +299,7 @@ public class DBliveryServiceImpl implements DBliveryService, DBliveryStatiticsSe
 
 	@Override
 	public Product getBestSellingProduct() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findBestSellingProduct();
 	}
 
 	@Override
@@ -327,5 +324,6 @@ public class DBliveryServiceImpl implements DBliveryService, DBliveryStatiticsSe
 		List<Order> oo = repository.findOrderNearPlazaMoreno();
 		return oo;
 	}
+	
 
 }
