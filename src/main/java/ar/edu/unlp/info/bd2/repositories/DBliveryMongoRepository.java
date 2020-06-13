@@ -231,6 +231,8 @@ public class DBliveryMongoRepository {
 		FindIterable<Order> itr = ordersCollection.find(filter);
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
+			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
+			o.setProducts(lr);
 			orders.add(o);
 		}
 		return orders;
@@ -243,6 +245,8 @@ public class DBliveryMongoRepository {
 		FindIterable<Order> itr = ordersCollection.find(filter);
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
+			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
+			o.setProducts(lr);
 			orders.add(o);
 		}
 		return orders;
@@ -254,6 +258,8 @@ public class DBliveryMongoRepository {
 		FindIterable<Order> itr = ordersCollection.find(filter);
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
+			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
+			o.setProducts(lr);
 			orders.add(o);
 		}
 		return orders;
@@ -274,6 +280,8 @@ public class DBliveryMongoRepository {
 	    AggregateIterable<Order> itr = ordersCollection.aggregate(Arrays.asList(geoNear));
 	    List<Order> orders=new ArrayList<Order>();
 		for(Order o : itr) {
+			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
+			o.setProducts(lr);
 			orders.add(o);
 		}
 	    return orders;
@@ -304,11 +312,10 @@ public class DBliveryMongoRepository {
 		FindIterable<Order> itr = ordersCollection.find(filter);
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
+			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
+			o.setProducts(lr);
 			orders.add(o);
 		}
-		
-		//HAY QUE RECUPERAR LOS RENGLONES!
-		
 		return orders;
 	}
 
@@ -395,12 +402,11 @@ public class DBliveryMongoRepository {
 				lookup("orders", "order_id.source", "_id", "order"),
 				match(eq("order.actualStatus.status", "Sent")),
 				group("$_id", Accumulators.sum("total", "$row.cant"), Accumulators.first("name", "$name"),  Accumulators.first( "address",  "$address"), Accumulators.first( "coordX",  "$coordX"), Accumulators.first( "coordY",  "$coordY"), Accumulators.first( "cuil", "$cuil"), Accumulators.first( "products", "$products")),
-				sort(Sorts.descending("total"))
+				sort(Sorts.descending("total")),
+				limit(n)
 				));
 			List<Supplier> sups = new ArrayList<Supplier>();
-			int i = 0;
 			for (Supplier s : itr) {
-				if(i++ == n) break;
 				sups.add(s);
 			}
 		return sups;
