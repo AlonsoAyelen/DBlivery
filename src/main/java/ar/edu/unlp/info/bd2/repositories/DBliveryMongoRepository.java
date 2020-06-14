@@ -227,13 +227,13 @@ public class DBliveryMongoRepository {
 	}
 	
 	public List<Order> findPendingOrders() {
-		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
-		BasicDBObject filter = new BasicDBObject("statusActual.status", "Pending"); 		
-		FindIterable<Order> itr = ordersCollection.find(filter);
+		AggregateIterable<Order> itr = this.getDb().getCollection("orders", Order.class).aggregate( Arrays.asList(
+				lookup("order_rows","_id", "source", "association"),
+				lookup("rows","association.destination", "_id", "products"),
+				match(eq("statusActual.status", "Pending"))		
+		));
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
-			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
-			o.setProducts(lr);
 			orders.add(o);
 		}
 		return orders;
@@ -258,13 +258,13 @@ public class DBliveryMongoRepository {
 	}
 	
 	public List<Order> findOrdersMadeByUser(String username){
-		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
-		BasicDBObject filter = new BasicDBObject("client.username", username); 		
-		FindIterable<Order> itr = ordersCollection.find(filter);
+		AggregateIterable<Order> itr = this.getDb().getCollection("orders", Order.class).aggregate( Arrays.asList(
+				lookup("order_rows","_id", "source", "association"),
+				lookup("rows","association.destination", "_id", "products"),
+				match(eq("client.username", username))		
+		));
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
-			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
-			o.setProducts(lr);
 			orders.add(o);
 		}
 		return orders;
@@ -296,7 +296,6 @@ public class DBliveryMongoRepository {
 		MongoCollection<Supplier> suppliersCollection = this.getDb().getCollection("suppliers", Supplier.class); 		
 		
 		BasicDBObject filter = new BasicDBObject("products.prices",new BasicDBObject("$size", 1)); 		
-		System.out.println(filter);
 		FindIterable<Supplier> itr = suppliersCollection.find(filter);
 		List<Product> products = new ArrayList<Product>();
 		for(Supplier s : itr) {
@@ -339,7 +338,6 @@ public class DBliveryMongoRepository {
 		aggrFilter.add(filter);
 		aggrFilter.add(weigth);
 		aggrFilter.add(new BasicDBObject("$project",project));
-		System.out.println(aggrFilter);
 		Product prod = suppliersCollection.aggregate(aggrFilter).first();
 		return prod;
 	}
