@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
 import ar.edu.unlp.info.bd2.mongo.*;
 
@@ -78,6 +79,7 @@ public class Product implements PersistentObject {
 		this.prices = prices;
 	}
 	
+	@BsonIgnore
 	public Price getLastPrice() {
 		Price act= prices.get(0);
 		for (Price p :this.getPrices()) {

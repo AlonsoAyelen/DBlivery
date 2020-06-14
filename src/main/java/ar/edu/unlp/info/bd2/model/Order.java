@@ -24,7 +24,6 @@ public class Order implements PersistentObject {
 	private Float coordY;
 	private Point position;
 	private OrderStatus statusActual;
-	@BsonIgnore
 	private List<Row> products = new ArrayList<>();
 	private List<OrderStatus> status = new ArrayList<>();
 	
@@ -77,11 +76,11 @@ public class Order implements PersistentObject {
 	public void setDateOfOrder(Date dateOfOrder) {
 		this.dateOfOrder = dateOfOrder;
 	}
-
+	@BsonIgnore
 	public List<Row> getProducts() {
 		return products;
 	}
-
+	
 	public void setProducts(List<Row> products) {
 		this.products = products;
 	}
@@ -138,7 +137,7 @@ public class Order implements PersistentObject {
 		return this.getActualStatus().canDeliver(this);
 	}
 
-	//@BsonIgnore
+	@BsonIgnore
 	public OrderStatus getActualStatus() {
 		OrderStatus act= this.getStatus().get(0);
 //		System.out.println(act.getObjectId());
@@ -170,7 +169,7 @@ public class Order implements PersistentObject {
 			this.getActualStatus().finish(this);	
 		}
 	}
-
+	@BsonIgnore
 	public Float getAmount() {
 		Float amount=0F;
 		for (Row r : this.getProducts()) {

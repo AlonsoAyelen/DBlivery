@@ -149,8 +149,9 @@ public class DBliveryMongoRepository {
 		pushAttr.append("product.prices", newPrice);		
 		BasicDBObject updateFields = new BasicDBObject();
 		updateFields.append("product.price", pr.getPrice());
-		updateFields.append("product.lastPrice.price", pr.getPrice());
-		updateFields.append("product.lastPrice.startDate", sd);
+//REVISAR ESTOS
+//		updateFields.append("product.lastPrice.price", pr.getPrice());
+//		updateFields.append("product.lastPrice.startDate", sd);
 		BasicDBObject setQuery = new BasicDBObject();
 		setQuery.append("$set", updateFields);
 		setQuery.append("$push", pushAttr);
@@ -239,14 +240,18 @@ public class DBliveryMongoRepository {
 	}
 	
 	public List<Order> findSentOrders() {
-		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
-		BasicDBObject filter = new BasicDBObject("statusActual.status", "Sent"); 		
-		System.out.print(filter);
-		FindIterable<Order> itr = ordersCollection.find(filter);
+		AggregateIterable<Order> itr = this.getDb().getCollection("orders", Order.class).aggregate( Arrays.asList(
+				lookup("order_rows","_id", "source", "association"),
+				lookup("rows","association.destination", "_id", "products"),
+				match(eq("statusActual.status", "Sent"))		
+		));
+//		> db.orders.aggregate([
+//		              {$lookup:{from:"order_rows",localField:"_id",foreignField:"source",as:"association"}},
+//		              {$lookup:{from:"rows",localField:"association.destination",foreignField:"_id",as:"products"}},
+//		              {$match:{"actualStatus.status":"Sent"}}
+//		          ])
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
-			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
-			o.setProducts(lr);
 			orders.add(o);
 		}
 		return orders;
@@ -400,7 +405,7 @@ public class DBliveryMongoRepository {
 				unwind("$row"),
 				lookup("order_rows", "row._id", "destination", "order_id"),
 				lookup("orders", "order_id.source", "_id", "order"),
-				match(eq("order.actualStatus.status", "Sent")),
+				match(eq("order.statusActual.status", "Sent")),
 				group("$_id", Accumulators.sum("total", "$row.cant"), Accumulators.first("name", "$name"),  Accumulators.first( "address",  "$address"), Accumulators.first( "coordX",  "$coordX"), Accumulators.first( "coordY",  "$coordY"), Accumulators.first( "cuil", "$cuil"), Accumulators.first( "products", "$products")),
 				sort(Sorts.descending("total")),
 				limit(n)

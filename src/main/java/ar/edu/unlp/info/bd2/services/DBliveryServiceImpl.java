@@ -272,7 +272,11 @@ public class DBliveryServiceImpl implements DBliveryService, DBliveryStatiticsSe
 	@Override
 	public List<Order> getAllOrdersMadeByUser(String username) throws DBliveryException {
 		List<Order> orders=repository.findOrdersMadeByUser(username);
-		return orders;
+		if(orders.size() > 0) {
+			return orders;
+		}else {
+			throw new DBliveryException("No hay ordenes para el usuario");
+		}
 	}
 
 	@Override
