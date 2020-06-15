@@ -309,15 +309,13 @@ public class DBliveryMongoRepository {
 	}
 
 	public List<Order> findDeliveredOrdersForUser(String username) {
-		MongoCollection<Order> ordersCollection = this.getDb().getCollection("orders", Order.class); 		
-		BasicDBObject filter = new BasicDBObject();
-		filter.append("statusActual.status", "Delivered");
-		filter.append("client.username", username);
-		FindIterable<Order> itr = ordersCollection.find(filter);
+		AggregateIterable<Order> itr = this.getDb().getCollection("orders", Order.class).aggregate( Arrays.asList(
+				lookup("order_rows","_id", "source", "association"),
+				lookup("rows","association.destination", "_id", "products"),
+				match(Filters.and(eq("statusActual.status", "Delivered"),eq("client.username",username)))
+		));
 		List<Order> orders = new ArrayList<Order>();
 		for(Order o : itr) {
-			List<Row> lr= this.getAssociatedObjects(o, Row.class, "order_rows", "rows");
-			o.setProducts(lr);
 			orders.add(o);
 		}
 		return orders;
