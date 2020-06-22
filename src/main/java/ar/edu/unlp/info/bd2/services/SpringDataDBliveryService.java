@@ -18,6 +18,7 @@ import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
 import ar.edu.unlp.info.bd2.repositories.DBliveryRepository;
+import ar.edu.unlp.info.bd2.repositories.OrderRepository;
 import ar.edu.unlp.info.bd2.repositories.ProductRepository;
 import ar.edu.unlp.info.bd2.repositories.SupplierRepository;
 import ar.edu.unlp.info.bd2.repositories.UserRepository;
@@ -36,6 +37,9 @@ public class SpringDataDBliveryService implements DBliveryService {
     
     @Autowired
     private ProductRepository productRepository;
+    
+    @Autowired
+    private OrderRepository orderRepository;
 	
     @Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
@@ -73,20 +77,17 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Optional<User> getUserById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.getById(id);
 	}
 
 	@Override
 	public Optional<User> getUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.getByEmail(email);
 	}
 
 	@Override
 	public Optional<User> getUserByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.getByUsername(username);
 	}
 
 	@Override
@@ -109,8 +110,15 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = orderRepository.findById(order);
+		if (oo.isPresent() && oo.get().canDeliver()){
+			Order o = oo.get();
+			o.send(deliveryUser);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be delivered");
+		}
 	}
 
 	@Override
@@ -157,8 +165,12 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public boolean canDeliver(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		Optional<Order> oo = orderRepository.findById(order);
+		if(oo.isPresent()) {
+			return oo.get().canDeliver();
+		} else {
+			throw new DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
@@ -169,7 +181,6 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public List<Product> getProductsByName(String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
     
