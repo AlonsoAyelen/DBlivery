@@ -1,18 +1,14 @@
 package ar.edu.unlp.info.bd2.model;
 
 import java.util.ArrayList;
-//import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-//import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-//import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-//import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,14 +30,13 @@ public class Supplier {
 	@Column(name="coordY")
 	private Float coordY;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "supplier")
-	private List<Product> products = new ArrayList<>();
+	private List<Product> products = new ArrayList<Product>();
 	
 	public Supplier() {
 
 	}
 	
 	public Supplier(String n,String c,String a,Float x,Float y) {   //constructor
-		id=1;
 		name = n;
 		cuil = c;
 		address = a;

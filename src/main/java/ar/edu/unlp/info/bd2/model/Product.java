@@ -4,12 +4,9 @@ import java.util.List;
 import java.util.Calendar;
 import java.util.Date;
 
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
 import javax.persistence.*;
 
-import java.util.ArrayList; // import the ArrayList class
+import java.util.ArrayList;
 @Entity
 @Table(name="products")
 public class Product {
@@ -21,7 +18,6 @@ public class Product {
 	@Column(name="name")
 	private String name;
 	@ManyToOne()
-	@JoinColumn()
 	private Supplier supplier;
 	@Column(name="price")
 	private Float price;

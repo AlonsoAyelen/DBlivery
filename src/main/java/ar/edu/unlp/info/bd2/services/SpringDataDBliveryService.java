@@ -42,6 +42,7 @@ public class SpringDataDBliveryService implements DBliveryService {
     private OrderRepository orderRepository;
 	
     @Override
+	@Transactional
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
 		Product p = new Product(name, price,weight,supplier);
 		productRepository.save(p);
@@ -49,6 +50,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
 		Product p = new Product(name, price,weight,supplier,date);
 		productRepository.save(p);
@@ -56,6 +58,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY) {
 		Supplier s = new Supplier(name, cuil,address,coordX,coordY);
 		supplierRepository.save(s);
@@ -63,6 +66,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
 		User u = new User(email,password,username,name,dateOfBirth);
 		userRepository.save(u);
@@ -70,6 +74,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Product updateProductPrice(Long id, Float price, Date startDate) throws DBliveryException {
 		if (productRepository.existsById(id)){
 			Product prod = productRepository.getProductById(id);
@@ -102,6 +107,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
 		Order o = new Order(dateOfOrder, address, coordX, coordY, client);
 		orderRepository.save(o);
@@ -109,6 +115,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
 		if (orderRepository.existsById(order)) {
 			Order o = orderRepository.getOrderById(order).get();
@@ -122,6 +129,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
 		Optional<Order> oo = orderRepository.findById(order);
 		if (oo.isPresent() && oo.get().canDeliver()){
@@ -135,12 +143,14 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order deliverOrder(Long order, User deliveryUser, Date date) throws DBliveryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	@Transactional
 	public Order cancelOrder(Long order) throws DBliveryException {
 		if (orderRepository.existsById(order)) {
 			Order o = orderRepository.getOrderById(order).get();
@@ -157,12 +167,14 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order cancelOrder(Long order, Date date) throws DBliveryException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	@Transactional
 	public Order finishOrder(Long order) throws DBliveryException {
 		if (orderRepository.existsById(order)) {
 			Order o = orderRepository.getOrderById(order).get();
@@ -179,6 +191,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order finishOrder(Long order, Date date) throws DBliveryException {
 		// TODO Auto-generated method stub
 		return null;
