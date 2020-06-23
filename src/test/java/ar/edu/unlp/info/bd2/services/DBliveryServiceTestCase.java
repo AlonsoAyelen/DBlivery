@@ -183,7 +183,7 @@ public class DBliveryServiceTestCase {
     }
 
     @Test
-    public void testFinishOrder() throws DBliveryException {
+    public void testFinishOrder() throws DBliveryException { //Hecho
         Calendar cal = Calendar.getInstance();
         Date orderDate = cal.getTime();
         Supplier s1 = this.service.createSupplier("Burger King", "30710256443", "Av. Corrientes 956", Float.valueOf(-53.45F), Float.valueOf(-60.22F));

@@ -165,8 +165,18 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Order finishOrder(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		if (orderRepository.existsById(order)) {
+			Order o = orderRepository.getOrderById(order).get();
+			if (o.canFinish()) {
+				o.finish();
+				orderRepository.save(o);
+				return o;
+			} else {
+				throw new DBliveryException("The order can't be finished");
+			}
+		} else {
+			throw new DBliveryException("The order can't be finished");
+		}
 	}
 
 	@Override
@@ -187,8 +197,12 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public boolean canFinish(Long id) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		if (orderRepository.existsById(id)) {
+			Order o = orderRepository.getOrderById(id).get();
+			return o.canFinish();
+		} else {
+			throw new DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
