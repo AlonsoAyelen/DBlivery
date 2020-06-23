@@ -79,14 +79,6 @@ public class SpringDataDBliveryService implements DBliveryService {
 		} else {
 			throw new  DBliveryException("Product not found");
 		}
-		//		Optional<Product> pp = repository.findProductById(id);
-//		if (pp.isPresent()){
-//			Product p = pp.get();
-//			p.updatePrice(p,price,startDate);
-//			return p;
-//		} else {
-//			throw new  DBliveryException("Product not found");
-//		}
 	}
 
 	@Override
@@ -106,8 +98,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Optional<Order> getOrderById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return orderRepository.getOrderById(id);
 	}
 
 	@Override
@@ -196,7 +187,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public List<Product> getProductsByName(String name) {
-		return null;
+		return productRepository.findAllByNameLike("%"+name+"%");
 	}
     
 //    @Transactional
