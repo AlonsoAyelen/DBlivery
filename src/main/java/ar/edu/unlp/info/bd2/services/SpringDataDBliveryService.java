@@ -71,8 +71,22 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Product updateProductPrice(Long id, Float price, Date startDate) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		if (productRepository.existsById(id)){
+			Product prod = productRepository.getProductById(id);
+			prod.updatePrice(price, startDate);
+			productRepository.save(prod);
+			return prod;
+		} else {
+			throw new  DBliveryException("Product not found");
+		}
+		//		Optional<Product> pp = repository.findProductById(id);
+//		if (pp.isPresent()){
+//			Product p = pp.get();
+//			p.updatePrice(p,price,startDate);
+//			return p;
+//		} else {
+//			throw new  DBliveryException("Product not found");
+//		}
 	}
 
 	@Override
@@ -110,6 +124,7 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
+		//Aye ya no esta mas el optional, fijate el copypaste si es lo que no te funciona
 		Optional<Order> oo = orderRepository.findById(order);
 		if (oo.isPresent() && oo.get().canDeliver()){
 			Order o = oo.get();

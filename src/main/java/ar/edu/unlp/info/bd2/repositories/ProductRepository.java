@@ -7,5 +7,6 @@ import ar.edu.unlp.info.bd2.model.Product;
 public interface ProductRepository extends CrudRepository<Product,Long> {
 	
 	public Product getProductByName(String name);
+	public Product getProductById(Long id);
 
 }

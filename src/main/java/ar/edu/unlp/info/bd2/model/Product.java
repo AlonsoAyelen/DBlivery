@@ -104,13 +104,14 @@ public class Product {
 		//return prices.get(prices.size()-1);
 	}
 	
-	public Product updatePrice(Product p,Float price, Date startDate) {
-		p.setPrice(price);
-		Price pOld = p.getLastPrice();
+	public Product updatePrice(Float price, Date startDate) {
+		//removed p changed to this, why did we do that to begin with
+		this.setPrice(price);
+		Price pOld = this.getLastPrice();
 		pOld.setFinishDate(startDate);
 		Price pri = new Price(startDate,null,price);
-		p.addPrice(pri);
-		return p;
+		this.addPrice(pri);
+		return this;
 	}
 
 	public Float getPriceInDate(Date date) {
