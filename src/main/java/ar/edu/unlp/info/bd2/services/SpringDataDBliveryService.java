@@ -123,7 +123,6 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
-		//Aye ya no esta mas el optional, fijate el copypaste si es lo que no te funciona
 		Optional<Order> oo = orderRepository.findById(order);
 		if (oo.isPresent() && oo.get().canDeliver()){
 			Order o = oo.get();
