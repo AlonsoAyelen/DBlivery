@@ -50,7 +50,7 @@ public class DBliveryServiceTestCase {
     }
 
     @Test
-    public void testGetUser() {
+    public void testGetUser() { //Hecho
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 1982);
         cal.set(Calendar.MONTH, Calendar.MAY);
@@ -92,7 +92,7 @@ public class DBliveryServiceTestCase {
     }
 
     @Test
-    public void testUpdateProductPrice() throws DBliveryException{
+    public void testUpdateProductPrice() throws DBliveryException{ //Hecho
         Calendar cal = Calendar.getInstance();
         Date startDate = cal.getTime();
         Supplier s1 = this.service.createSupplier("Burger King", "30710256443", "Av. Corrientes 956", Float.valueOf(-53.45F), Float.valueOf(-60.22F));
@@ -105,7 +105,7 @@ public class DBliveryServiceTestCase {
     }
 
     @Test
-    public void testCreateOrder() throws DBliveryException {
+    public void testCreateOrder() throws DBliveryException { //Hecho
         Calendar cal = Calendar.getInstance();
         Date orderDate = cal.getTime();
         Supplier s1 = this.service.createSupplier("Burger King", "30710256443", "Av. Corrientes 956", Float.valueOf(-53.45F), Float.valueOf(-60.22F));
@@ -211,7 +211,7 @@ public class DBliveryServiceTestCase {
     }
 
     @Test
-    public void testGetProduct() {
+    public void testGetProduct() { //Hecho
         Supplier s1 = this.service.createSupplier("Burger King", "30710256443", "Av. Corrientes 956", Float.valueOf(-53.45F), Float.valueOf(-60.22F));
         assertNotNull(s1.getId());
         assertEquals("Burger King",s1.getName());

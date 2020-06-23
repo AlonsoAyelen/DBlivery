@@ -103,14 +103,23 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
-		// TODO Auto-generated method stub
-		return null;
+		Order o = new Order(dateOfOrder, address, coordX, coordY, client);
+		orderRepository.save(o);
+		return o;
 	}
 
 	@Override
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = orderRepository.getOrderById(order);
+		if (orderRepository.existsById(order) && oo.isPresent()) {
+			Order o = oo.get();
+			Row r = new Row(product,quantity,o);
+			o.addProduct(r);
+			orderRepository.save(o);
+			return o;
+		}else {
+			throw new  DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
