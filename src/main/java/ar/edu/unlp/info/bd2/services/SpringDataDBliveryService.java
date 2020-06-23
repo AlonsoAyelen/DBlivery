@@ -110,9 +110,8 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
-		Optional<Order> oo = orderRepository.getOrderById(order);
-		if (orderRepository.existsById(order) && oo.isPresent()) {
-			Order o = oo.get();
+		if (orderRepository.existsById(order)) {
+			Order o = orderRepository.getOrderById(order).get();
 			Row r = new Row(product,quantity,o);
 			o.addProduct(r);
 			orderRepository.save(o);
@@ -144,8 +143,18 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public Order cancelOrder(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		if (orderRepository.existsById(order)) {
+			Order o = orderRepository.getOrderById(order).get();
+			if (o.canCancel()) {
+				o.cancel();
+				orderRepository.save(o);
+				return o;
+			} else {
+				throw new DBliveryException("The order can't be cancelled");
+			}
+		} else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
 	@Override
@@ -168,8 +177,12 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public boolean canCancel(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		if (orderRepository.existsById(order)) {
+			Order o = orderRepository.getOrderById(order).get();
+			return o.canCancel();
+		} else {
+			throw new DBliveryException("Order not found\n");
+		}
 	}
 
 	@Override
@@ -190,7 +203,10 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public OrderStatus getActualStatus(Long order) {
-		// TODO Auto-generated method stub
+		if (orderRepository.existsById(order)) {
+			Order o = orderRepository.getOrderById(order).get();
+			return o.getActualStatus();
+		}
 		return null;
 	}
 
