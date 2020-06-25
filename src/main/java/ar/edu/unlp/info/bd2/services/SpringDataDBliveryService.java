@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.bd2.services;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -9,22 +10,24 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ar.edu.unlp.info.bd2.model.Delivered;
 import ar.edu.unlp.info.bd2.model.Order;
 import ar.edu.unlp.info.bd2.model.OrderStatus;
-import ar.edu.unlp.info.bd2.model.Price;
+//import ar.edu.unlp.info.bd2.model.Price;
 import ar.edu.unlp.info.bd2.model.Product;
 import ar.edu.unlp.info.bd2.model.Row;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
 import ar.edu.unlp.info.bd2.repositories.DBliveryRepository;
+import ar.edu.unlp.info.bd2.repositories.DeliveredRepository;
 import ar.edu.unlp.info.bd2.repositories.OrderRepository;
 import ar.edu.unlp.info.bd2.repositories.ProductRepository;
 import ar.edu.unlp.info.bd2.repositories.SupplierRepository;
 import ar.edu.unlp.info.bd2.repositories.UserRepository;
 import ar.edu.unlp.info.bd2.services.DBliveryService;
 
-public class SpringDataDBliveryService implements DBliveryService {
+public class SpringDataDBliveryService implements DBliveryService,DBliveryStatisticsService {
 
     public SpringDataDBliveryService() {
     }
@@ -40,6 +43,9 @@ public class SpringDataDBliveryService implements DBliveryService {
     
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private DeliveredRepository deliveredRepository;
 	
     @Override
 	@Transactional
@@ -260,6 +266,58 @@ public class SpringDataDBliveryService implements DBliveryService {
 	@Override
 	public List<Product> getProductsByName(String name) {
 		return productRepository.findAllByNameLike("%"+name+"%");
+	}
+
+	@Override
+	public Product getMaxWeigth() {
+		Optional<Product> op = productRepository.findTopByOrderByWeightDesc();
+		return op.get();
+	}
+
+	@Override
+	public List<Order> getAllOrdersMadeByUser(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getPendingOrders() {
+		List<Order> orders= orderRepository.findPendingOrders();
+		return orders;
+	}
+
+	@Override
+	public List<Order> getSentOrders() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getDeliveredOrdersInPeriod(Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getDeliveredOrdersForUser(String username) {
+		List<Delivered> ld=deliveredRepository.findByOrder_Client_Username(username);
+		List<Order> orders = new ArrayList<Order>();
+		for(Delivered d : ld) {
+			orders.add(d.getOrder());
+		}
+		return orders;
+	}
+
+	@Override
+	public List<Product> getProductsOnePrice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getSoldProductsOn(Date day) {
+		// TODO Auto-generated method stub
+		return null;
 	}
     
 //    @Transactional
