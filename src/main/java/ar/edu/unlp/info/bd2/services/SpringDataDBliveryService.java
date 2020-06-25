@@ -145,8 +145,15 @@ public class SpringDataDBliveryService implements DBliveryService {
 	@Override
 	@Transactional
 	public Order deliverOrder(Long order, User deliveryUser, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = orderRepository.findById(order);
+		if (oo.isPresent() && oo.get().canDeliver()){
+			Order o = oo.get();
+			o.send(deliveryUser,date);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be delivered");
+		}
 	}
 
 	@Override
@@ -169,8 +176,15 @@ public class SpringDataDBliveryService implements DBliveryService {
 	@Override
 	@Transactional
 	public Order cancelOrder(Long order, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = orderRepository.findById(order);
+		if (oo.isPresent() && oo.get().canCancel()){
+			Order o = oo.get();
+			o.cancel(date);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
 	@Override
@@ -193,8 +207,15 @@ public class SpringDataDBliveryService implements DBliveryService {
 	@Override
 	@Transactional
 	public Order finishOrder(Long order, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oo = orderRepository.findById(order);
+		if (oo.isPresent() && oo.get().canFinish()){
+			Order o = oo.get();
+			o.finish(date);
+			return o;
+		}
+		else {
+			throw new DBliveryException("The order can't be finished");
+		}
 	}
 
 	@Override
