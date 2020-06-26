@@ -276,8 +276,8 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 
 	@Override
 	public List<Order> getAllOrdersMadeByUser(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders = orderRepository.findAllByClient_Username(username);
+		return orders;
 	}
 
 	@Override
@@ -310,8 +310,8 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 
 	@Override
 	public List<Product> getProductsOnePrice() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> prods = productRepository.findByGroupByPrices_Product();
+		return prods;
 	}
 
 	@Override

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+
+import ar.edu.unlp.info.bd2.model.Delivered;
 import ar.edu.unlp.info.bd2.model.Order;
 
 public interface OrderRepository extends CrudRepository<Order,Long> {
@@ -13,4 +15,6 @@ public interface OrderRepository extends CrudRepository<Order,Long> {
 
 	@Query("select o from Pending p join p.order o where o.id not in(select c.order.id from Cancelled c) and o not in(select s.order.id from Sent s) and o not in(select d.order.id from Delivered d)")
 	public List<Order> findPendingOrders();
+	
+	public List<Order> findAllByClient_Username(String username);
 }

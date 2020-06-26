@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -34,6 +35,11 @@ public class Order {
 	private Float coordX;
 	@Column(name="coordy")
 	private Float coordY;
+	//@Column(name="statusActual")
+	//private OrderStatus statusActual;
+	@OneToOne(cascade=CascadeType.ALL)
+	private OrderStatus actualStatus;
+
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	private List<Row> products = new ArrayList<>();
@@ -51,8 +57,13 @@ public class Order {
 		this.coordY=coordY;
 		this.client=client;
 		Pending p = new Pending(this,dateOfOrder);
+		this.actualStatus=p;
 		this.status.add(p);
 	}
+	public void setActualStatus(OrderStatus actualStatus) {
+		this.actualStatus = actualStatus;
+	}
+
 	
 	public User getClient() {
 		return client;
@@ -143,14 +154,14 @@ public class Order {
 	}
 	
 	public OrderStatus getActualStatus() {
-		OrderStatus act= this.getStatus().get(0);
+//		OrderStatus act= this.getStatus().get(0);
+////		for (OrderStatus os :this.getStatus()) {
+////			if(os.getDate().after(act.getDate())) act=os;
+////		}
 //		for (OrderStatus os :this.getStatus()) {
-//			if(os.getDate().after(act.getDate())) act=os;
+//			if(os.getId()>act.getId()) act=os;
 //		}
-		for (OrderStatus os :this.getStatus()) {
-			if(os.getId()>act.getId()) act=os;
-		}
-		return act;
+		return this.actualStatus;
 		//return this.getStatus().get(this.getStatus().size() - 1 );
 	}
 	
@@ -213,5 +224,7 @@ public class Order {
 			this.getActualStatus().finish(this,date);
 		}
 	}
+
+
 
 }

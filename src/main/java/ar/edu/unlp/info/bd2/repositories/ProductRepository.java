@@ -16,5 +16,8 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
 	public List<Product> findAllByNameLike(String name);
 
 	public Optional<Product> findTopByOrderByWeightDesc();
+	
+	@Query("Select prod from Product prod join prod.prices prc group by prod.id having (count(*)=1)")
+	public List<Product> findByGroupByPrices_Product();
 
 }

@@ -56,7 +56,7 @@ public class DBliveryStatisticsTestCase {
     }
 
     @Test
-    public void testGetAllOrdersMadeByUser() {	//AYE
+    public void testGetAllOrdersMadeByUser() {	//Hecho
         assertEquals(5,this.service.getAllOrdersMadeByUser("rubnpastor265").size());
     }
 
@@ -85,7 +85,7 @@ public class DBliveryStatisticsTestCase {
     }
 
     @Test
-    public void testGetProductsOnePrice() {	//AYE
+    public void testGetProductsOnePrice() {	//Hecho
         List<Product> products = this.service.getProductsOnePrice();
         assertEquals(27, products.size());
     }
