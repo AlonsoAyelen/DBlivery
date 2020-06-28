@@ -11,7 +11,6 @@ import ar.edu.unlp.info.bd2.model.Order;
 
 public interface OrderRepository extends CrudRepository<Order,Long> {
 
-	Optional<Order> getOrderById(Long id);
 
 	public List<Order> findAllByClient_Username(String username);
 

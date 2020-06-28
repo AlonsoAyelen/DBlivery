@@ -78,7 +78,7 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 	@Transactional
 	public Product updateProductPrice(Long id, Float price, Date startDate) throws DBliveryException {
 		if (productRepository.existsById(id)){
-			Product prod = productRepository.getProductById(id);
+			Product prod = productRepository.findById(id).get();
 			prod.updatePrice(price, startDate);
 			productRepository.save(prod);
 			return prod;
