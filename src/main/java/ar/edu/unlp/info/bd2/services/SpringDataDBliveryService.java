@@ -104,7 +104,7 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 
 	@Override
 	public Optional<Order> getOrderById(Long id) {
-		return orderRepository.getOrderById(id);
+		return orderRepository.findById(id);
 	}
 
 	@Override
@@ -220,7 +220,7 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 	@Override
 	public boolean canCancel(Long order) throws DBliveryException {
 		if (orderRepository.existsById(order)) {
-			Order o = orderRepository.getOrderById(order).get();
+			Order o = orderRepository.findById(order).get();
 			return o.canCancel();
 		} else {
 			throw new DBliveryException("Order not found\n");
@@ -230,7 +230,7 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 	@Override
 	public boolean canFinish(Long id) throws DBliveryException {
 		if (orderRepository.existsById(id)) {
-			Order o = orderRepository.getOrderById(id).get();
+			Order o = orderRepository.findById(id).get();
 			return o.canFinish();
 		} else {
 			throw new DBliveryException("Order not found\n");
@@ -250,7 +250,7 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 	@Override
 	public OrderStatus getActualStatus(Long order) {
 		if (orderRepository.existsById(order)) {
-			Order o = orderRepository.getOrderById(order).get();
+			Order o = orderRepository.findById(order).get();
 			return o.getActualStatus();
 		}
 		return null;
@@ -281,8 +281,8 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 
 	@Override
 	public List<Order> getSentOrders() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders= orderRepository.findSentOrders();
+		return orders;
 	}
 
 	@Override
