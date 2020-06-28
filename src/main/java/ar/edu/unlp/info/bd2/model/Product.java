@@ -14,14 +14,10 @@ public class Product {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	@Column(name="name")
 	private String name;
 	@ManyToOne()
 	private Supplier supplier;
-	@Column(name="price")
 	private Float price;
-	@Column(name="weight")
 	private Float weight;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "product_id")

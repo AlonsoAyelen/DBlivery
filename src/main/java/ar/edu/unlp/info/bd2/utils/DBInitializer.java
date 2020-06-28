@@ -520,8 +520,8 @@ public class DBInitializer {
         service.addProduct(order004.getId(),2L, product004);
         service.addProduct(order004.getId(),4L, product102);
         service.addProduct(order004.getId(),3L, product006);
-        //service.deliverOrder(order004.getId(), user197, sdf.parse("2/4/2013"));
-        //service.finishOrder(order004.getId(), sdf.parse("2/4/2013"));
+        service.deliverOrder(order004.getId(), user197, sdf.parse("2/4/2013"));
+        service.finishOrder(order004.getId(), sdf.parse("2/4/2013"));
         Order order005 = service.createOrder(sdf.parse("11/5/2015"), "Calle 63 Nº1377", -34.942428F, -57.965701F, user033);
         service.addProduct(order005.getId(),3L, product086);
         service.addProduct(order005.getId(),2L, product105);

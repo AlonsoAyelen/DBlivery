@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -148,14 +147,13 @@ public class Order {
 	
 	public OrderStatus getActualStatus() {
 		OrderStatus act= this.getStatus().get(0);
-		for (OrderStatus os :this.getStatus()) {
-			if(os.getDate().after(act.getDate())) act=os;
-		}
+//		for (OrderStatus os :this.getStatus()) {
+//			if(os.getDate().after(act.getDate())) act=os;
+//		}
 		for (OrderStatus os :this.getStatus()) {
 			if(os.getId()>act.getId()) act=os;
 		}
-		System.out.print(this.getStatus().get(this.getStatus().size() - 1 ));
-		return this.getStatus().get(this.getStatus().size() - 1 );
+		return act;
 	}
 	
 	public void send(User deilvery) {
