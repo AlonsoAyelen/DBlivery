@@ -316,8 +316,8 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 
 	@Override
 	public List<Product> getSoldProductsOn(Date day) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> prods = productRepository.findByDateByOrder_Product(day);
+		return prods;
 	}
     
 //    @Transactional

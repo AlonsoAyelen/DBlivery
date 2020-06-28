@@ -1,5 +1,7 @@
 package ar.edu.unlp.info.bd2.repositories;
 
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,5 +21,9 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
 	
 	@Query("Select prod from Product prod join prod.prices prc group by prod.id having (count(*)=1)")
 	public List<Product> findByGroupByPrices_Product();
+	
+	@Query("Select row.product from Order o join o.products row where o.dateOfOrder=:day")
+	public List<Product> findByDateByOrder_Product(Date day);
+	
 
 }

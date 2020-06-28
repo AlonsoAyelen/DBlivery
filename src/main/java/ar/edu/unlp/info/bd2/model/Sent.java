@@ -37,15 +37,11 @@ public class Sent extends OrderStatus {
 	}
 	
 	public void finish(Order o) {
-		OrderStatus status = new Delivered(o);
-		o.setStatus(status);
-		o.setActualStatus(status);
+		o.setStatus(new Delivered(o));
 	}
 
 	public void finish(Order order2, Date date2) {
-		OrderStatus status = new Delivered(order2,date2);
-		order2.setStatus(status);
-		order2.setActualStatus(status);
+		order2.setStatus(new Delivered(order2,date2));
 	
 	}
 }

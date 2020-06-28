@@ -29,9 +29,7 @@ public class Pending extends OrderStatus {
 	}
 	
 	public void cancel(Order o) {
-		OrderStatus status = new Cancelled(o);
-		o.setStatus(status);
-		o.setActualStatus(status);
+		o.setStatus(new Cancelled(o));
 	}
 	
 //	public void cancel(Order o,Date date) {
@@ -43,9 +41,7 @@ public class Pending extends OrderStatus {
 //	}
 	
 	public void send(Order o) {
-		OrderStatus status = new Sent(o);
-		o.setStatus(status);
-		o.setActualStatus(status);
+		o.setStatus(new Sent(o));
 	}
 	
 	public String getStatus() {
@@ -59,15 +55,11 @@ public class Pending extends OrderStatus {
 	}
 	
 	public void send(Order order2, Date date2) {
-		OrderStatus status = new Sent(order2,date2);
-		order2.setStatus(status);
-		order2.setActualStatus(status);	
+		order2.setStatus(new Sent(order2,date2));
 	}
 	
 	public void cancel(Order order2, Date date2) {
-		OrderStatus status = new Cancelled(order2,date2);
-		order2.setStatus(status);
-		order2.setActualStatus(status);	
+		order2.setStatus(new Cancelled(order2,date2));
 		
 	}
 }
