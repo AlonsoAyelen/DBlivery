@@ -119,7 +119,7 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 	@Transactional
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
 		if (orderRepository.existsById(order)) {
-			Order o = orderRepository.getOrderById(order).get();
+			Order o = orderRepository.findById(order).get();
 			Row r = new Row(product,quantity,o);
 			o.addProduct(r);
 			orderRepository.save(o);
@@ -161,10 +161,9 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 	@Transactional
 	public Order cancelOrder(Long order) throws DBliveryException {
 		if (orderRepository.existsById(order)) {
-			Order o = orderRepository.getOrderById(order).get();
+			Order o = orderRepository.findById(order).get();
 			if (o.canCancel()) {
 				o.cancel();
-				orderRepository.save(o);
 				return o;
 			} else {
 				throw new DBliveryException("The order can't be cancelled");
@@ -192,10 +191,9 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 	@Transactional
 	public Order finishOrder(Long order) throws DBliveryException {
 		if (orderRepository.existsById(order)) {
-			Order o = orderRepository.getOrderById(order).get();
+			Order o = orderRepository.findById(order).get();
 			if (o.canFinish()) {
 				o.finish();
-				orderRepository.save(o);
 				return o;
 			} else {
 				throw new DBliveryException("The order can't be finished");
