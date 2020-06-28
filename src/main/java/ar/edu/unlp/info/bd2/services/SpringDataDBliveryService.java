@@ -19,8 +19,6 @@ import ar.edu.unlp.info.bd2.model.Row;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
-import ar.edu.unlp.info.bd2.repositories.DBliveryRepository;
-import ar.edu.unlp.info.bd2.repositories.DeliveredRepository;
 import ar.edu.unlp.info.bd2.repositories.OrderRepository;
 import ar.edu.unlp.info.bd2.repositories.ProductRepository;
 import ar.edu.unlp.info.bd2.repositories.SupplierRepository;
@@ -44,9 +42,6 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private DeliveredRepository deliveredRepository;
-	
     @Override
 	@Transactional
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
@@ -300,11 +295,7 @@ public class SpringDataDBliveryService implements DBliveryService,DBliveryStatis
 
 	@Override
 	public List<Order> getDeliveredOrdersForUser(String username) {
-		List<Delivered> ld=deliveredRepository.findByOrder_Client_Username(username);
-		List<Order> orders = new ArrayList<Order>();
-		for(Delivered d : ld) {
-			orders.add(d.getOrder());
-		}
+		List<Order> orders=orderRepository.findDeliveredOrdersForUser(username);
 		return orders;
 	}
 

@@ -61,7 +61,7 @@ public class DBliveryStatisticsTestCase {
     }
 
     @Test
-    public void testGetPendingOrders() {	//HECHO?
+    public void testGetPendingOrders() {	//HECHO
         List<Order> orders = this.service.getPendingOrders();
         assertEquals(54,orders.size());
     }
@@ -79,7 +79,7 @@ public class DBliveryStatisticsTestCase {
     }
 
     @Test
-    public void testGetDeliveredOrdersForUser() {	//HECHO?????????????????
+    public void testGetDeliveredOrdersForUser() {	//HECHO
         List<Order> orders = this.service.getDeliveredOrdersForUser("luzmartnez660");
         assertEquals(3,orders.size());
     }
