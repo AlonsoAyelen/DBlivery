@@ -21,7 +21,7 @@ public interface OrderRepository extends CrudRepository<Order,Long> {
 	@Query("select o from Delivered d join d.order o where d.date between :startDate and :endDate")
 	public List<Order> findDeliveredOrdersBetween(@Param("startDate")Date startDate, @Param("endDate") Date endDate);
 	
-	@Query("select o from Pending p join p.order o where o.id not in(select c.order.id from Cancelled c) and o not in(select s.order.id from Sent s) and o not in(select d.order.id from Delivered d)")
+	@Query("select o from Pending p join p.order o where o.id not in(select c.order.id from Cancelled c) and o not in(select s.order.id from Sent s)")
 	public List<Order> findPendingOrders();
 
 	@Query("select o from Sent s join s.order o where o.client.username = :username")

@@ -26,13 +26,9 @@ public class Order {
 	private User deliveryUser;
 	@ManyToOne()
 	private User client;
-	@Column(name="date")
 	private Date dateOfOrder;
-	@Column(name="address")
 	private String address;
-	@Column(name="coordx")
 	private Float coordX;
-	@Column(name="coordy")
 	private Float coordY;
 
 
