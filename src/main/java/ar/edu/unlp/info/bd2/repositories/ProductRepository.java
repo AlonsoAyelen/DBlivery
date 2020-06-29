@@ -20,7 +20,7 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
 	@Query("Select prod from Product prod join prod.prices prc group by prod.id having (count(*)=1)")
 	public List<Product> findByGroupByPrices_Product();
 	
-	@Query("Select row.product from Order o join o.products row where o.dateOfOrder=:day")
+	@Query("Select row.product from Order o join o.products row where o.dateOfOrder = ?1")
 	public List<Product> findByDateByOrder_Product(Date day);
 	
 
