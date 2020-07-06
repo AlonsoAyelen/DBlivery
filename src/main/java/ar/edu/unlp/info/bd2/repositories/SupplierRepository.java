@@ -8,5 +8,4 @@ import ar.edu.unlp.info.bd2.model.Supplier;
 
 public interface SupplierRepository extends CrudRepository<Supplier,Long> {
 
-	public Optional<Supplier> getById(Long id);
 }
